@@ -90,7 +90,7 @@ int drawable ic_plusone_standard_off_client 0x7f02001b
 int drawable ic_plusone_tall_off_client 0x7f02001c
 int drawable powered_by_google_dark 0x7f02001d
 int drawable powered_by_google_light 0x7f02001e
-int id action_settings 0x7f060018
+int id action_settings 0x7f06001b
 int id book_now 0x7f060010
 int id buyButton 0x7f06000a
 int id buy_now 0x7f06000f
@@ -113,7 +113,10 @@ int id section_label 0x7f060015
 int id selectionDetails 0x7f06000b
 int id strict_sandbox 0x7f060009
 int id terrain 0x7f060003
-int id tvStepsSum 0x7f060016
+int id tvStepsSum2 0x7f060019
+int id tvStepsSum3 0x7f06001a
+int id tvStepsSumAll 0x7f060016
+int id tvStepsSumAll1 0x7f060018
 int id wrap_content 0x7f06000d
 int integer google_play_services_version 0x7f070000
 int layout activity_main 0x7f030000
@@ -155,6 +158,7 @@ int string common_google_play_services_update_text 0x7f040013
 int string common_google_play_services_update_title 0x7f040012
 int string common_signin_button_text 0x7f04001d
 int string common_signin_button_text_long 0x7f04001e
+int string placeholder_null 0x7f040026
 int string title_section1 0x7f040021
 int string title_section2 0x7f040022
 int string title_section3 0x7f040023

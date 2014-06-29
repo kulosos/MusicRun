@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#323232"
+    android:gravity="center_vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -17,34 +18,60 @@
     <GridLayout
         android:id="@+id/gridview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="3"
+        android:layout_height="match_parent"
+        android:columnCount="2"
         android:horizontalSpacing="0dp"
         android:rowCount="3"
         android:verticalSpacing="0dp" >
 
         <TextView
-            android:id="@+id/tvStepsSum"
-            android:layout_gravity="right|top"
-            android:layout_weight="20"
+            android:id="@+id/tvStepsSumAll"
+            android:layout_width="140dp"
+         android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="3dp"
             android:background="#404040"
-            android:text="0"
+            android:gravity="right"
+            android:text="@string/placeholder_null"
             android:textColor="#00ccff"
             android:textSize="100sp" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/tvStepsSum"
-            android:layout_gravity="right|top"
-            android:layout_weight="20"
+            android:id="@+id/tvStepsSumAll1"
+            android:layout_width="140dp"
+         android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="3dp"
             android:background="#404040"
-            android:text="0"
+            android:gravity="right"
+            android:text="@string/placeholder_null"
             android:textColor="#00ccff"
             android:textSize="100sp" />
+        
+        <TextView
+            android:id="@+id/tvStepsSum2"
+            android:layout_width="140dp"
+         android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="3dp"
+            android:background="#404040"
+            android:gravity="right"
+            android:text="@string/placeholder_null"
+            android:textColor="#00ccff"
+            android:textSize="100sp" />
+
+        <TextView
+            android:id="@+id/tvStepsSum3"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="3dp"
+            android:background="#404040"
+            android:gravity="right"
+            android:text="@string/placeholder_null"
+            android:textColor="#00ccff"
+            android:textSize="100sp" />
+
     </GridLayout>
 
 </RelativeLayout>

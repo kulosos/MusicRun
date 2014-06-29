@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.thm.fmi.musicrun.R;
+import de.thm.fmi.musicrun.application.MainActivity;
 import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,12 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	private StepDetector stepDetector;
 	private int stepcount = 0;	
 	private List<TextView> uiTextElements;
+	private TextView tvCountAll;
+	
+	// DEBUG
+	private static final String TAG = MainActivity.class.getName();
+	private static final boolean D = true;
+	
 	
 	// ------------------------------------------------------------------------
 
@@ -29,9 +37,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 
 		// attach Observer to this activity
 		this.stepDetector.attachObserver(this);
-
-//		tvCount = (TextView) getView().findViewById(R.id.textView1);
-
+		
 	}
 
 	// -----------------------------------------------------------------------
@@ -45,6 +51,9 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		this.setUiTextElements(view);
 		this.setTypefaces(view);
 		
+		// get the textViews on fragment
+		this.tvCountAll = (TextView) view.findViewById(R.id.tvStepsSumAll);
+		
 		return view;
 	}
 	
@@ -56,6 +65,11 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 
 		// counts the recognized steps
 		this.stepcount = this.stepcount +1;
+		
+		if(D) Log.i(TAG, "Stepcount: " + this.stepcount);
+
+		this.tvCountAll.setText(Integer.toString(this.stepcount));
+		
 	}
 
 	// ------------------------------------------------------------------------
@@ -86,7 +100,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		
 		this.uiTextElements = new ArrayList<TextView>();
 		// adds TextView by Id
-		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsSum));
+		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsSumAll));
 //		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsSum));
 	}
 	
