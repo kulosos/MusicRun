@@ -87,7 +87,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		this.uiTextElements = new ArrayList<TextView>();
 		// adds TextView by Id
 		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsSum));
-		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsSinceStart));
+//		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsSum));
 	}
 	
 	// -----------------------------------------------------------------------
@@ -95,7 +95,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	// sets typeface for all TextView in uiTextElementsList
 	private void setTypefaces(View view){
 		
-		Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+		Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
 		
 		for(int i = 0; i < this.uiTextElements.size(); i++){
 			//set text
