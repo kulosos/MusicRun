@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#323232"
+    android:background="#252525"
     android:gravity="center_vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -15,63 +15,182 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <GridLayout
-        android:id="@+id/gridview"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:columnCount="2"
-        android:horizontalSpacing="0dp"
-        android:rowCount="3"
-        android:verticalSpacing="0dp" >
+        android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/tvStepsSumAll"
-            android:layout_width="140dp"
-         android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="3dp"
-            android:background="#404040"
-            android:gravity="right"
-            android:text="@string/placeholder_null"
-            android:textColor="#00ccff"
-            android:textSize="100sp" />
+        <!-- FIRST LINEAR HORIZONTAL ROW START -->
 
-        <TextView
-            android:id="@+id/tvStepsSumAll1"
-            android:layout_width="140dp"
-         android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="3dp"
-            android:background="#404040"
-            android:gravity="right"
-            android:text="@string/placeholder_null"
-            android:textColor="#00ccff"
-            android:textSize="100sp" />
-        
-        <TextView
-            android:id="@+id/tvStepsSum2"
-            android:layout_width="140dp"
-         android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="3dp"
-            android:background="#404040"
-            android:gravity="right"
-            android:text="@string/placeholder_null"
-            android:textColor="#00ccff"
-            android:textSize="100sp" />
-
-        <TextView
-            android:id="@+id/tvStepsSum3"
-            android:layout_width="140dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="3dp"
-            android:background="#404040"
-            android:gravity="right"
-            android:text="@string/placeholder_null"
-            android:textColor="#00ccff"
-            android:textSize="100sp" />
+            android:baselineAligned="false" >
 
-    </GridLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvStepsTotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="3dp"
+                    android:background="#404040"
+                    android:gravity="right"
+                    android:text="@string/placeholder_null"
+                    android:textColor="#00ccff"
+                    android:textSize="80sp" />
+
+                <TextView
+                    android:id="@+id/tvStepsTotalLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="0dp"
+                    android:background="#303030"
+                    android:gravity="right"
+                    android:padding="3dp"
+                    android:text="@string/label_totalsteps"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvStepsTotalSinceStart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="3dp"
+                    android:background="#404040"
+                    android:gravity="right"
+                    android:text="@string/placeholder_null"
+                    android:textColor="#00ccff"
+                    android:textSize="80sp" />
+
+                <TextView
+                    android:id="@+id/tvStepsTotalSinceStartLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="0dp"
+                    android:background="#303030"
+                    android:gravity="right"
+                    android:padding="3dp"
+                    android:text="@string/label_stepssincestarte"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <!-- FIRST LINEAR HORIZONTAL ROW END -->
+        
+        
+        <!-- FIRST LINEAR HORIZONTAL ROW START -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvStepsPerMinute"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="3dp"
+                    android:background="#404040"
+                    android:gravity="right"
+                    android:text="@string/placeholder_null"
+                    android:textColor="#00ccff"
+                    android:textSize="80sp" />
+
+                <TextView
+                    android:id="@+id/tvStepsPerMinuteLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="0dp"
+                    android:background="#303030"
+                    android:gravity="right"
+                    android:padding="3dp"
+                    android:text="@string/label_stepsperminute"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvStepsAverage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="3dp"
+                    android:background="#404040"
+                    android:gravity="right"
+                    android:text="@string/placeholder_null"
+                    android:textColor="#00ccff"
+                    android:textSize="80sp" />
+
+                <TextView
+                    android:id="@+id/tvStepsAverageLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="0dp"
+                    android:background="#303030"
+                    android:gravity="right"
+                    android:padding="3dp"
+                    android:text="@string/label_stepsperminute_average"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <!-- FIRST LINEAR HORIZONTAL ROW END -->
+
+    </LinearLayout>
 
 </RelativeLayout>

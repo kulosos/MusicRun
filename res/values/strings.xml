@@ -8,6 +8,10 @@
     <string name="title_section4">Settings</string>
     <string name="action_settings">Settings</string>
     <string name="placeholder_null">0</string>
+    <string name="label_totalsteps">total steps</string>
+    <string name="label_stepsperminute">steps per minute</string>
+    <string name="label_stepssincestarte">steps since start</string>
+    <string name="label_stepsperminute_average">steps/min average</string>
     
 
 </resources>

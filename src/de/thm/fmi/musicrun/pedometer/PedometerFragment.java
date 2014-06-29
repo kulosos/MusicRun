@@ -21,7 +21,12 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	private StepDetector stepDetector;
 	private int stepcount = 0;	
 	private List<TextView> uiTextElements;
-	private TextView tvCountAll;
+	
+	// TextViews
+	private TextView tvStepsTotal;
+	private TextView tvStepsTotalSinceStart;
+	private TextView tvStepsAverage;
+	private TextView tvStepsPerMinute;
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -52,7 +57,10 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		this.setTypefaces(view);
 		
 		// get the textViews on fragment
-		this.tvCountAll = (TextView) view.findViewById(R.id.tvStepsSumAll);
+		this.tvStepsTotal 			= (TextView) view.findViewById(R.id.tvStepsTotal);
+		this.tvStepsTotalSinceStart = (TextView) view.findViewById(R.id.tvStepsTotalSinceStart);
+		this.tvStepsPerMinute		= (TextView) view.findViewById(R.id.tvStepsPerMinute);
+		this.tvStepsAverage 		= (TextView) view.findViewById(R.id.tvStepsAverage);
 		
 		return view;
 	}
@@ -68,7 +76,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		
 		if(D) Log.i(TAG, "Stepcount: " + this.stepcount);
 
-		this.tvCountAll.setText(Integer.toString(this.stepcount));
+		this.tvStepsTotal.setText(Integer.toString(this.stepcount));
 		
 	}
 
@@ -100,8 +108,14 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		
 		this.uiTextElements = new ArrayList<TextView>();
 		// adds TextView by Id
-		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsSumAll));
-//		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsSum));
+		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsTotal));
+		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsTotalLabel));
+		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsTotalSinceStart));
+		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsTotalSinceStartLabel));
+		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsPerMinute));
+		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsPerMinuteLabel));
+		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsAverage));
+		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsAverageLabel));
 	}
 	
 	// -----------------------------------------------------------------------
@@ -112,8 +126,8 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
 		
 		for(int i = 0; i < this.uiTextElements.size(); i++){
-			//set text
-			this.uiTextElements.get(i).setText("0");
+//			//set text
+//			this.uiTextElements.get(i).setText("0");
 			//set Typeface
 			this.uiTextElements.get(i).setTypeface(font);
 		}
