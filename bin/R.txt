@@ -90,8 +90,10 @@ int drawable ic_plusone_standard_off_client 0x7f02001b
 int drawable ic_plusone_tall_off_client 0x7f02001c
 int drawable powered_by_google_dark 0x7f02001d
 int drawable powered_by_google_light 0x7f02001e
-int id action_settings 0x7f06001e
+int id action_settings 0x7f060020
 int id book_now 0x7f060010
+int id btn_reset 0x7f06001f
+int id btn_start 0x7f06001e
 int id buyButton 0x7f06000a
 int id buy_now 0x7f06000f
 int id buy_with_google 0x7f06000e
@@ -136,6 +138,8 @@ int string auth_client_needs_update_title 0x7f040003
 int string auth_client_play_services_err_notification_msg 0x7f040004
 int string auth_client_requested_by_msg 0x7f040005
 int string auth_client_using_bad_version_title 0x7f040000
+int string btn_reset 0x7f04002b
+int string btn_start 0x7f04002c
 int string common_google_play_services_enable_button 0x7f040011
 int string common_google_play_services_enable_text 0x7f040010
 int string common_google_play_services_enable_title 0x7f04000f

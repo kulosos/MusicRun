@@ -2,6 +2,8 @@ package de.thm.fmi.musicrun.pedometer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
@@ -9,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +23,19 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 
 	private StepDetector stepDetector;
 	private int stepcount = 0;	
-	private List<TextView> uiTextElements;
+	private int stepCountLastMinute;
+	private float stepsAverage;
+	private int totalTime;
 	
 	// TextViews
+	private List<TextView> uiTextElements;
 	private TextView tvStepsTotal;
 	private TextView tvStepsTotalSinceStart;
 	private TextView tvStepsAverage;
 	private TextView tvStepsPerMinute;
+	
+	// Timer
+	private Handler customHandler;
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -62,22 +71,59 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		this.tvStepsPerMinute		= (TextView) view.findViewById(R.id.tvStepsPerMinute);
 		this.tvStepsAverage 		= (TextView) view.findViewById(R.id.tvStepsAverage);
 		
+		
+		// time interval, needed for average step calculation
+	    this.customHandler = new android.os.Handler();
+        customHandler.postDelayed(updateTimerThread, 0);
+        
 		return view;
 	}
+    
+	// ------------------------------------------------------------------------
 	
+	// time interval, needed for average step calculation
+    private Runnable updateTimerThread = new Runnable()
+	{
+	        public void run()
+	        {
+	        	int intervallTime = 1000; //milliseconds
+	            
+	        	if(D) Log.i(TAG, "TIMER INTERVAL"); 
+	        	
+	        	totalTime = totalTime + 1;
+	        	
+//	        	totalTime =
+	        	
+	        	tvStepsAverage.setText(Integer.toString(totalTime));
+	        	
+	        	// delay - time intervall
+	            customHandler.postDelayed(this, intervallTime);
+	        }
+	};
+    
 	// ------------------------------------------------------------------------
 	
 	// Step Detection Observer Update
 	@Override
 	public void update() {
 
-		// counts the recognized steps
+		// count the recognized steps
 		this.stepcount = this.stepcount +1;
-		
-		if(D) Log.i(TAG, "Stepcount: " + this.stepcount);
-
+		if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
 		this.tvStepsTotal.setText(Integer.toString(this.stepcount));
 		
+		// steps average
+
+    	
+//    	this.stepsAverage = this.to
+//    	
+//    	
+//    	stepsaverage = stepcount
+//    	
+//    	tvStepsAverage.setText(Integer.toString(this.totalTime));
+    	
+    	
+
 	}
 
 	// ------------------------------------------------------------------------
@@ -132,5 +178,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 			this.uiTextElements.get(i).setTypeface(font);
 		}
 	}
+	
+	
 	
 }
