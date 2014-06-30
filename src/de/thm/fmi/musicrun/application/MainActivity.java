@@ -9,25 +9,25 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.app.FragmentTransaction;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.graphics.Typeface;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
-	/**
-	 * The {@link android.support.v4.view.PagerAdapter} that will provide
-	 * fragments for each of the sections. We use a {@link FragmentPagerAdapter}
-	 * derivative, which will keep every loaded fragment in memory. If this
-	 * becomes too memory intensive, it may be best to switch to a
-	 * {@link android.support.v13.app.FragmentStatePagerAdapter}.
-	 */
+	// App Navigation
 	SectionsPagerAdapter mSectionsPagerAdapter;
+	ViewPager mViewPager;
+	
+	// Constants
+	public static final String DEFAULT_NORMAL_FONT_FILENAME = "fonts/Roboto-Thin.ttf";
+	public static final String DEFAULT_BOLD_FONT_FILENAME = "fonts/Roboto-Bold.ttf";
+	public static final String DEFAULT_ITALIC_FONT_FILENAME = "fonts/Roboto-ThinItalic.ttf";
+	public static final String DEFAULT_BOLD_ITALIC_FONT_FILENAME = "fonts/Roboto-BoldItalic.ttf";
 
-	ViewPager mViewPager; // The {@link ViewPager} that will host the section contents.
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
 	private static final boolean D = true;
-
+	
 	// ------------------------------------------------------------------------
 	
 	public MainActivity(){
@@ -37,6 +37,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
+		if(D) Log.d(TAG, "DEBUG - onCreate"); // DEBUG
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
@@ -77,7 +80,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		
 		// ....................................................................
 		
-		if(D) Log.d(TAG, "DEBUG - onCreate"); // DEBUG
+		this.setDefaultFont();
 
 		
 	}
@@ -130,4 +133,37 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			FragmentTransaction fragmentTransaction) {
 	}
 	
+	// ------------------------------------------------------------------------
+	
+	private void setDefaultFont() {
+
+	    try {
+	        final Typeface bold = Typeface.createFromAsset(getAssets(), DEFAULT_BOLD_FONT_FILENAME);
+	        final Typeface italic = Typeface.createFromAsset(getAssets(), DEFAULT_ITALIC_FONT_FILENAME);
+	        final Typeface boldItalic = Typeface.createFromAsset(getAssets(), DEFAULT_BOLD_ITALIC_FONT_FILENAME);
+	        final Typeface regular = Typeface.createFromAsset(getAssets(),DEFAULT_NORMAL_FONT_FILENAME);
+
+	        java.lang.reflect.Field DEFAULT = Typeface.class.getDeclaredField("DEFAULT");
+	        DEFAULT.setAccessible(true);
+	        DEFAULT.set(null, regular);
+
+	        java.lang.reflect.Field DEFAULT_BOLD = Typeface.class.getDeclaredField("DEFAULT_BOLD");
+	        DEFAULT_BOLD.setAccessible(true);
+	        DEFAULT_BOLD.set(null, bold);
+
+	        java.lang.reflect.Field sDefaults = Typeface.class.getDeclaredField("sDefaults");
+	        sDefaults.setAccessible(true);
+	        sDefaults.set(null, new Typeface[]{
+	                regular, bold, italic, boldItalic
+	        });
+
+	    } catch (NoSuchFieldException e) {
+	        Log.e(TAG, e.toString());
+	    } catch (IllegalAccessException e) {
+	    	Log.e(TAG, e.toString());
+	    } catch (Throwable e) {
+	        //cannot crash app if there is a failure with overriding the default font!
+	    	Log.e(TAG, e.toString());
+	    }
+	}	
 }
