@@ -1,14 +1,10 @@
 package de.thm.fmi.musicrun.pedometer;
 
 import java.text.DateFormatSymbols;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
 import android.annotation.SuppressLint;
-import android.graphics.Typeface;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +24,6 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	private Float stepFrequencyPerMinute;
 	
 	// TextViews
-	private List<TextView> uiTextElements;
 	private TextView tvStepsTotal;
 	private TextView tvStepsTotalSinceStart;
 	private TextView tvStepsAverage;
@@ -61,10 +56,6 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	
 		View view = inflater.inflate(R.layout.fragment_pedometer, container, false);
-		
-		// set Font Typefaces for all TextViews on Fragment
-//		this.setUiTextElements(view);
-//		this.setTypefaces(view);
 		
 		// get the textViews on fragment
 		this.tvStepsTotal 				= (TextView) view.findViewById(R.id.tvStepsTotal);
@@ -135,38 +126,6 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		
 		// Stop StepDetection
 		this.stepDetector.setActivityRunning(false);
-	}
-	
-	// ------------------------------------------------------------------------
-	
-	// adds UI TextView Elements to List
-	private void setUiTextElements(View view){
-		
-		this.uiTextElements = new ArrayList<TextView>();
-		// adds TextView by Id
-		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsTotal));
-		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsTotalLabel));
-		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsTotalSinceStart));
-		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsTotalSinceStartLabel));
-		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsPerMinute));
-		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsPerMinuteLabel));
-		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsAverage));
-		this.uiTextElements.add((TextView) view.findViewById(R.id.tvStepsAverageLabel));
-	}
-	
-	// -----------------------------------------------------------------------
-	
-	// sets typeface for all TextView in uiTextElementsList
-	private void setTypefaces(View view){
-		
-		Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
-		
-		for(int i = 0; i < this.uiTextElements.size(); i++){
-//			//set text
-//			this.uiTextElements.get(i).setText("0");
-			//set Typeface
-			this.uiTextElements.get(i).setTypeface(font);
-		}
 	}
 	
 	// ------------------------------------------------------------------------
