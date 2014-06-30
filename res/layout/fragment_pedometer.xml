@@ -46,12 +46,12 @@
                     android:gravity="right"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="80sp" />
+                    android:textSize="60sp" />
 
                 <TextView
                     android:id="@+id/tvStepsTotalLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -62,7 +62,7 @@
                     android:padding="3dp"
                     android:text="@string/label_totalsteps"
                     android:textColor="#ffffff"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -84,12 +84,12 @@
                     android:gravity="right"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="80sp" />
+                    android:textSize="60sp" />
 
                 <TextView
                     android:id="@+id/tvStepsTotalSinceStartLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -100,13 +100,13 @@
                     android:padding="3dp"
                     android:text="@string/label_stepssincestarte"
                     android:textColor="#ffffff"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
         <!-- FIRST LINEAR HORIZONTAL ROW END -->
         
         
-        <!-- FIRST LINEAR HORIZONTAL ROW START -->
+        <!-- SECOND LINEAR HORIZONTAL ROW START -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -132,12 +132,12 @@
                     android:gravity="right"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="80sp" />
+                    android:textSize="60sp" />
 
                 <TextView
                     android:id="@+id/tvStepsPerMinuteLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -148,7 +148,7 @@
                     android:padding="3dp"
                     android:text="@string/label_stepsperminute"
                     android:textColor="#ffffff"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -170,12 +170,12 @@
                     android:gravity="right"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="80sp" />
+                    android:textSize="60sp" />
 
                 <TextView
                     android:id="@+id/tvStepsAverageLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -186,15 +186,62 @@
                     android:padding="3dp"
                     android:text="@string/label_stepsperminute_average"
                     android:textColor="#ffffff"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
-        <!-- FIRST LINEAR HORIZONTAL ROW END -->
+        <!-- SECOND LINEAR HORIZONTAL ROW END -->
+
+        <!-- THIRD LINEAR HORIZONTAL ROW START -->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:baselineAligned="false" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvStepDetectionDuration"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="3dp"
+                    android:background="#404040"
+                    android:gravity="right"
+                    android:text="@string/placeholder_null"
+                    android:textColor="#00ccff"
+                    android:textSize="60sp" />
+
+                <TextView
+                    android:id="@+id/tvStepDetectionDurationLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="0dp"
+                    android:background="#303030"
+                    android:gravity="right"
+                    android:padding="3dp"
+                    android:text="@string/label_stepsdetectionduration"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <!-- THIRD LINEAR HORIZONTAL ROW END -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:gravity="bottom"
             android:orientation="vertical" >
 

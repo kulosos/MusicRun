@@ -90,10 +90,10 @@ int drawable ic_plusone_standard_off_client 0x7f02001b
 int drawable ic_plusone_tall_off_client 0x7f02001c
 int drawable powered_by_google_dark 0x7f02001d
 int drawable powered_by_google_light 0x7f02001e
-int id action_settings 0x7f060020
+int id action_settings 0x7f060022
 int id book_now 0x7f060010
-int id btn_reset 0x7f06001f
-int id btn_start 0x7f06001e
+int id btn_reset 0x7f060021
+int id btn_start 0x7f060020
 int id buyButton 0x7f06000a
 int id buy_now 0x7f06000f
 int id buy_with_google 0x7f06000e
@@ -114,6 +114,8 @@ int id section_label 0x7f060015
 int id selectionDetails 0x7f06000b
 int id strict_sandbox 0x7f060009
 int id terrain 0x7f060003
+int id tvStepDetectionDuration 0x7f06001e
+int id tvStepDetectionDurationLabel 0x7f06001f
 int id tvStepsAverage 0x7f06001c
 int id tvStepsAverageLabel 0x7f06001d
 int id tvStepsPerMinute 0x7f06001a
@@ -165,6 +167,7 @@ int string common_google_play_services_update_text 0x7f040013
 int string common_google_play_services_update_title 0x7f040012
 int string common_signin_button_text 0x7f04001d
 int string common_signin_button_text_long 0x7f04001e
+int string label_stepsdetectionduration 0x7f04002d
 int string label_stepsperminute 0x7f040028
 int string label_stepsperminute_average 0x7f04002a
 int string label_stepssincestarte 0x7f040029

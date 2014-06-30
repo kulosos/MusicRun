@@ -11,9 +11,10 @@
     <string name="label_totalsteps">total steps</string>
     <string name="label_stepsperminute">steps per minute</string>
     <string name="label_stepssincestarte">steps since start</string>
-    <string name="label_stepsperminute_average">steps/min average</string>
+    <string name="label_stepsperminute_average">steps / min average</string>
     <string name="btn_reset">Reset</string>
     <string name="btn_start">Start step detection</string>
+    <string name="label_stepsdetectionduration">duration</string>
     
 
 </resources>
