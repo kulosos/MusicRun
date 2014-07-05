@@ -8,7 +8,6 @@ package de.thm.fmi.musicrun.pedometer;
 import java.util.Vector;
 
 import de.thm.fmi.musicrun.application.MainActivity;
-import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -22,7 +21,7 @@ public class StepDetector implements SensorEventListener
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
-	private static final boolean D = true;
+	private static final boolean D = false;
 //    private final static String TAG = "StepDetector";
     
 	public SensorManager sensorManager;
