@@ -1,10 +1,14 @@
 package de.thm.fmi.musicrun.application;
 
 import de.thm.fmi.musicrun.R;
+import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.TypefaceSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +27,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	public static final String DEFAULT_ITALIC_FONT_FILENAME = "fonts/Roboto-ThinItalic.ttf";
 	public static final String DEFAULT_BOLD_ITALIC_FONT_FILENAME = "fonts/Roboto-BoldItalic.ttf";
 
+	// Typefaces
+	private Typeface regular;
+    private Typeface bold;
+    private Typeface italic;
+    private Typeface boldItalic;
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -78,9 +87,31 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			// the adapter. Also specify this Activity object, which implements
 			// the TabListener interface, as the callback (listener) for when
 			// this tab is selected.
-			actionBar.addTab(actionBar.newTab()
-					.setText(mSectionsPagerAdapter.getPageTitle(i))
-					.setTabListener(this));
+			
+			// create text only Tab
+//			actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
+			
+			// create icon with text tab
+//			actionBar.addTab(actionBar.newTab().setText("test").setIcon(R.drawable.ic_launcher).setTabListener(this));
+
+//			// create only icon tab
+//			actionBar.addTab(actionBar.newTab().setText("").setIcon(R.drawable.ic_launcher).setTabListener(this));
+
+			switch(i){
+			case 0: 
+				actionBar.addTab(actionBar.newTab().setText("").setIcon(R.drawable.ic_player1).setTabListener(this));
+				break;
+			case 1: 
+				actionBar.addTab(actionBar.newTab().setText("").setIcon(R.drawable.ic_pedometer3).setTabListener(this));
+				break;
+			case 2:
+				actionBar.addTab(actionBar.newTab().setText("").setIcon(R.drawable.ic_maps2).setTabListener(this));
+				break;
+			case 3:
+				actionBar.addTab(actionBar.newTab().setText("").setIcon(R.drawable.ic_settings).setTabListener(this));
+				break;
+			}
+	
 		}
 		
 		// ....................................................................
@@ -144,23 +175,23 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	private void setDefaultFont() {
 
 	    try {
-	        final Typeface bold = Typeface.createFromAsset(getAssets(), DEFAULT_BOLD_FONT_FILENAME);
-	        final Typeface italic = Typeface.createFromAsset(getAssets(), DEFAULT_ITALIC_FONT_FILENAME);
-	        final Typeface boldItalic = Typeface.createFromAsset(getAssets(), DEFAULT_BOLD_ITALIC_FONT_FILENAME);
-	        final Typeface regular = Typeface.createFromAsset(getAssets(),DEFAULT_NORMAL_FONT_FILENAME);
-
+	    	this.regular = Typeface.createFromAsset(getAssets(),DEFAULT_NORMAL_FONT_FILENAME);
+	        this.bold = Typeface.createFromAsset(getAssets(), DEFAULT_BOLD_FONT_FILENAME);
+	        this.italic = Typeface.createFromAsset(getAssets(), DEFAULT_ITALIC_FONT_FILENAME);
+	        this.boldItalic = Typeface.createFromAsset(getAssets(), DEFAULT_BOLD_ITALIC_FONT_FILENAME);
+	       
 	        java.lang.reflect.Field DEFAULT = Typeface.class.getDeclaredField("DEFAULT");
 	        DEFAULT.setAccessible(true);
-	        DEFAULT.set(null, regular);
+	        DEFAULT.set(null, this.regular);
 
 	        java.lang.reflect.Field DEFAULT_BOLD = Typeface.class.getDeclaredField("DEFAULT_BOLD");
 	        DEFAULT_BOLD.setAccessible(true);
-	        DEFAULT_BOLD.set(null, bold);
+	        DEFAULT_BOLD.set(null, this.bold);
 
 	        java.lang.reflect.Field sDefaults = Typeface.class.getDeclaredField("sDefaults");
 	        sDefaults.setAccessible(true);
 	        sDefaults.set(null, new Typeface[]{
-	                regular, bold, italic, boldItalic
+	                this.regular, this.bold, this.italic, this.boldItalic
 	        });
 
 	    } catch (NoSuchFieldException e) {
