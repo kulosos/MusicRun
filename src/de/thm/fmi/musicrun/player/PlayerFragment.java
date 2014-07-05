@@ -1,60 +1,45 @@
 package de.thm.fmi.musicrun.player;
 
 import de.thm.fmi.musicrun.R;
+import de.thm.fmi.musicrun.application.MainActivity;
 import de.thm.fmi.musicrun.pedometer.IStepDetectionObserver;
 import de.thm.fmi.musicrun.pedometer.StepDetector;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+
 @SuppressLint("ValidFragment")
-public class PlayerFragment extends Fragment implements IStepDetectionObserver {
+public class PlayerFragment extends Fragment {
 
-	private StepDetector stepDetector;
+	// DEBUG
+		private static final String TAG = MainActivity.class.getName();
+		private static final boolean D = false;
 	
-	private TextView tvCount;
-	private int stepcount = 0;	
-
 	// ------------------------------------------------------------------------
 
-	public PlayerFragment(Object systemService){
-
-		// Initialize StepDetector
-		this.stepDetector = new StepDetector(systemService);
-
-		// attach Observer to this activity
-		this.stepDetector.attachObserver(this);
-
-//		tvCount = (TextView) getView().findViewById(R.id.textView1);
+	public PlayerFragment(){
 
 	}
 
 	// -----------------------------------------------------------------------
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater,
-			ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		
+		if(D) Log.i(TAG, "PlayerFragment onCreate()");	
+		
 		/**
 		 * Inflate the layout for this fragment
 		 */
 		return inflater.inflate(
 				R.layout.fragment_main, container, false);
-	}
-	
-	// ------------------------------------------------------------------------
-	
-	// Step Detection Observer Update
-	@Override
-	public void update() {
-
-		// counts the recognized steps
-		this.stepcount = this.stepcount +1;
-//		tvCount.setText( Integer.toString(this.stepcount));
 	}
 
 	// ------------------------------------------------------------------------
@@ -62,10 +47,6 @@ public class PlayerFragment extends Fragment implements IStepDetectionObserver {
 	@Override
 	public void onResume(){
 		super.onResume();
-		
-		// Start StepDetection
-		this.stepDetector.setActivityRunning(true);
-		this.stepDetector.registerSensorManager();
 	}
 	
 	// ------------------------------------------------------------------------
@@ -73,9 +54,6 @@ public class PlayerFragment extends Fragment implements IStepDetectionObserver {
 	@Override
 	public void onPause(){
 		super.onPause();
-		
-		// Stop StepDetection
-		this.stepDetector.setActivityRunning(false);
 	}
 	
 	

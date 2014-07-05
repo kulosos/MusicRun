@@ -2,10 +2,11 @@ package de.thm.fmi.musicrun.pedometer;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
+
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
-import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateFormat;
@@ -15,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-@SuppressLint("ValidFragment")
+
 public class PedometerFragment extends Fragment implements IStepDetectionObserver {
 
 	private StepDetector stepDetector;
@@ -40,14 +41,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	
 	// ------------------------------------------------------------------------
 
-	public PedometerFragment(Object systemService){
-
-		// Initialize StepDetector
-		this.stepDetector = new StepDetector(systemService);
-
-		// attach Observer to this activity
-		this.stepDetector.attachObserver(this);
-		
+	public PedometerFragment(){	
 	}
 
 	// -----------------------------------------------------------------------
@@ -55,6 +49,14 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	
+		if(D) Log.i(TAG, "PedometerFragment onCreateView()");
+		
+		// Initialize StepDetector
+		this.stepDetector = new StepDetector(this.getActivity().getSystemService(Context.SENSOR_SERVICE));
+		// attach Observer to this activity
+		this.stepDetector.attachObserver(this);	
+		
+		// get the fragment view
 		View view = inflater.inflate(R.layout.fragment_pedometer, container, false);
 		
 		// get the textViews on fragment
@@ -63,7 +65,6 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		this.tvStepsPerMinute			= (TextView) view.findViewById(R.id.tvStepsPerMinute);
 		this.tvStepsAverage 			= (TextView) view.findViewById(R.id.tvStepsAverage);
 		this.tvStepDetectionDuration 	= (TextView) view.findViewById(R.id.tvStepDetectionDuration);
-		
 		
 		// time interval, needed for average step calculation
 	    this.customHandlerPerSecond = new Handler();

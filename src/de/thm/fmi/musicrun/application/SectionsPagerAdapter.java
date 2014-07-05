@@ -31,13 +31,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 	// --------------------------------------------------------------------
 	
 	public SectionsPagerAdapter(FragmentManager fm, Activity activity) {
+	
 		super(fm);
 		
-		this.activity = activity;
-		
-		// --------------------
 		if(D)Log.i(TAG, "SectionPagerAdapter CONSTRUCTOR");
-		
+		this.activity = activity;
 		this.setSections();
 	}
 	
@@ -47,13 +45,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 		
 		if(D)Log.i(TAG, "SectionPagerAdapter setSections");
 		
-		this.sections.add(new PlayerFragment(this.activity.getSystemService(Context.SENSOR_SERVICE)));
-		this.sections.add(new PedometerFragment(this.activity.getSystemService(Context.SENSOR_SERVICE))); 
+		this.sections.add(new PlayerFragment());
+		this.sections.add(new PedometerFragment()); 
 		this.sections.add(new MapsFragment()); 
 		this.sections.add(new SettingsFragment()); 
 //		this.sections.add(PlaceholderFragment.newInstance(1));
-		
-
 	}
 	
 	// --------------------------------------------------------------------
@@ -61,7 +57,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 	@Override
 	public Fragment getItem(int position) {
 
-		if(D)Log.i(TAG, "getItem - Instantiate sections from List");
+		if(D)Log.i(TAG, "SectionPagerAdapter - getItem - Instantiate sections from List on position: " + position);
 		return this.sections.get(position);
 	}
 
