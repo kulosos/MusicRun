@@ -1,28 +1,22 @@
 package de.thm.fmi.musicrun.pedometer;
 
-import java.text.DateFormatSymbols;
-import java.util.Calendar;
-
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
-
+@SuppressLint("ResourceAsColor")
 public class PedometerFragment extends Fragment implements IStepDetectionObserver {
-
-	private StepDetector stepDetector;
-	private int stepcount = 0;	
-	private int totalTime;
-	private Float stepFrequencyPerMinute;
 	
 	// TextViews
 	private TextView tvStepsTotal;
@@ -31,8 +25,23 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	private TextView tvStepsPerMinute;
 	private TextView tvStepDetectionDuration;
 	
-	// Timer
+	// Buttons
+	private Button btnStart;
+	private Button btnReset;
+	
+	// StepDetection
+	private StepDetector stepDetector;
+	private int stepcount = 0;	
+	private int totalTime;
+	private Float stepFrequencyPerMinute;
+	private boolean isRunning = false;
+	
+	// Runnable Thread / Timer
 	private Handler customHandlerPerSecond;
+	StopWatch sw = new StopWatch();
+	private Object pauseLock = new Object();
+	private boolean isPaused = false;
+    private boolean isFinished = false;
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -51,11 +60,6 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	
 		if(D) Log.i(TAG, "PedometerFragment onCreateView()");
 		
-		// Initialize StepDetector
-		this.stepDetector = new StepDetector(this.getActivity().getSystemService(Context.SENSOR_SERVICE));
-		// attach Observer to this activity
-		this.stepDetector.attachObserver(this);	
-		
 		// get the fragment view
 		View view = inflater.inflate(R.layout.fragment_pedometer, container, false);
 		
@@ -66,36 +70,114 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		this.tvStepsAverage 			= (TextView) view.findViewById(R.id.tvStepsAverage);
 		this.tvStepDetectionDuration 	= (TextView) view.findViewById(R.id.tvStepDetectionDuration);
 		
-		// time interval, needed for average step calculation
-	    this.customHandlerPerSecond = new Handler();
-        customHandlerPerSecond.postDelayed(updateTimerPerSecond, 0);
+		// start button on fragment and add listener
+		this.btnStart = (Button) view.findViewById(R.id.btn_start);
+		this.btnStart.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+			
+				// start / stop step detection
+				if(isRunning){
+					stopStepDetection();
+				}
+				else{
+					startStepDetection();
+				}
+			}
+		});
+		
+//		// reset button on fragment and add listener
+//		this.btnReset = (Button) view.findViewById(R.id.btn_reset);
+//		this.btnReset.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//			
+//			}
+//		}); 
 
 		return view;
 	}
-    
+
 	// ------------------------------------------------------------------------
 	
-	// time interval, needed for average step calculation
-    private Runnable updateTimerPerSecond = new Runnable()
-	{
-	        public void run()
-	        {
-	        	int intervallTime = 1000; //milliseconds
-//	        	if(D) Log.i(TAG, "TIMER INTERVAL"); 
-	        	totalTime = totalTime + 1;
-	        	tvStepsTotalSinceStart.setText(Float.toString(totalTime));
-	        	
-	            customHandlerPerSecond.postDelayed(this, intervallTime);
+	@Override
+	public void onResume(){
+		super.onResume();
+	}
+	
+	// ------------------------------------------------------------------------
 
-	         // calculate step frequency f=n/t
-	        	stepFrequencyPerMinute = (float)Math.round(((float)stepcount / (float)totalTime) * 60f);
-	        	
-	        	tvStepsAverage.setText(Float.toString((stepFrequencyPerMinute)));
-	        	
-	        	setTime();
-	        }
-	};
-    
+	@Override
+	public void onPause(){
+		super.onPause();
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	private void startStepDetection(){
+		
+		// time interval, needed for average step calculation
+		if(customHandlerPerSecond==null){
+			this.customHandlerPerSecond = new Handler();
+			this.customHandlerPerSecond.postDelayed(updateTimerPerSecond, 0);
+		}
+		
+//		this.customHandlerPerSecond.notifyAll();
+
+        // start the stopWatch
+        this.sw.resume();
+		
+		// Initialize StepDetector
+		if(stepDetector==null){
+			stepDetector = new StepDetector(getActivity().getSystemService(Context.SENSOR_SERVICE));
+		}
+		
+		// Start StepDetection
+		this.stepDetector.setActivityRunning(true);
+		this.stepDetector.registerSensorManager();
+		this.isRunning = true;
+
+		// attach Observer to this activity
+		this.stepDetector.attachObserver(this);
+		
+		// change the button label to stop
+		this.btnStart.setText(this.getResources().getString(R.string.btn_stop));
+		
+		Resources res = getResources();
+		int color = res.getColor(R.color.red);
+		this.btnStart.setTextColor(color);
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	private void stopStepDetection(){
+		
+		// attach Observer to this activity
+		this.stepDetector.detachObserver(this);
+		this.stepDetector.setActivityRunning(false);
+		this.isRunning = false;
+		
+		// change the button label to start
+		this.btnStart.setText(this.getResources().getString(R.string.btn_start));
+		
+		Resources res = getResources();
+		int color = res.getColor(R.color.green);
+		this.btnStart.setTextColor(color);
+		
+		 // start the stopWatch
+        this.sw.pause();
+		
+		// stop runnable handler
+//		this.customHandlerPerSecond.removeCallbacks(updateTimerPerSecond);
+		
+//		try {
+//			this.customHandlerPerSecond.wait();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+	}
+	
 	// ------------------------------------------------------------------------
 	
 	// Step Detection Observer Update
@@ -107,43 +189,85 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
 		this.tvStepsTotal.setText(Float.toString(this.stepcount));
 	}
-
+    
 	// ------------------------------------------------------------------------
 	
-	@Override
-	public void onResume(){
-		super.onResume();
+	// time interval, needed for average step calculation
+	
+	private Runnable updateTimerPerSecond = new Runnable()
+	{
+
+		public void run()
+		{
+			
+			int intervallTime = 1000; //milliseconds
+			//	        	if(D) Log.i(TAG, "TIMER INTERVAL"); 
+			totalTime = totalTime + 1;
+			tvStepsTotalSinceStart.setText(Float.toString(totalTime));
+
+			customHandlerPerSecond.postDelayed(this, intervallTime);
+
+			// calculate step frequency f=n/t
+			stepFrequencyPerMinute = (float)Math.round(((float)stepcount / (float)totalTime) * 60f);
+
+			tvStepsAverage.setText(Float.toString((stepFrequencyPerMinute)));
+
+			setStopWatch();
+			
+			
+//			while(!isFinished){
+//				
+//				synchronized (pauseLock){
+//					while (isPaused){
+//						try{
+//							pauseLock.wait();
+//						}
+//						catch(Exception e){
+//							
+//						}
+//					}
+//				}
+//				
+//			
+//			}
+//		}
+//		
+//		public void onPause() {
+//			synchronized (pauseLock) {
+//				isPaused = true;
+//			}
+//		}
+//
+//		public void onResume() {
+//			synchronized (pauseLock) {
+//				isPaused = false;
+//				pauseLock.notifyAll();
+//			}
+		}
+	};
+	
+	// ------------------------------------------------------------------------
+	
+	public void setStopWatch() {
+
+//		if(D) Log.i(TAG, "StopWatch: " + sw.getElapsedTimeHour() + ":" + sw.getElapsedTimeMin() + ":" +  sw.getElapsedTimeSecs() + ":" + sw.getElapsedTimeMili());
+
+		String hours = "", minutes = "", seconds = "";
+
+		if(sw.getElapsedTimeHour()<10){
+			hours = "0" + Long.toString(sw.getElapsedTimeHour());}
+		else{ hours = Long.toString(sw.getElapsedTimeHour()); }
+
+		if(sw.getElapsedTimeMin()<10){
+			minutes = "0" + Long.toString(sw.getElapsedTimeMin());	}
+		else{ minutes = Long.toString(sw.getElapsedTimeMin());}
 		
-		// Start StepDetection
-		this.stepDetector.setActivityRunning(true);
-		this.stepDetector.registerSensorManager();
-	}
-	
-	// ------------------------------------------------------------------------
-
-	@Override
-	public void onPause(){
-		super.onPause();
+		if(sw.getElapsedTimeSecs()<10){
+			seconds = "0" + Long.toString(sw.getElapsedTimeSecs());}
+		else{seconds = Long.toString(sw.getElapsedTimeSecs());}
 		
-		// Stop StepDetection
-		this.stepDetector.setActivityRunning(false);
+		// set the textView
+		this.tvStepDetectionDuration.setText(hours + ":" + minutes + ":" + seconds);
 	}
-	
-	// ------------------------------------------------------------------------
-	
-	public void setTime() {
-	    Calendar cal = Calendar.getInstance();
-	    int minutes = cal.get(Calendar.MINUTE);
-
-	    if (DateFormat.is24HourFormat(getActivity())) {
-	        int hours = cal.get(Calendar.HOUR_OF_DAY);
-	        this.tvStepDetectionDuration.setText((hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes));
-	    }
-	    else {
-	        int hours = cal.get(Calendar.HOUR);
-	        this.tvStepDetectionDuration.setText(hours + ":" + (minutes < 10 ? "0" + minutes : minutes) + " " + new DateFormatSymbols().getAmPmStrings()[cal.get(Calendar.AM_PM)]);
-	    }
-	}
-	 
 	 // -----------------------------------------------------------------------
 }

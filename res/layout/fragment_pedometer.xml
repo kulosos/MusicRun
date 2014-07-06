@@ -36,7 +36,7 @@
                 <TextView
                     android:id="@+id/tvStepsTotal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="3dp"
@@ -46,12 +46,12 @@
                     android:gravity="right"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="60sp" />
+                    android:textSize="50dp" />
 
                 <TextView
                     android:id="@+id/tvStepsTotalLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -74,7 +74,7 @@
                 <TextView
                     android:id="@+id/tvStepsTotalSinceStart"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="3dp"
@@ -84,12 +84,12 @@
                     android:gravity="right"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="60sp" />
+                    android:textSize="50dp" />
 
                 <TextView
                     android:id="@+id/tvStepsTotalSinceStartLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -122,7 +122,7 @@
                 <TextView
                     android:id="@+id/tvStepsPerMinute"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="3dp"
@@ -132,12 +132,12 @@
                     android:gravity="right"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="60sp" />
+                    android:textSize="50dp" />
 
                 <TextView
                     android:id="@+id/tvStepsPerMinuteLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -160,7 +160,7 @@
                 <TextView
                     android:id="@+id/tvStepsAverage"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="3dp"
@@ -170,12 +170,12 @@
                     android:gravity="right"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="60sp" />
+                    android:textSize="50dp" />
 
                 <TextView
                     android:id="@+id/tvStepsAverageLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -214,15 +214,15 @@
                     android:layout_marginRight="3dp"
                     android:layout_marginTop="3dp"
                     android:background="#404040"
-                    android:gravity="right"
+                    android:gravity="center"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="60sp" />
+                    android:textSize="40sp" />
 
                 <TextView
                     android:id="@+id/tvStepDetectionDurationLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -249,13 +249,16 @@
                 android:id="@+id/btn_start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_start" />
+                android:text="@string/btn_start"
+                android:textColor="#ffffff" />
 
             <Button
                 android:id="@+id/btn_reset"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_reset" />
+                android:text="@string/btn_reset"
+                android:textColor="#ffffff" />
+
         </LinearLayout>
 
     </LinearLayout>

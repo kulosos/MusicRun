@@ -107,13 +107,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				actionBar.addTab(actionBar.newTab().setText("").setIcon(R.drawable.ic_settings).setTabListener(this));
 				break;
 			}
-	
 		}
 		
 		// ....................................................................
 		
 		this.setDefaultFont();
-		
 	}
 
 	// ------------------------------------------------------------------------
@@ -168,6 +166,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	
 	// ------------------------------------------------------------------------
 	
+	// sets the custom typefaces global, except the navigation bar
 	private void setDefaultFont() {
 
 	    try {
