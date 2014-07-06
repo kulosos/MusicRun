@@ -215,7 +215,7 @@
                     android:layout_marginTop="3dp"
                     android:background="#404040"
                     android:gravity="center"
-                    android:text="@string/placeholder_null"
+                    android:text="00:00:00"
                     android:textColor="#00ccff"
                     android:textSize="40sp" />
 
@@ -249,15 +249,15 @@
                 android:id="@+id/btn_start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_start"
-                android:textColor="#ffffff" />
+                android:text="@string/btn_pedometer_start"
+                android:textColor="#00ccff" />
 
             <Button
                 android:id="@+id/btn_reset"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_reset"
-                android:textColor="#ffffff" />
+                android:text="@string/btn_pedometer_reset"
+                android:textColor="#00ccff" />
 
         </LinearLayout>
 

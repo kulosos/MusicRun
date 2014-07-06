@@ -39,9 +39,9 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	// Runnable Thread / Timer
 	private Handler customHandlerPerSecond;
 	StopWatch sw = new StopWatch();
-	private Object pauseLock = new Object();
-	private boolean isPaused = false;
-    private boolean isFinished = false;
+//	private Object pauseLock = new Object();
+	private boolean isPaused = true;
+//    private boolean isFinished = false;
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -78,7 +78,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 			
 				// start / stop step detection
 				if(isRunning){
-					stopStepDetection();
+					pauseStepDetection();
 				}
 				else{
 					startStepDetection();
@@ -116,6 +116,8 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	
 	private void startStepDetection(){
 		
+		this.isPaused = false;
+		
 		// time interval, needed for average step calculation
 		if(customHandlerPerSecond==null){
 			this.customHandlerPerSecond = new Handler();
@@ -141,7 +143,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		this.stepDetector.attachObserver(this);
 		
 		// change the button label to stop
-		this.btnStart.setText(this.getResources().getString(R.string.btn_stop));
+		this.btnStart.setText(this.getResources().getString(R.string.btn_pedometer_pause));
 		
 		Resources res = getResources();
 		int color = res.getColor(R.color.red);
@@ -150,23 +152,29 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	
 	// ------------------------------------------------------------------------
 	
-	private void stopStepDetection(){
+	private void pauseStepDetection(){
 		
+		this.isPaused = true;
+		
+		 // start the stopWatch
+        this.sw.pause();
+        
 		// attach Observer to this activity
 		this.stepDetector.detachObserver(this);
 		this.stepDetector.setActivityRunning(false);
 		this.isRunning = false;
 		
 		// change the button label to start
-		this.btnStart.setText(this.getResources().getString(R.string.btn_start));
+		this.btnStart.setText(this.getResources().getString(R.string.btn_pedometer_start));
 		
 		Resources res = getResources();
-		int color = res.getColor(R.color.green);
+		int color = res.getColor(R.color.systemLightBlue);
 		this.btnStart.setTextColor(color);
 		
-		 // start the stopWatch
-        this.sw.pause();
 		
+		
+        
+        
 		// stop runnable handler
 //		this.customHandlerPerSecond.removeCallbacks(updateTimerPerSecond);
 		
@@ -184,37 +192,39 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	@Override
 	public void update() {
 
-		// count the recognized steps
-		this.stepcount += 1;
-		if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
-		this.tvStepsTotal.setText(Float.toString(this.stepcount));
+		if(!isPaused){
+			// count the recognized steps
+			this.stepcount += 1;
+			if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
+			this.tvStepsTotal.setText(Float.toString(this.stepcount));
+		}
 	}
     
 	// ------------------------------------------------------------------------
 	
 	// time interval, needed for average step calculation
-	
 	private Runnable updateTimerPerSecond = new Runnable()
 	{
 
 		public void run()
 		{
+
 			
-			int intervallTime = 1000; //milliseconds
-			//	        	if(D) Log.i(TAG, "TIMER INTERVAL"); 
-			totalTime = totalTime + 1;
-			tvStepsTotalSinceStart.setText(Float.toString(totalTime));
+				int intervallTime = 1000; //milliseconds
+				//	        	if(D) Log.i(TAG, "TIMER INTERVAL"); 
+				totalTime = totalTime + 1;
+				tvStepsTotalSinceStart.setText(Float.toString(totalTime));
 
-			customHandlerPerSecond.postDelayed(this, intervallTime);
+				customHandlerPerSecond.postDelayed(this, intervallTime);
 
-			// calculate step frequency f=n/t
-			stepFrequencyPerMinute = (float)Math.round(((float)stepcount / (float)totalTime) * 60f);
+				// calculate step frequency f=n/t
+				stepFrequencyPerMinute = (float)Math.round(((float)stepcount / (float)totalTime) * 60f);
 
-			tvStepsAverage.setText(Float.toString((stepFrequencyPerMinute)));
+				tvStepsAverage.setText(Float.toString((stepFrequencyPerMinute)));
 
-			setStopWatch();
+				setStopWatch();
 			
-			
+
 //			while(!isFinished){
 //				
 //				synchronized (pauseLock){
@@ -252,22 +262,24 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 
 //		if(D) Log.i(TAG, "StopWatch: " + sw.getElapsedTimeHour() + ":" + sw.getElapsedTimeMin() + ":" +  sw.getElapsedTimeSecs() + ":" + sw.getElapsedTimeMili());
 
-		String hours = "", minutes = "", seconds = "";
+		if(!isPaused){
+			String hours = "", minutes = "", seconds = "";
 
-		if(sw.getElapsedTimeHour()<10){
-			hours = "0" + Long.toString(sw.getElapsedTimeHour());}
-		else{ hours = Long.toString(sw.getElapsedTimeHour()); }
+			if(sw.getElapsedTimeHour()<10){
+				hours = "0" + Long.toString(sw.getElapsedTimeHour());}
+			else{ hours = Long.toString(sw.getElapsedTimeHour()); }
 
-		if(sw.getElapsedTimeMin()<10){
-			minutes = "0" + Long.toString(sw.getElapsedTimeMin());	}
-		else{ minutes = Long.toString(sw.getElapsedTimeMin());}
-		
-		if(sw.getElapsedTimeSecs()<10){
-			seconds = "0" + Long.toString(sw.getElapsedTimeSecs());}
-		else{seconds = Long.toString(sw.getElapsedTimeSecs());}
-		
-		// set the textView
-		this.tvStepDetectionDuration.setText(hours + ":" + minutes + ":" + seconds);
+			if(sw.getElapsedTimeMin()<10){
+				minutes = "0" + Long.toString(sw.getElapsedTimeMin());	}
+			else{ minutes = Long.toString(sw.getElapsedTimeMin());}
+
+			if(sw.getElapsedTimeSecs()<10){
+				seconds = "0" + Long.toString(sw.getElapsedTimeSecs());}
+			else{seconds = Long.toString(sw.getElapsedTimeSecs());}
+
+			// set the textView
+			this.tvStepDetectionDuration.setText(hours + ":" + minutes + ":" + seconds);
+		}
 	}
 	 // -----------------------------------------------------------------------
 }

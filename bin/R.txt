@@ -43,8 +43,8 @@ int color common_signin_btn_light_text_default 0x7f050004
 int color common_signin_btn_light_text_disabled 0x7f050006
 int color common_signin_btn_light_text_focused 0x7f050007
 int color common_signin_btn_light_text_pressed 0x7f050005
-int color common_signin_btn_text_dark 0x7f050027
-int color common_signin_btn_text_light 0x7f050028
+int color common_signin_btn_text_dark 0x7f050028
+int color common_signin_btn_text_light 0x7f050029
 int color fuchsia 0x7f050019
 int color gray 0x7f05001c
 int color green 0x7f050023
@@ -55,6 +55,7 @@ int color olive 0x7f05001d
 int color purple 0x7f05001e
 int color red 0x7f05001a
 int color silver 0x7f05001b
+int color systemLightBlue 0x7f050027
 int color teal 0x7f050022
 int color wallet_bright_foreground_disabled_holo_light 0x7f05000f
 int color wallet_bright_foreground_holo_dark 0x7f05000a
@@ -69,8 +70,8 @@ int color wallet_hint_foreground_holo_dark 0x7f050012
 int color wallet_hint_foreground_holo_light 0x7f050011
 int color wallet_holo_blue_light 0x7f050015
 int color wallet_link_text_light 0x7f050016
-int color wallet_primary_text_holo_light 0x7f050029
-int color wallet_secondary_text_holo_dark 0x7f05002a
+int color wallet_primary_text_holo_light 0x7f05002a
+int color wallet_secondary_text_holo_dark 0x7f05002b
 int color white 0x7f050017
 int color yellow 0x7f050018
 int dimen activity_horizontal_margin 0x7f090000
@@ -163,9 +164,9 @@ int string auth_client_needs_update_title 0x7f040003
 int string auth_client_play_services_err_notification_msg 0x7f040004
 int string auth_client_requested_by_msg 0x7f040005
 int string auth_client_using_bad_version_title 0x7f040000
-int string btn_reset 0x7f04002c
-int string btn_start 0x7f04002d
-int string btn_stop 0x7f04002e
+int string btn_pedometer_pause 0x7f04002e
+int string btn_pedometer_reset 0x7f04002c
+int string btn_pedometer_start 0x7f04002d
 int string common_google_play_services_enable_button 0x7f040011
 int string common_google_play_services_enable_text 0x7f040010
 int string common_google_play_services_enable_title 0x7f04000f

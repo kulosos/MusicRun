@@ -12,10 +12,10 @@
     <string name="label_stepsperminute">steps per minute</string>
     <string name="label_stepssincestarte">steps since start</string>
     <string name="label_stepsperminute_average">steps / min average</string>
-    <string name="label_stepsdetectionduration">duration</string><string name="btn_reset">Reset</string>
-    <string name="btn_start">Start step detection</string>
+    <string name="label_stepsdetectionduration">duration</string><string name="btn_pedometer_reset">Reset</string>
+    <string name="btn_pedometer_start">Start step detection</string>
     
-    <string name="btn_stop">Stop step detection</string>
+    <string name="btn_pedometer_pause">Pause step detection</string>
     
 
 </resources>
