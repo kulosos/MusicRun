@@ -214,7 +214,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 			// count the recognized steps
 			this.stepcount += 1;
 			if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
-			this.tvStepsTotal.setText(Float.toString(this.stepcount));
+			this.tvStepsTotal.setText(Integer.toString(this.stepcount));
 		}
 	}
     
@@ -228,11 +228,11 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 				int intervallTime = 1000; //milliseconds
 				
 				// calculate step frequency f=n/t
-				stepFrequencyPerMinute = (float)Math.round(((float)stepcount / (float)totalTime) * 60f);
+				stepFrequencyPerMinute = (float)((float)stepcount / (float)totalTime) * 60f;
 
 				// sets the stopWatch, timer textview and counts the totaltime (in stopWach method)
 				setStopWatch();
-				tvStepsAverage.setText(Float.toString((stepFrequencyPerMinute)));
+				tvStepsAverage.setText(Integer.toString(((int)Math.round(stepFrequencyPerMinute))));
 				
 				customHandlerPerSecond.postDelayed(this, intervallTime);
 		}
