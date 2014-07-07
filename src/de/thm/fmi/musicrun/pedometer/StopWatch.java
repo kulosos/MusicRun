@@ -1,8 +1,5 @@
 package de.thm.fmi.musicrun.pedometer;
 
-import android.util.Log;
-import de.thm.fmi.musicrun.application.MainActivity;
-
 public class StopWatch {
 	
 	private long startTime = 0;
@@ -10,8 +7,8 @@ public class StopWatch {
 	private long currentTime = 0;
 	
 	// DEBUG
-	private static final String TAG = MainActivity.class.getName();
-	private static final boolean D = true;
+//	private static final String TAG = MainActivity.class.getName();
+//	private static final boolean D = true;
 
 	// ------------------------------------------------------------------------
 	public void start() {

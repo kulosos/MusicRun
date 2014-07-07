@@ -197,10 +197,10 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		
 		// clear all textViews
 		this.tvStepDetectionDuration.setText("00:00:00");
-		this.tvStepsAverage.setText("0.0");
-		this.tvStepsPerMinute.setText("0.0");
-		this.tvStepsTotal.setText("0.0");
-		this.tvStepsTotalSinceStart.setText("0.0");
+		this.tvStepsAverage.setText("0");
+		this.tvStepsPerMinute.setText("0");
+		this.tvStepsTotal.setText("0");
+		this.tvStepsTotalSinceStart.setText("0");
 		
 	}
 	
@@ -213,7 +213,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		if(!isPaused){
 			// count the recognized steps
 			this.stepcount += 1;
-			if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
+//			if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
 			this.tvStepsTotal.setText(Integer.toString(this.stepcount));
 		}
 	}
@@ -267,5 +267,6 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 			this.tvStepsTotalSinceStart.setText(Float.toString(totalTime));
 		}
 	}
-	 // -----------------------------------------------------------------------
+	 
+	// -----------------------------------------------------------------------
 }
