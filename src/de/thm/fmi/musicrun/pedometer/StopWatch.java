@@ -40,6 +40,14 @@ public class StopWatch {
 	}
 
 	// ------------------------------------------------------------------------
+	
+	public void clear(){
+		this.startTime = 0;
+		this.running = false;
+		this.currentTime = 0;
+	}
+	
+	// ------------------------------------------------------------------------
 	//elaspsed time in milliseconds
 	public long getElapsedTimeMili() {
 		long elapsed = 0;
