@@ -9,30 +9,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.app.FragmentTransaction;
-import android.graphics.Typeface;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
 	// App Navigation
 	SectionsPagerAdapter mSectionsPagerAdapter;
 	ViewPager mViewPager;
-	
-	// Constants
-	public static final String DEFAULT_NORMAL_FONT_FILENAME = "fonts/Roboto-Thin.ttf";
-	public static final String DEFAULT_BOLD_FONT_FILENAME = "fonts/Roboto-Bold.ttf";
-	public static final String DEFAULT_ITALIC_FONT_FILENAME = "fonts/Roboto-ThinItalic.ttf";
-	public static final String DEFAULT_BOLD_ITALIC_FONT_FILENAME = "fonts/Roboto-BoldItalic.ttf";
 
 	// Typefaces
-	private Typeface regular;
-    private Typeface bold;
-    private Typeface italic;
-    private Typeface boldItalic;
+	TypefaceManager typefaceMgr;
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
 	private static final boolean D = true;
-	
+
 	// ------------------------------------------------------------------------
 	
 	public MainActivity(){
@@ -111,7 +101,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		
 		// ....................................................................
 		
-		this.setDefaultFont();
+		// Set global Typefaces
+		this.typefaceMgr = new TypefaceManager(this);
+		this.typefaceMgr.setDefaultFont();
 	}
 
 	// ------------------------------------------------------------------------
@@ -164,38 +156,4 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 	}
 	
-	// ------------------------------------------------------------------------
-	
-	// sets the custom typefaces global, except the navigation bar
-	private void setDefaultFont() {
-
-	    try {
-	    	this.regular = Typeface.createFromAsset(getAssets(),DEFAULT_NORMAL_FONT_FILENAME);
-	        this.bold = Typeface.createFromAsset(getAssets(), DEFAULT_BOLD_FONT_FILENAME);
-	        this.italic = Typeface.createFromAsset(getAssets(), DEFAULT_ITALIC_FONT_FILENAME);
-	        this.boldItalic = Typeface.createFromAsset(getAssets(), DEFAULT_BOLD_ITALIC_FONT_FILENAME);
-	       
-	        java.lang.reflect.Field DEFAULT = Typeface.class.getDeclaredField("DEFAULT");
-	        DEFAULT.setAccessible(true);
-	        DEFAULT.set(null, this.regular);
-
-	        java.lang.reflect.Field DEFAULT_BOLD = Typeface.class.getDeclaredField("DEFAULT_BOLD");
-	        DEFAULT_BOLD.setAccessible(true);
-	        DEFAULT_BOLD.set(null, this.bold);
-
-	        java.lang.reflect.Field sDefaults = Typeface.class.getDeclaredField("sDefaults");
-	        sDefaults.setAccessible(true);
-	        sDefaults.set(null, new Typeface[]{
-	                this.regular, this.bold, this.italic, this.boldItalic
-	        });
-
-	    } catch (NoSuchFieldException e) {
-	        Log.e(TAG, e.toString());
-	    } catch (IllegalAccessException e) {
-	    	Log.e(TAG, e.toString());
-	    } catch (Throwable e) {
-	        //cannot crash app if there is a failure with overriding the default font!
-	    	Log.e(TAG, e.toString());
-	    }
-	}	
 }

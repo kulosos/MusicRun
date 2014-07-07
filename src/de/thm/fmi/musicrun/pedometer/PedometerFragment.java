@@ -2,9 +2,13 @@ package de.thm.fmi.musicrun.pedometer;
 
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
+import de.thm.fmi.musicrun.application.TypefaceManager;
+import de.thm.fmi.musicrun.application.TypefaceManager.FontStyle;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,10 +43,14 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	// Runnable Thread / Timer
 	private Handler customHandlerPerSecond;
 	StopWatch sw = new StopWatch();
-//	private Object pauseLock = new Object();
+	private Object pauseLock = new Object();
 	private boolean isPaused = true;
-//    private boolean isFinished = false;
+    private boolean isFinished = false;
+    private Intent timerIntentService = null;
 	
+    // TypefaceManager
+    TypefaceManager typefaceMgr;
+    
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
 	private static final boolean D = true;
@@ -94,7 +102,16 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 //			
 //			}
 //		}); 
-
+		
+		// TODO:
+		// find a better way
+		// this is not a good implementation for bold fonts here
+		// get TypefaceManager (Buttons need it for BoldTypeface
+		this.typefaceMgr = new TypefaceManager(getActivity());
+		
+		this.btnStart.setTypeface(this.typefaceMgr.getTypeface(FontStyle.BOLD));
+//		this.btnReset.setTypeface(this.typefaceMgr.getTypeface(FontStyle.BOLD));
+		
 		return view;
 	}
 
@@ -103,6 +120,11 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	@Override
 	public void onResume(){
 		super.onResume();
+		// start intentService
+		if(this.timerIntentService == null){
+			this.timerIntentService = new Intent(getActivity(), TimerIntentService.class);
+		}
+		this.getActivity().startService(timerIntentService);
 	}
 	
 	// ------------------------------------------------------------------------
@@ -148,6 +170,13 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		Resources res = getResources();
 		int color = res.getColor(R.color.red);
 		this.btnStart.setTextColor(color);
+		
+//		// start intentService
+//		if(this.timerIntentService == null){
+//			this.timerIntentService = new Intent(getActivity(), TimerIntentService.class);
+//		}
+//		getActivity().startService(timerIntentService);
+	
 	}
 	
 	// ------------------------------------------------------------------------
@@ -170,8 +199,6 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		Resources res = getResources();
 		int color = res.getColor(R.color.systemLightBlue);
 		this.btnStart.setTextColor(color);
-		
-		
 		
         
         
@@ -208,8 +235,6 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 
 		public void run()
 		{
-
-			
 				int intervallTime = 1000; //milliseconds
 				//	        	if(D) Log.i(TAG, "TIMER INTERVAL"); 
 				totalTime = totalTime + 1;
@@ -224,8 +249,21 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 
 				setStopWatch();
 			
-
+//			int intervallTime = 1000; //milliseconds
+//
 //			while(!isFinished){
+//				
+//				totalTime = totalTime + 1;
+//				tvStepsTotalSinceStart.setText(Float.toString(totalTime));
+//
+//				customHandlerPerSecond.postDelayed(this, intervallTime);
+//
+//				// calculate step frequency f=n/t
+//				stepFrequencyPerMinute = (float)Math.round(((float)stepcount / (float)totalTime) * 60f);
+//
+//				tvStepsAverage.setText(Float.toString((stepFrequencyPerMinute)));
+//
+//				setStopWatch();
 //				
 //				synchronized (pauseLock){
 //					while (isPaused){
@@ -233,7 +271,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 //							pauseLock.wait();
 //						}
 //						catch(Exception e){
-//							
+//							if(D) Log.e(TAG, "PAUSELOCK - " + e);
 //						}
 //					}
 //				}
