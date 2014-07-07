@@ -10,6 +10,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -94,8 +95,8 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 			}
 		});
 		
-//		// reset button on fragment and add listener
-//		this.btnReset = (Button) view.findViewById(R.id.btn_reset);
+		// reset button on fragment and add listener
+		this.btnReset = (Button) view.findViewById(R.id.btn_reset);
 //		this.btnReset.setOnClickListener(new View.OnClickListener() {
 //			@Override
 //			public void onClick(View v) {
@@ -104,14 +105,14 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 //		}); 
 		
 		// TODO:
-		// find a better way
-		// this is not a good implementation for bold fonts here
-		// get TypefaceManager (Buttons need it for BoldTypeface
-		this.typefaceMgr = new TypefaceManager(getActivity());
-		
-		this.btnStart.setTypeface(this.typefaceMgr.getTypeface(FontStyle.BOLD));
-//		this.btnReset.setTypeface(this.typefaceMgr.getTypeface(FontStyle.BOLD));
-		
+		// find a better way, this is not a good implementation for bold fonts here
+		// set seperate Typeface for Buttons (a little bit wider)
+	    this.typefaceMgr = new TypefaceManager(getActivity());
+		Typeface fontBold = Typeface.createFromAsset(getActivity().getAssets(), this.typefaceMgr.getTypeface(FontStyle.BOLD));
+	    this.btnStart.setTypeface(fontBold);
+	    this.btnReset.setTypeface(fontBold);
+	   		
+
 		return view;
 	}
 

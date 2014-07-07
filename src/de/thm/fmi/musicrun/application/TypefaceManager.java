@@ -10,10 +10,10 @@ public class TypefaceManager {
 	Activity activity;
 	
 	// Constants
-	public static final String DEFAULT_NORMAL_FONT_FILENAME = "fonts/Roboto-Thin.ttf";
-	public static final String DEFAULT_BOLD_FONT_FILENAME = "fonts/Roboto-Bold.ttf";
-	public static final String DEFAULT_ITALIC_FONT_FILENAME = "fonts/Roboto-ThinItalic.ttf";
-	public static final String DEFAULT_BOLD_ITALIC_FONT_FILENAME = "fonts/Roboto-BoldItalic.ttf";
+	private static final String DEFAULT_NORMAL_FONT_FILENAME = "fonts/Roboto-Thin.ttf";
+	private static final String DEFAULT_BOLD_FONT_FILENAME = "fonts/Roboto-Regular.ttf";
+	private static final String DEFAULT_ITALIC_FONT_FILENAME = "fonts/Roboto-ThinItalic.ttf";
+	private static final String DEFAULT_BOLD_ITALIC_FONT_FILENAME = "fonts/Roboto-BoldItalic.ttf";
 
 	// Typefaces
 	private Typeface regular;
@@ -70,14 +70,14 @@ public class TypefaceManager {
 	
 	// ------------------------------------------------------------------------
 	
-	public Typeface getTypeface(FontStyle style){
+	public String getTypeface(FontStyle style){
 	
 		switch(style){
-		case REGULAR: 		return this.regular;
-		case BOLD:			return this.bold;
-		case ITALIC:		return this.italic;
-		case ITALIC_BOLD:	return this.boldItalic;
-		default:			return this.regular;
+		case REGULAR: 		return this.DEFAULT_NORMAL_FONT_FILENAME;
+		case BOLD:			return this.DEFAULT_BOLD_FONT_FILENAME;
+		case ITALIC:		return this.DEFAULT_ITALIC_FONT_FILENAME;
+		case ITALIC_BOLD:	return this.DEFAULT_BOLD_ITALIC_FONT_FILENAME;
+		default:			return this.DEFAULT_NORMAL_FONT_FILENAME;
 		}
 	}
 	
