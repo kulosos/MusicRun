@@ -35,6 +35,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	// StepDetection
 	private StepDetector stepDetector;
 	private int stepcount = 0;	
+	private int stepcountAPI19 = 0;
 	private int totalTime;
 	private Float stepFrequencyPerMinute;
 	private boolean isRunning = false;
@@ -152,6 +153,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		// attach Observer to this activity
 		this.stepDetector.attachObserver(this);
 		
+		
 		// change the button label to stop
 		this.btnStart.setText(this.getResources().getString(R.string.btn_pedometer_pause));
 		
@@ -194,6 +196,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		this.totalTime = 0;
 		this.stepcount = 0;
 		this.stepFrequencyPerMinute = 0.0f;
+		this.stepcountAPI19 = 0;
 		
 		// clear all textViews
 		this.tvStepDetectionDuration.setText("00:00:00");
@@ -215,6 +218,20 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 			this.stepcount += 1;
 //			if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
 			this.tvStepsTotal.setText(Integer.toString(this.stepcount));
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	// Step Detection Observer Update
+	@Override
+	public void updateForAPILevel19() {
+
+		if(!isPaused){
+			// count the recognized steps
+			this.stepcountAPI19 += 1;
+//			if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
+			this.tvStepsTotalSinceStart.setText(Integer.toString(this.stepcountAPI19));
 		}
 	}
     
@@ -264,7 +281,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 			
 			// count the total seconds
 			this.totalTime += 1;
-			this.tvStepsTotalSinceStart.setText(Float.toString(totalTime));
+//			this.tvStepsTotalSinceStart.setText(Float.toString(totalTime));
 		}
 	}
 	 
