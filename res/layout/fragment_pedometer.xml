@@ -44,6 +44,8 @@
                     android:layout_marginTop="3dp"
                     android:background="#404040"
                     android:gravity="right"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
                     android:textSize="50dp" />
@@ -59,10 +61,14 @@
                     android:layout_marginTop="0dp"
                     android:background="#303030"
                     android:gravity="right"
-                    android:padding="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
                     android:text="@string/label_totalsteps"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -82,6 +88,8 @@
                     android:layout_marginTop="3dp"
                     android:background="#404040"
                     android:gravity="right"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
                     android:textSize="50dp" />
@@ -97,10 +105,14 @@
                     android:layout_marginTop="0dp"
                     android:background="#303030"
                     android:gravity="right"
-                    android:padding="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
                     android:text="@string/label_stepssincestarte"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
+
             </LinearLayout>
         </LinearLayout>
         <!-- FIRST LINEAR HORIZONTAL ROW END -->
@@ -130,9 +142,11 @@
                     android:layout_marginTop="3dp"
                     android:background="#404040"
                     android:gravity="right"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="50dp" />
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/tvStepsPerMinuteLabel"
@@ -145,10 +159,14 @@
                     android:layout_marginTop="0dp"
                     android:background="#303030"
                     android:gravity="right"
-                    android:padding="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
                     android:text="@string/label_stepsperminute"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -168,6 +186,8 @@
                     android:layout_marginTop="3dp"
                     android:background="#404040"
                     android:gravity="right"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
                     android:textSize="50dp" />
@@ -183,10 +203,14 @@
                     android:layout_marginTop="0dp"
                     android:background="#303030"
                     android:gravity="right"
-                    android:padding="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
                     android:text="@string/label_stepsperminute_average"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
+
             </LinearLayout>
         </LinearLayout>
         <!-- SECOND LINEAR HORIZONTAL ROW END -->
@@ -230,10 +254,14 @@
                     android:layout_marginTop="0dp"
                     android:background="#303030"
                     android:gravity="right"
-                    android:padding="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
                     android:text="@string/label_stepsdetectionduration"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
+
             </LinearLayout>
         </LinearLayout>
         <!-- THIRD LINEAR HORIZONTAL ROW END -->

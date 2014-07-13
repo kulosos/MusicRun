@@ -39,6 +39,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	private int totalTime;
 	private Float stepFrequencyPerMinute;
 	private boolean isRunning = false;
+	private Float distance;
 	
 	// Runnable Thread / Timer
 	private Handler customHandlerPerSecond;
@@ -107,7 +108,7 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		Typeface fontBold = Typeface.createFromAsset(getActivity().getAssets(), this.typefaceMgr.getTypeface(FontStyle.BOLD));
 	    this.btnStart.setTypeface(fontBold);
 	    this.btnReset.setTypeface(fontBold);
-
+	    
 		return view;
 	}
 
@@ -160,6 +161,11 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		Resources res = getResources();
 		int color = res.getColor(R.color.red);
 		this.btnStart.setTextColor(color);
+		
+	    // deactivate when api level < 19
+	    if(this.stepDetector.getApiLevel()<19){
+	    	this.tvStepsTotalSinceStart.setText("n.a.");
+	    }
 	}
 	
 	// ------------------------------------------------------------------------
@@ -218,6 +224,10 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 			this.stepcount += 1;
 //			if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
 			this.tvStepsTotal.setText(Integer.toString(this.stepcount));
+			
+			this.distance = (this.stepcount * 0.80f) / 1000;
+		
+			this.tvStepsPerMinute.setText(Float.toString(this.distance));
 		}
 	}
 	

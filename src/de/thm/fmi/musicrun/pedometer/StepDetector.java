@@ -72,44 +72,26 @@ public class StepDetector implements SensorEventListener
 		//    	TODO: API Level Detection (TYPE_STEP_COUNTER for API Level 19 and higher)
 		this.apiLevel = Integer.valueOf(android.os.Build.VERSION.SDK);
 		if(D) Log.i(TAG, "Detected API version: " + apiLevel);
-
-//		if(this.apiLevel < 19){
-//			
-//			Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-//
-//			if (countSensor != null) {
-//				Log.i(TAG, "DEBUG - API Level < 19 - SUCCESS: Count sensoravailable"); // DEBUG
-//				sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
-//			} else {
-//				Log.e(TAG, "DEBUG - API Level < 19 - ERROR: Count sensor not available"); // DEBUG
-//				// Toast.makeText(Context.SENSOR_SERVICE, "Count sensor not available!", Toast.LENGTH_LONG).show();
-//			}
-//		}
-//		else{
-//
-//			Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-//
-//			if (countSensor != null) {
-//				Log.i(TAG, "DEBUG - API Level >= 19 - SUCCESS: Count sensoravailable"); // DEBUG
-//				sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_NORMAL);
-//			} else {
-//				Log.e(TAG, "DEBUG - API Level >= 19 - ERROR: Count sensor not available"); // DEBUG
-//				// Toast.makeText(Context.SENSOR_SERVICE, "Count sensor not available!", Toast.LENGTH_LONG).show();
-//			}
-//		}
 		
+		// available in every device with sensor
 		Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		Sensor countSensor2 = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-		
 		if (countSensor != null) {
 			Log.i(TAG, "DEBUG - API Level < 19 - SUCCESS: Count sensoravailable"); // DEBUG
 			sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
-			sensorManager.registerListener(this, countSensor2, SensorManager.SENSOR_DELAY_UI);
 		} else {
 			Log.e(TAG, "DEBUG - API Level < 19 - ERROR: Count sensor not available"); // DEBUG
 			// Toast.makeText(Context.SENSOR_SERVICE, "Count sensor not available!", Toast.LENGTH_LONG).show();
 		}
 
+		// available up to API Level 19
+		Sensor countSensor2 = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+		if (countSensor2 != null) {
+			Log.i(TAG, "DEBUG - API Level >= 19 - SUCCESS: Count sensoravailable"); // DEBUG
+			sensorManager.registerListener(this, countSensor2, SensorManager.SENSOR_DELAY_GAME);
+		} else {
+			Log.e(TAG, "DEBUG - API Level >= 19 - ERROR: Count sensor not available"); // DEBUG
+			// Toast.makeText(Context.SENSOR_SERVICE, "Count sensor not available!", Toast.LENGTH_LONG).show();
+		}
 
 
 	}
@@ -119,8 +101,6 @@ public class StepDetector implements SensorEventListener
 	public void onSensorChanged(SensorEvent event) {
 		//if(D) Log.d(TAG, "DEBUG - onSensorChanged"); // DEBUG
 
-		
-		
 		if(this.apiLevel < 19 || this.apiComparison){
 
 			if(this.isActivityRunning){
@@ -218,6 +198,10 @@ public class StepDetector implements SensorEventListener
 
 	public boolean getActivityRunning(){
 		return this.isActivityRunning;
+	}
+	
+	public int getApiLevel(){
+		return this.apiLevel;
 	}
 
 }
