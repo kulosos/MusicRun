@@ -4,11 +4,13 @@ import de.thm.fmi.musicrun.R;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
@@ -104,6 +106,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		// Set global Typefaces
 		this.typefaceMgr = new TypefaceManager(this);
 		this.typefaceMgr.setDefaultFont();
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String stepLength = prefs.getString("pref_key_steplength", "default value for this shit");
+		
+		if(D) Log.i(TAG, " ##################### ################## " + stepLength);
 	}
 
 	// ------------------------------------------------------------------------

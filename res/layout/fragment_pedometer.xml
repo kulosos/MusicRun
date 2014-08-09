@@ -48,7 +48,7 @@
                     android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="50dp" />
+                    android:textSize="40sp" />
 
                 <TextView
                     android:id="@+id/tvStepsTotalLabel"
@@ -92,7 +92,7 @@
                     android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="50dp" />
+                    android:textSize="40sp" />
 
                 <TextView
                     android:id="@+id/tvStepsTotalSinceStartLabel"
@@ -146,7 +146,7 @@
                     android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="30sp" />
+                    android:textSize="40sp" />
 
                 <TextView
                     android:id="@+id/tvStepsPerMinuteLabel"
@@ -190,7 +190,7 @@
                     android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="50dp" />
+                    android:textSize="40sp" />
 
                 <TextView
                     android:id="@+id/tvStepsAverageLabel"

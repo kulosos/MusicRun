@@ -7,10 +7,13 @@ import de.thm.fmi.musicrun.application.TypefaceManager.FontStyle;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +22,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 @SuppressLint("ResourceAsColor")
-public class PedometerFragment extends Fragment implements IStepDetectionObserver {
+public class PedometerFragment extends Fragment implements IStepDetectionObserver, OnSharedPreferenceChangeListener {
 	
 	// TextViews
 	private TextView tvStepsTotal;
@@ -48,6 +51,10 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	
     // TypefaceManager
     TypefaceManager typefaceMgr;
+    
+    // Preferences
+    SharedPreferences prefs;
+    private Float stepLength;
     
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -108,6 +115,16 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 		Typeface fontBold = Typeface.createFromAsset(getActivity().getAssets(), this.typefaceMgr.getTypeface(FontStyle.BOLD));
 	    this.btnStart.setTypeface(fontBold);
 	    this.btnReset.setTypeface(fontBold);
+	    
+	    
+	    // PREFERENCES
+	    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        // register preference change listener
+        prefs.registerOnSharedPreferenceChangeListener(this);
+        // and set remembered preferences
+        this.stepLength = Float.parseFloat((prefs.getString("pref_key_steplength", "120")));
+        
+        if(D) Log.i(TAG, "STEPLENGTH FROM SETTINGS: " + this.stepLength);
 	    
 		return view;
 	}
@@ -225,9 +242,9 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 //			if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
 			this.tvStepsTotal.setText(Integer.toString(this.stepcount));
 			
-			this.distance = (this.stepcount * 0.80f) / 1000;
-		
-			this.tvStepsPerMinute.setText(Float.toString(this.distance));
+			// calculate run distance
+			this.distance = (this.stepcount * (this.stepLength*0.01f)) / 1000;
+			this.tvStepsPerMinute.setText(String.format("%.3f", this.distance));
 		}
 	}
 	
@@ -293,6 +310,18 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 			this.totalTime += 1;
 //			this.tvStepsTotalSinceStart.setText(Float.toString(totalTime));
 		}
+	}
+	
+	// ------------------------------------------------------------------------
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
+		
+//		if (key.equals("weightValues")) {
+//            this.stepLength = Float.parseFloat((prefs.getString("pref_key_steplength", "120")));
+//            
+//            if(D) Log.i(TAG, "STEPLENGTH FROM SETTINGS CHANGED: " + this.stepLength);
+//        }
 	}
 	 
 	// -----------------------------------------------------------------------

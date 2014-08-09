@@ -10,10 +10,10 @@ public class TypefaceManager {
 	Activity activity;
 	
 	// Constants
-	private static final String DEFAULT_NORMAL_FONT_FILENAME = "fonts/Roboto-Thin.ttf";
-	private static final String DEFAULT_BOLD_FONT_FILENAME = "fonts/Roboto-Regular.ttf";
-	private static final String DEFAULT_ITALIC_FONT_FILENAME = "fonts/Roboto-ThinItalic.ttf";
-	private static final String DEFAULT_BOLD_ITALIC_FONT_FILENAME = "fonts/Roboto-BoldItalic.ttf";
+	private static final String DEFAULT_NORMAL_FONT_FILENAME = "fonts/Lato-Light.ttf";
+	private static final String DEFAULT_BOLD_FONT_FILENAME = "fonts/Lato-Regular.ttf";
+	private static final String DEFAULT_ITALIC_FONT_FILENAME = "fonts/Lato-Semibold.ttf";
+	private static final String DEFAULT_BOLD_ITALIC_FONT_FILENAME = "fonts/Lato-Bold.ttf";
 
 	// Typefaces
 	private Typeface regular;

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">MusicRun</string>
-    <string name="title_section1">Player</string>
+    <string name="title_section1">MusicPlayer</string>
     <string name="title_section2">Pedometer</string>
     <string name="title_section3">Maps</string>
     <string name="title_section4">Settings</string>
@@ -16,6 +16,8 @@
     <string name="btn_pedometer_start">Start step detection</string>
     
     <string name="btn_pedometer_pause">Pause step detection</string>
+    <string name="settings_label_pedometer_steplength">Step length (cm)</string>
+    <string name="settings_label_pedometer_steplength_desc">Please enter your step length in cm</string>
     
 
 </resources>
