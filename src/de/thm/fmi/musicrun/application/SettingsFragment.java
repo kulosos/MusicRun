@@ -2,9 +2,12 @@ package de.thm.fmi.musicrun.application;
 
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
+import android.app.DialogFragment;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
@@ -22,6 +25,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	        // Load the preferences from an XML resource
 	        addPreferencesFromResource(R.xml.preferences);
 	        
+//	        this.setPreferencesListener();
 
 	    }
 
@@ -34,27 +38,21 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	
 	// -----------------------------------------------------------------------
 	
-//	@Override
-//	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//		
-//		if(D) Log.i(TAG, "SettingsFragment onCreate()");
-//		/**
-//		 * Inflate the layout for this fragment
-//		 */
-//		return inflater.inflate(R.layout.fragment_settings, container, false);
-//	}
-
-	// ------------------------------------------------------------------------
-	
-//	@Override
-//	public void onResume(){
-//		super.onResume();
-//	}
-//	
-//	// ------------------------------------------------------------------------
+//	private void setPreferencesListener(){
 //
-//	@Override
-//	public void onPause(){
-//		super.onPause();
+//		Preference dialogPreference = (Preference) getPreferenceScreen().findPreference("dialog_preference");
+//		dialogPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+//		        public boolean onPreferenceClick(Preference preference) {
+//		           
+//
+//				    DialogFragment newFragment = new StepLengthDialogFragment();
+//				    newFragment.show(getActivity().getFragmentManager(), "missiles");
+//		          
+//		        	
+//		            return true;
+//		        }
+//		    });
 //	}
+	
+
 }

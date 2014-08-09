@@ -21,7 +21,7 @@ public class StepDetector implements SensorEventListener
 
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
-	private static final boolean D = true;
+	private static final boolean D = false;
 	//    private final static String TAG = "StepDetector";
 
 	public SensorManager sensorManager;
@@ -79,7 +79,7 @@ public class StepDetector implements SensorEventListener
 			Log.i(TAG, "DEBUG - API Level < 19 - SUCCESS: Count sensoravailable"); // DEBUG
 			sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
 		} else {
-			Log.e(TAG, "DEBUG - API Level < 19 - ERROR: Count sensor not available"); // DEBUG
+			Log.w(TAG, "DEBUG - API Level < 19 - ERROR: Count sensor not available"); // DEBUG
 			// Toast.makeText(Context.SENSOR_SERVICE, "Count sensor not available!", Toast.LENGTH_LONG).show();
 		}
 
@@ -89,7 +89,7 @@ public class StepDetector implements SensorEventListener
 			Log.i(TAG, "DEBUG - API Level >= 19 - SUCCESS: Count sensoravailable"); // DEBUG
 			sensorManager.registerListener(this, countSensor2, SensorManager.SENSOR_DELAY_GAME);
 		} else {
-			Log.e(TAG, "DEBUG - API Level >= 19 - ERROR: Count sensor not available"); // DEBUG
+			Log.w(TAG, "DEBUG - API Level >= 19 - ERROR: Count sensor not available"); // DEBUG
 			// Toast.makeText(Context.SENSOR_SERVICE, "Count sensor not available!", Toast.LENGTH_LONG).show();
 		}
 

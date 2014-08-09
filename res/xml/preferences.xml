@@ -20,6 +20,8 @@
         android:title="@string/title_section2" >
         <EditTextPreference
             android:key="pref_key_steplength"
+            android:inputType="number"
+            android:defaultValue="120"
             android:summary="@string/settings_label_pedometer_steplength_desc"
             android:title="@string/settings_label_pedometer_steplength"  >
         </EditTextPreference>
@@ -27,6 +29,7 @@
     <PreferenceCategory
         android:key="pref_key_storage_settings"
         android:title="@string/title_section3" >
+
     </PreferenceCategory>
     
     <!-- MAPS SETTINGS -->

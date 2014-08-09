@@ -15,9 +15,11 @@
     <string name="label_stepsdetectionduration">duration</string><string name="btn_pedometer_reset">Reset</string>
     <string name="btn_pedometer_start">Start step detection</string>
     
-    <string name="btn_pedometer_pause">Pause step detection</string>
+    <string name="btn_pedometer_pause">Pause step detection</string><string name="btn_ok">OK</string><string name="btn_cancel">Cancel</string>
     <string name="settings_label_pedometer_steplength">Step length (cm)</string>
     <string name="settings_label_pedometer_steplength_desc">Please enter your step length in cm</string>
+    
+    
     
 
 </resources>

@@ -23,7 +23,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
-	private static final boolean D = true;
+	private static final boolean D = false;
 
 	// ------------------------------------------------------------------------
 	
@@ -109,8 +109,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String stepLength = prefs.getString("pref_key_steplength", "default value for this shit");
-		
-		if(D) Log.i(TAG, " ##################### ################## " + stepLength);
 	}
 
 	// ------------------------------------------------------------------------
@@ -144,7 +142,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	@Override
 	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 		
-		if(D)Log.i(TAG, "MainActivity- onTabSelected - tab.getPosition: " + tab.getPosition());
 		
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.

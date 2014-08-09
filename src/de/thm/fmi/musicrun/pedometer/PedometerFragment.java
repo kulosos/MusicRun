@@ -2,9 +2,11 @@ package de.thm.fmi.musicrun.pedometer;
 
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
+import de.thm.fmi.musicrun.application.StepLengthDialogFragment;
 import de.thm.fmi.musicrun.application.TypefaceManager;
 import de.thm.fmi.musicrun.application.TypefaceManager.FontStyle;
 import android.annotation.SuppressLint;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -53,8 +55,8 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
     TypefaceManager typefaceMgr;
     
     // Preferences
-    SharedPreferences prefs;
-    private Float stepLength;
+    private SharedPreferences prefs;
+    private Float stepLength = 120.0f;
     
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -118,13 +120,11 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	    
 	    
 	    // PREFERENCES
-	    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+	    this.prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         // register preference change listener
         prefs.registerOnSharedPreferenceChangeListener(this);
         // and set remembered preferences
-        this.stepLength = Float.parseFloat((prefs.getString("pref_key_steplength", "120")));
-        
-        if(D) Log.i(TAG, "STEPLENGTH FROM SETTINGS: " + this.stepLength);
+        this.stepLength = Float.parseFloat((prefs.getString("pref_key_steplength", "120.0")));
 	    
 		return view;
 	}
@@ -211,23 +211,25 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	
 	private void resetStepDetection(){
 		
-		this.pauseStepDetection();
-		
-		// clear the stopWatch
-		this.sw.clear();
-		
-		this.totalTime = 0;
-		this.stepcount = 0;
-		this.stepFrequencyPerMinute = 0.0f;
-		this.stepcountAPI19 = 0;
-		
-		// clear all textViews
-		this.tvStepDetectionDuration.setText("00:00:00");
-		this.tvStepsAverage.setText("0");
-		this.tvStepsPerMinute.setText("0");
-		this.tvStepsTotal.setText("0");
-		this.tvStepsTotalSinceStart.setText("0");
-		
+		if(this.totalTime > 0){
+			
+			this.pauseStepDetection();
+			
+			// clear the stopWatch
+			this.sw.clear();
+			
+			this.totalTime = 0;
+			this.stepcount = 0;
+			this.stepFrequencyPerMinute = 0.0f;
+			this.stepcountAPI19 = 0;
+			
+			// clear all textViews
+			this.tvStepDetectionDuration.setText("00:00:00");
+			this.tvStepsAverage.setText("0");
+			this.tvStepsPerMinute.setText("0");
+			this.tvStepsTotal.setText("0");
+			this.tvStepsTotalSinceStart.setText("0");
+		}
 	}
 	
 	// ------------------------------------------------------------------------
@@ -284,6 +286,8 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	
 	// ------------------------------------------------------------------------
 	
+	// ------------------------------------------------------------------------
+	
 	public void setStopWatch() {
 
 //		if(D) Log.i(TAG, "StopWatch: " + sw.getElapsedTimeHour() + ":" + sw.getElapsedTimeMin() + ":" +  sw.getElapsedTimeSecs() + ":" + sw.getElapsedTimeMili());
@@ -317,11 +321,10 @@ public class PedometerFragment extends Fragment implements IStepDetectionObserve
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
 		
-//		if (key.equals("weightValues")) {
-//            this.stepLength = Float.parseFloat((prefs.getString("pref_key_steplength", "120")));
-//            
-//            if(D) Log.i(TAG, "STEPLENGTH FROM SETTINGS CHANGED: " + this.stepLength);
-//        }
+		if (key.equals("pref_key_steplength")) {
+            this.stepLength = Float.parseFloat((prefs.getString("pref_key_steplength", "120.0")));
+        }
+
 	}
 	 
 	// -----------------------------------------------------------------------

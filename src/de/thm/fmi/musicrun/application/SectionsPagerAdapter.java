@@ -25,7 +25,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
-	private static final boolean D = true;
+	private static final boolean D = false;
 	
 	// --------------------------------------------------------------------
 	
