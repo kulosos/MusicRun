@@ -4,10 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import wseemann.media.FFmpegMediaMetadataRetriever;
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.graphics.Bitmap;
 import android.app.Fragment;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -218,17 +220,34 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 			playlist.add(list[i].getName());
 //			if(D) Log.d(TAG, "LIST" + i + " :" + list[i].getName());
 			
+			FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
 			
-			MediaMetadataRetriever mmr = new MediaMetadataRetriever();
 			mmr.setDataSource(this.musicFilepath + list[i].getName());
 
-			String title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
-			String artist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-			String album = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-			String year = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR);
+			String title = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE);
+			String artist = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST);
+			String album = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM);
+			String year = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DATE);
 			int bpm = 120;
 			String category = "category";
-			String mimetype = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_MIMETYPE);
+			String mimetype = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ENCODER);
+
+			Bitmap b = mmr.getFrameAtTime(2000000, FFmpegMediaMetadataRetriever.OPTION_CLOSEST); // frame at 2 seconds
+			byte [] artwork = mmr.getEmbeddedPicture();
+
+			mmr.release();
+			
+			
+//			MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+//			mmr.setDataSource(this.musicFilepath + list[i].getName());
+//
+//			String title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+//			String artist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+//			String album = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+//			String year = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR);
+//			int bpm = 120;
+//			String category = "category";
+//			String mimetype = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_MIMETYPE);
 			
 			db.addTrack(new Track(i, title, artist, album, year, bpm, category, mimetype));
 		}
