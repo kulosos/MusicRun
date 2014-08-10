@@ -1,12 +1,15 @@
 package de.thm.fmi.musicrun.player;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.app.Fragment;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,6 +32,9 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 	// MediaPlayer
 	private MediaPlayer mediaPlayer;
 	private boolean isPlaying;
+	
+	// Database
+	DatabaseManager db;
 	
 	// Preferences
 	private SharedPreferences prefs;
@@ -67,10 +73,13 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 			@Override
 			public void onClick(View v) {
 				if(D) Log.i(TAG, "BUTTON STOP CLICKED");
-				stopMusic();
+//				stopMusic();
+				getPlayList();
 			}
 		}); 
-
+		
+		// DATABASE
+		this.db = new DatabaseManager(getActivity());
 
 		// PREFERENCES
 	    this.prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
@@ -105,14 +114,10 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 		// check for external storage isReadable
 		if(this.isExternalStorageReadable()){
 			
-			if(D) Log.i(TAG, "EXTERNAL STORAGE IS READABLE");
+			String fileName = "TryHarder.mp3";
 
-
-			String fileName = "Boss.mp3";
-
-//			String filePath = Environment.getExternalStorageDirectory().getAbsolutePath().toString() + File.separator + "SuperMarioSounds" + File.separator + fileName;
 			String filePath = this.musicFilepath + fileName; 
-			if(D) Log.d(TAG, "MUSIC FILE PATH: " +  filePath);
+//			if(D) Log.d(TAG, "MUSIC FILE PATH: " +  filePath);
 			
 
 //			File f = new File(filePath);
@@ -139,10 +144,19 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 			} 
 
 			this.mediaPlayer.start();
-
+			
 		}
 		else{
-			if(D) Log.i(TAG, "EXTERNAL STORAGE IS NOT READABLE");
+			Log.e(TAG, "EXTERNAL STORAGE IS NOT READABLE");
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	private void pauseMusic() {
+		
+		if(this.isPlaying){
+			this.mediaPlayer.pause();
 		}
 	}
 	
@@ -151,13 +165,10 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 	private void stopMusic() {
 		
 		if(this.isPlaying){
-			
 			this.mediaPlayer.stop();
-			
 			this.isPlaying = false;
 		}
 	}
-	
 	
 	// ------------------------------------------------------------------------
 	
@@ -166,7 +177,7 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 			String key) {
 		
 		if (key.equals("pref_key_musicfilepath")) {
-            this.musicFilepath = (prefs.getString("pref_key_musicfilepath", "/mnt/external_sd/"));
+            this.musicFilepath = (prefs.getString("pref_key_musicfilepath", "/storage/extSd/"));
         }
 		
 	}
@@ -182,6 +193,8 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 	    return false;
 	}
 
+	// ------------------------------------------------------------------------
+	
 	/* Checks if external storage is available to at least read */
 	public boolean isExternalStorageReadable() {
 	    String state = Environment.getExternalStorageState();
@@ -192,5 +205,45 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 	    return false;
 	}
 	
+	// ------------------------------------------------------------------------
 	
+	private List<String> getPlayList(){
+
+		List<String> playlist = new ArrayList<String>();
+
+		File file = new File(this.musicFilepath) ;       
+		File list[] = file.listFiles();
+
+		for(int i=0; i< list.length; i++){
+			playlist.add(list[i].getName());
+//			if(D) Log.d(TAG, "LIST" + i + " :" + list[i].getName());
+			
+			
+			MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+			mmr.setDataSource(this.musicFilepath + list[i].getName());
+
+			String title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+			String artist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+			String album = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+			String year = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR);
+			int bpm = 120;
+			String category = "category";
+			String mimetype = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_MIMETYPE);
+			
+			db.addTrack(new Track(i, title, artist, album, year, bpm, category, mimetype));
+		}
+		
+		
+		
+//		if(D) Log.d(TAG, "ID3-TAG: Artist: " + artistName + ", Title: " + titleName + ", Album: " + albumName + ", Mimetype: " + bpm);
+
+		
+//		db.getTrack(23);
+//		if(D) Log.i(TAG, "########################################################");
+		
+//		db.getAllTracks();
+		
+		
+		return playlist;
+	}
 }
