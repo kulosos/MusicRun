@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class PlayerFragment extends Fragment implements OnSharedPreferenceChangeListener {
 	
@@ -29,11 +30,10 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 	private static final boolean D = true;
 
 	// Buttons
-	private Button btnPlay, btnStop;
+	private ImageView btnPlay, btnStop, btnPause, btnNext, btnLast, btnList;
 	
 	// MediaPlayer
 	private MediaPlayer mediaPlayer;
-	private boolean isPlaying;
 	
 	// Database
 	DatabaseManager db;
@@ -60,7 +60,7 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 
 
 		// play button on fragment and add listener
-		this.btnPlay = (Button) view.findViewById(R.id.btn_play);
+		this.btnPlay = (ImageView) view.findViewById(R.id.btn_play);
 		this.btnPlay.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -69,16 +69,27 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 			}
 		}); 
 		
-		// play button on fragment and add listener
-		this.btnStop = (Button) view.findViewById(R.id.btn_stop);
+		// stop button on fragment and add listener
+		this.btnStop = (ImageView) view.findViewById(R.id.btn_stop);
 		this.btnStop.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if(D) Log.i(TAG, "BUTTON STOP CLICKED");
-//				stopMusic();
-				getPlayList();
+				stopMusic();
+//				getPlayList();
 			}
 		}); 
+		
+		// pause button on fragment and add listener
+		this.btnPause = (ImageView) view.findViewById(R.id.btn_pause);
+		this.btnPause.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(D) Log.i(TAG, "BUTTON STOP CLICKED");
+				pauseMusic();
+			}
+		}); 
+		
 		
 		// DATABASE
 		this.db = new DatabaseManager(getActivity());
@@ -110,46 +121,46 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 	// ------------------------------------------------------------------------
 
 	private void playMusic(){
-
-		this.isPlaying = true;
 		
-		// check for external storage isReadable
-		if(this.isExternalStorageReadable()){
-			
-			String fileName = "TryHarder.mp3";
+		if(!this.mediaPlayer.isPlaying()){
+			// check for external storage isReadable
+			if(this.isExternalStorageReadable()){
 
-			String filePath = this.musicFilepath + fileName; 
-//			if(D) Log.d(TAG, "MUSIC FILE PATH: " +  filePath);
-			
+				String fileName = "TryHarder.mp3";
 
-//			File f = new File(filePath);
-//			if(f.exists()) {
-//				if(D) Log.i(TAG, "FILE EXISTS");
-//			}else{
-//				if(D) Log.w(TAG, "FILE DOESN'T EXISTS");
-//			}
+				String filePath = this.musicFilepath + fileName; 
+				//			if(D) Log.d(TAG, "MUSIC FILE PATH: " +  filePath);
 
-			this.mediaPlayer = new  MediaPlayer();
-			
-			try {
-				this.mediaPlayer.setDataSource(filePath);
-			} catch (Exception e) {
-				e.printStackTrace();
-				if(D) Log.e(TAG, e.toString());
+
+				//			File f = new File(filePath);
+				//			if(f.exists()) {
+				//				if(D) Log.i(TAG, "FILE EXISTS");
+				//			}else{
+				//				if(D) Log.w(TAG, "FILE DOESN'T EXISTS");
+				//			}
+
+				this.mediaPlayer = new  MediaPlayer();
+
+				try {
+					this.mediaPlayer.setDataSource(filePath);
+				} catch (Exception e) {
+					e.printStackTrace();
+					if(D) Log.e(TAG, e.toString());
+				}
+
+				try {
+					this.mediaPlayer.prepare();
+				} catch (Exception e) {
+					e.printStackTrace();
+					if(D) Log.e(TAG, e.toString());
+				} 
+
+				this.mediaPlayer.start();
+				
 			}
-
-			try {
-				this.mediaPlayer.prepare();
-			} catch (Exception e) {
-				e.printStackTrace();
-				if(D) Log.e(TAG, e.toString());
-			} 
-
-			this.mediaPlayer.start();
-			
-		}
-		else{
-			Log.e(TAG, "EXTERNAL STORAGE IS NOT READABLE");
+			else{
+				Log.e(TAG, "EXTERNAL STORAGE IS NOT READABLE");
+			}
 		}
 	}
 	
@@ -157,8 +168,11 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 	
 	private void pauseMusic() {
 		
-		if(this.isPlaying){
+		if(this.mediaPlayer.isPlaying()){
 			this.mediaPlayer.pause();
+		}
+		else{
+			this.mediaPlayer.release();
 		}
 	}
 	
@@ -166,9 +180,8 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 	
 	private void stopMusic() {
 		
-		if(this.isPlaying){
+		if(this.mediaPlayer.isPlaying()){
 			this.mediaPlayer.stop();
-			this.isPlaying = false;
 		}
 	}
 	
