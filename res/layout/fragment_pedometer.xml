@@ -36,7 +36,7 @@
                 <TextView
                     android:id="@+id/tvStepsTotal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="3dp"
@@ -44,14 +44,16 @@
                     android:layout_marginTop="3dp"
                     android:background="#404040"
                     android:gravity="right"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="60sp" />
+                    android:textSize="40sp" />
 
                 <TextView
                     android:id="@+id/tvStepsTotalLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -59,10 +61,14 @@
                     android:layout_marginTop="0dp"
                     android:background="#303030"
                     android:gravity="right"
-                    android:padding="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
                     android:text="@string/label_totalsteps"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -74,7 +80,7 @@
                 <TextView
                     android:id="@+id/tvStepsTotalSinceStart"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="3dp"
@@ -82,14 +88,16 @@
                     android:layout_marginTop="3dp"
                     android:background="#404040"
                     android:gravity="right"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="60sp" />
+                    android:textSize="40sp" />
 
                 <TextView
                     android:id="@+id/tvStepsTotalSinceStartLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -97,10 +105,14 @@
                     android:layout_marginTop="0dp"
                     android:background="#303030"
                     android:gravity="right"
-                    android:padding="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
                     android:text="@string/label_stepssincestarte"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
+
             </LinearLayout>
         </LinearLayout>
         <!-- FIRST LINEAR HORIZONTAL ROW END -->
@@ -122,7 +134,7 @@
                 <TextView
                     android:id="@+id/tvStepsPerMinute"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="3dp"
@@ -130,14 +142,16 @@
                     android:layout_marginTop="3dp"
                     android:background="#404040"
                     android:gravity="right"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="60sp" />
+                    android:textSize="40sp" />
 
                 <TextView
                     android:id="@+id/tvStepsPerMinuteLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -145,10 +159,14 @@
                     android:layout_marginTop="0dp"
                     android:background="#303030"
                     android:gravity="right"
-                    android:padding="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
                     android:text="@string/label_stepsperminute"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -160,7 +178,7 @@
                 <TextView
                     android:id="@+id/tvStepsAverage"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="3dp"
@@ -168,14 +186,16 @@
                     android:layout_marginTop="3dp"
                     android:background="#404040"
                     android:gravity="right"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="60sp" />
+                    android:textSize="40sp" />
 
                 <TextView
                     android:id="@+id/tvStepsAverageLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -183,10 +203,14 @@
                     android:layout_marginTop="0dp"
                     android:background="#303030"
                     android:gravity="right"
-                    android:padding="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
                     android:text="@string/label_stepsperminute_average"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
+
             </LinearLayout>
         </LinearLayout>
         <!-- SECOND LINEAR HORIZONTAL ROW END -->
@@ -214,15 +238,15 @@
                     android:layout_marginRight="3dp"
                     android:layout_marginTop="3dp"
                     android:background="#404040"
-                    android:gravity="right"
-                    android:text="@string/placeholder_null"
+                    android:gravity="center"
+                    android:text="00:00:00"
                     android:textColor="#00ccff"
-                    android:textSize="60sp" />
+                    android:textSize="40sp" />
 
                 <TextView
                     android:id="@+id/tvStepDetectionDurationLabel"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginBottom="3dp"
                     android:layout_marginLeft="3dp"
@@ -230,10 +254,14 @@
                     android:layout_marginTop="0dp"
                     android:background="#303030"
                     android:gravity="right"
-                    android:padding="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
                     android:text="@string/label_stepsdetectionduration"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
+
             </LinearLayout>
         </LinearLayout>
         <!-- THIRD LINEAR HORIZONTAL ROW END -->
@@ -249,13 +277,16 @@
                 android:id="@+id/btn_start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_start" />
+                android:text="@string/btn_pedometer_start"
+                android:textColor="#00ccff" />
 
             <Button
                 android:id="@+id/btn_reset"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_reset" />
+                android:text="@string/btn_pedometer_reset"
+                android:textColor="#00ccff" />
+
         </LinearLayout>
 
     </LinearLayout>
