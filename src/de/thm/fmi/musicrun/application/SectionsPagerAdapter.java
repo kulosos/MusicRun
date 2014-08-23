@@ -12,7 +12,6 @@ import android.util.Log;
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.maps.MapsFragment;
 import de.thm.fmi.musicrun.pedometer.PedometerFragment;
-import de.thm.fmi.musicrun.player.PlayerFragment;
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

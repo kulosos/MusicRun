@@ -136,11 +136,11 @@ int id buyButton 0x7f08000a
 int id buy_now 0x7f08000f
 int id buy_with_google 0x7f08000e
 int id classic 0x7f080011
-int id expandableListView1 0x7f08002b
 int id grayscale 0x7f080012
 int id holo_dark 0x7f080005
 int id holo_light 0x7f080006
 int id hybrid 0x7f080004
+int id ic_player1 0x7f08002b
 int id match_parent 0x7f08000c
 int id monochrome 0x7f080013
 int id none 0x7f080000
@@ -223,6 +223,8 @@ int string label_totalsteps 0x7f060027
 int string placeholder_null 0x7f060026
 int string settings_label_musicplayer_filepath 0x7f060033
 int string settings_label_musicplayer_filepath_desc 0x7f060034
+int string settings_label_musicplayer_libraryscan 0x7f060035
+int string settings_label_musicplayer_libraryscan_desc 0x7f060036
 int string settings_label_pedometer_steplength 0x7f060031
 int string settings_label_pedometer_steplength_desc 0x7f060032
 int string title_section1 0x7f060021

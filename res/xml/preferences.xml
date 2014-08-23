@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#00FF00" >
+    android:background="#000000" >
 
     <!-- ################################################### -->
     <!-- PLAYER SETTINGS  -->
     <PreferenceCategory
         android:background="#252525"
         android:key="pref_key_storage_settings"
-        android:title="@string/title_section1" >
-        
+        android:title="@string/title_section1" 
+        android:icon="@+id/ic_player1" >
         
         <EditTextPreference
-            android:key="pref_key_musicfilepath"
             android:defaultValue="/storage/extSdCard/SuperMarioSounds/"
+            android:key="pref_key_musicfilepath"
             android:summary="@string/settings_label_musicplayer_filepath_desc"
-            android:title="@string/settings_label_musicplayer_filepath"  >
+            android:title="@string/settings_label_musicplayer_filepath" >
         </EditTextPreference>
+
+        <Preference
+            android:key="pref_key_libraryscan"
+            android:title="@string/settings_label_musicplayer_libraryscan" >
+        </Preference>
     </PreferenceCategory>
-    
+
     <!-- ################################################### -->
+
     <!-- PEDOMETER SETTINGS  -->
     <PreferenceCategory
         android:key="pref_key_storage_settings"
