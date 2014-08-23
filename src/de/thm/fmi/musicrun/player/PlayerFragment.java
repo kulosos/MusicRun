@@ -10,6 +10,7 @@ import de.thm.fmi.musicrun.application.MainActivity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.app.Fragment;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -58,38 +59,11 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 		// get the fragment view
 		View view = inflater.inflate(R.layout.fragment_player, container, false);
 
-
-		// play button on fragment and add listener
-		this.btnPlay = (ImageView) view.findViewById(R.id.btn_play);
-		this.btnPlay.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(D) Log.i(TAG, "BUTTON START CLICKED");
-				playMusic();
-			}
-		}); 
+		// get buttons from fragment and set listeners
+		view = this.initButtons(view);
 		
-		// stop button on fragment and add listener
-		this.btnStop = (ImageView) view.findViewById(R.id.btn_stop);
-		this.btnStop.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(D) Log.i(TAG, "BUTTON STOP CLICKED");
-				stopMusic();
-//				getPlayList();
-			}
-		}); 
-		
-		// pause button on fragment and add listener
-		this.btnPause = (ImageView) view.findViewById(R.id.btn_pause);
-		this.btnPause.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(D) Log.i(TAG, "BUTTON STOP CLICKED");
-				pauseMusic();
-			}
-		}); 
-		
+		// MediaPlayer
+		this.mediaPlayer = new MediaPlayer();
 		
 		// DATABASE
 		this.db = new DatabaseManager(getActivity());
@@ -125,6 +99,9 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 		if(!this.mediaPlayer.isPlaying()){
 			// check for external storage isReadable
 			if(this.isExternalStorageReadable()){
+				
+	            // change Play Button to PauseIcon
+	            this.btnPlay.setImageDrawable(getResources().getDrawable(R.drawable.btn_pause_white));
 
 				String fileName = "TryHarder.mp3";
 
@@ -138,8 +115,6 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 				//			}else{
 				//				if(D) Log.w(TAG, "FILE DOESN'T EXISTS");
 				//			}
-
-				this.mediaPlayer = new  MediaPlayer();
 
 				try {
 					this.mediaPlayer.setDataSource(filePath);
@@ -162,6 +137,9 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 				Log.e(TAG, "EXTERNAL STORAGE IS NOT READABLE");
 			}
 		}
+		else{
+			this.pauseMusic();
+		}
 	}
 	
 	// ------------------------------------------------------------------------
@@ -169,6 +147,10 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 	private void pauseMusic() {
 		
 		if(this.mediaPlayer.isPlaying()){
+			
+			// change PauseButton to PlayIcon
+            this.btnPlay.setImageDrawable(getResources().getDrawable(R.drawable.btn_play_white));
+            
 			this.mediaPlayer.pause();
 		}
 		else{
@@ -277,5 +259,50 @@ public class PlayerFragment extends Fragment implements OnSharedPreferenceChange
 		
 		
 		return playlist;
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	private View initButtons(View view){
+
+		// play button on fragment and add listener
+		this.btnPlay = (ImageView) view.findViewById(R.id.btn_play);
+		this.btnPlay.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(D) Log.i(TAG, "BUTTON PLAY CLICKED");
+				playMusic();
+			}
+		}); 
+		
+		// stop button on fragment and add listener
+		this.btnLast = (ImageView) view.findViewById(R.id.btn_last);
+		this.btnLast.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(D) Log.i(TAG, "BUTTON LAST CLICKED");
+			}
+		}); 
+		
+		// stop button on fragment and add listener
+		this.btnNext = (ImageView) view.findViewById(R.id.btn_next);
+		this.btnNext.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(D) Log.i(TAG, "BUTTON NEXT CLICKED");
+			}
+		}); 
+		
+		// pause button on fragment and add listener
+		this.btnList = (ImageView) view.findViewById(R.id.btn_list);
+		this.btnList.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(D) Log.i(TAG, "BUTTON LIST CLICKED");
+				
+			}
+		}); 
+		
+		return view;
 	}
 }

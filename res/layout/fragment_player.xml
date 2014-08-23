@@ -20,11 +20,11 @@
         android:orientation="vertical" >
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/trackImage"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="0.3"
-            android:src="@drawable/ic_player1" />
+            android:layout_weight="0.5"
+            android:src="@drawable/ic_notebig_blue" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -32,15 +32,28 @@
             android:layout_weight="1"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/textView1"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:padding="16dp"
-                android:text="Interpret - Title"
-                android:textColor="@color/white" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.1"
+                    android:padding="16dp"
+                    android:text="Interpret - Title"
+                    android:textColor="@color/white" />
+
+                <ImageView
+                    android:id="@+id/btn_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:src="@drawable/btn_listsmall_white" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,44 +64,23 @@
                 <ImageView
                     android:id="@+id/btn_last"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
                     android:src="@drawable/btn_last_white" />
-
-                <ImageView
-                    android:id="@+id/btn_pause"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/btn_pause_white" />
 
                 <ImageView
                     android:id="@+id/btn_play"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:src="@drawable/btn_play_white" />
 
                 <ImageView
-                    android:id="@+id/btn_stop"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/btn_stop_white" />
-
-                <ImageView
                     android:id="@+id/btn_next"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
                     android:src="@drawable/btn_next_white" />
-
-                <ImageView
-                    android:id="@+id/imageView1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/btn_list_white" />
 
             </LinearLayout>
 
