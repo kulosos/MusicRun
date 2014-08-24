@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
 
 public class PlayerController {
@@ -137,15 +138,17 @@ public class PlayerController {
 
 	// ------------------------------------------------------------------------
 
-//	private void getPlaylist2(){
-//
-//		//			List<Track> playlist = db.getAllTracks();
-//		//			
-//		//			for(int i = 0; i < playlist.size(); i++){
-//		//				Track t;
-//		//				t = this.db.getTrack(i);
-//		//				Log.i(TAG, t.getArtist() + " - " + t.getTitle() + " - " + t.getAlbum());
-//		//			}
-//	}
+	public void getAllTracks(){
+
+		List<Track> playlist = db.getAllTracks();
+		if(D) Log.i(TAG, "#########################################################");
+		if(D) Log.i(TAG, "Database tuple: " + playlist.size());
+		if(D) Log.i(TAG, "#########################################################");
+		for(int i = 0; i < playlist.size(); i++){
+			Track t;
+			t = this.db.getTrack(i);
+			Log.i(TAG, t.getArtist() + " - " + t.getTitle() + " - " + t.getAlbum());
+		}
+	}
 
 }

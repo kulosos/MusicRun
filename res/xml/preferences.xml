@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#000000" >
+>
 
     <!-- ################################################### -->
-    <!-- PLAYER SETTINGS  -->
+    <!-- PLAYER SETTINGS -->
     <PreferenceCategory
         android:background="#252525"
+        android:icon="@drawable/ic_player1"
         android:key="pref_key_storage_settings"
         android:title="@string/title_section1" 
-        android:icon="@+id/ic_player1" >
+        android:textColor="#FFFFFF">
         
         <EditTextPreference
             android:defaultValue="/storage/extSdCard/SuperMarioSounds/"
+            android:icon="@drawable/ic_player1"
             android:key="pref_key_musicfilepath"
             android:summary="@string/settings_label_musicplayer_filepath_desc"
-            android:title="@string/settings_label_musicplayer_filepath" >
+            android:title="@string/settings_label_musicplayer_filepath" 
+            android:textColor="#FFFFFF">
         </EditTextPreference>
 
         <Preference
+            android:icon="@drawable/ic_folderscan_blue_50"
             android:key="pref_key_libraryscan"
-            android:title="@string/settings_label_musicplayer_libraryscan" >
+            android:title="@string/settings_label_musicplayer_libraryscan" 
+            android:textColor="#FFFFFF">
+        </Preference>
+        
+        <Preference
+            android:key="pref_key_libraryscan_test"
+            android:title="whats up test"
+            android:textColor="#FFFFFF" >
         </Preference>
     </PreferenceCategory>
 
@@ -28,14 +39,16 @@
     <!-- PEDOMETER SETTINGS  -->
     <PreferenceCategory
         android:key="pref_key_storage_settings"
-        android:title="@string/title_section2" >
+        android:title="@string/title_section2" 
+        android:textColor="#FFFFFF">
         
         <EditTextPreference
             android:key="pref_key_steplength"
             android:inputType="number"
             android:defaultValue="120"
             android:summary="@string/settings_label_pedometer_steplength_desc"
-            android:title="@string/settings_label_pedometer_steplength"  >
+            android:title="@string/settings_label_pedometer_steplength"  
+            android:textColor="#FFFFFF">
         </EditTextPreference>
         
     </PreferenceCategory>
@@ -44,7 +57,8 @@
     <!-- MAPS SETTINGS -->
     <PreferenceCategory
         android:key="pref_key_storage_settings"
-        android:title="@string/title_section3" >
+        android:title="@string/title_section3"
+        android:textColor="#FFFFFF" >
 
     </PreferenceCategory>
     

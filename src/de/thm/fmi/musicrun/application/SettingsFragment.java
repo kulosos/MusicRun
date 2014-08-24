@@ -12,6 +12,9 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
@@ -32,12 +35,14 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences);
 
-		// init dialog for music folder scan
-		this.musicFolderScanDialog();
+		// init events for preferences view
+		this.settingsEvents();
 		
 		this.pc = new PlayerController(this.getActivity());
 
 	}
+	
+
 	
 	// ------------------------------------------------------------------------
 
@@ -50,39 +55,51 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
 	// -----------------------------------------------------------------------
 	
-	private void musicFolderScanDialog(){
+	private void settingsEvents(){
 
-		Preference dialogPreference = (Preference) getPreferenceScreen().findPreference("pref_key_libraryscan");
-		
+		Preference musicFolderScanDialog = (Preference) getPreferenceScreen().findPreference("pref_key_libraryscan");
+
+		musicFolderScanDialog.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			public boolean onPreferenceClick(Preference preference) {
+
+
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+				builder.setMessage(R.string.settings_label_musicplayer_libraryscan_desc)
+				.setTitle(R.string.settings_label_musicplayer_libraryscan)
+				.setIcon(R.drawable.ic_folderscan_blue_50);
+
+
+				builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						pc.scanMusicFolder();
+					}
+				});
+
+				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+
+					}
+				});
+
+				AlertDialog dialog = builder.create();
+				dialog.show();
+
+				return true;
+			}
+		});
+
+
+		Preference dialogPreference = (Preference) getPreferenceScreen().findPreference("pref_key_libraryscan_test");
+
 		dialogPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-		        public boolean onPreferenceClick(Preference preference) {
-		           
+			public boolean onPreferenceClick(Preference preference) {
 
-		        	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-		        	builder.setMessage(R.string.settings_label_musicplayer_libraryscan_desc)
-		        	       .setTitle(R.string.settings_label_musicplayer_libraryscan)
-		        	       .setIcon(R.drawable.ic_folderscan_blue_50);
-
-		        	
-		        	builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
-		                public void onClick(DialogInterface dialog, int id) {
-		                	pc.scanMusicFolder();
-		                }
-		            });
-		        	
-		        	builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
-		                public void onClick(DialogInterface dialog, int id) {
-		                	
-		                }
-		            });
-		        	
-		        	AlertDialog dialog = builder.create();
-		        	dialog.show();
-
-				    return true;
-		        }
-		    });
+				pc.getAllTracks();
+				
+				return true;
+			}
+		});
 	}
 
 }
