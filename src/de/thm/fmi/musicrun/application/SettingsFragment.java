@@ -61,12 +61,12 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 		        	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 		        	builder.setMessage(R.string.settings_label_musicplayer_libraryscan_desc)
-		        	       .setTitle(R.string.settings_label_musicplayer_libraryscan);
+		        	       .setTitle(R.string.settings_label_musicplayer_libraryscan)
+		        	       .setIcon(R.drawable.ic_folderscan_blue_50);
 
 		        	
 		        	builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
 		                public void onClick(DialogInterface dialog, int id) {
-		                	
 		                	pc.scanMusicFolder();
 		                }
 		            });
@@ -83,48 +83,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 				    return true;
 		        }
 		    });
-	}
-	
-	// ------------------------------------------------------------------------
-	
-	private void musicFolderScanProgressBarDialog(){
-		
-
-		int filesInFolder = this.pc.getFileList().length;
-		
-//		this.pc.scanMusicFolder();
-		
-//
-//		this.progress = new ProgressDialog(getActivity());
-//
-//		progress.setMessage("Scanning music folder");
-//		progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//		progress.setIndeterminate(true);
-//		progress.show();
-//
-//		final int totalProgressTime = filesInFolder;
-//
-//		final Thread t = new Thread(){
-//
-//			@Override
-//			public void run(){
-//
-//				int jumpTime = 0;
-//				while(jumpTime < totalProgressTime){
-//					try {
-////						sleep(200);
-//						jumpTime += 5;
-//						progress.setProgress(jumpTime);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//
-//				}
-//
-//			}
-//		};
-//		t.start();
 	}
 
 }

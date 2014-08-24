@@ -7,8 +7,15 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 
@@ -107,8 +114,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		this.typefaceMgr = new TypefaceManager(this);
 		this.typefaceMgr.setDefaultFont();
 		
+		//TODO
+		// Is this correct here ? Seems like it has to be move to the pedometer class
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String stepLength = prefs.getString("pref_key_steplength", "default value for this shit");
+		String stepLength = prefs.getString("pref_key_steplength", "default value");
 	}
 
 	// ------------------------------------------------------------------------
