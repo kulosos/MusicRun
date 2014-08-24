@@ -10,12 +10,15 @@ public class PreferencesManager implements OnSharedPreferenceChangeListener {
 	// Preferences
 	private SharedPreferences prefs;
 	private String musicFilepath = "";
+
+	// DEBUG
+	private static final String TAG = MainActivity.class.getName();
+	private static final boolean D = true;
 	
 	// ------------------------------------------------------------------------
 	
 	public PreferencesManager(Context context){
 		
-		// PREFERENCES
 	    this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
         // register preference change listener
         prefs.registerOnSharedPreferenceChangeListener(this);

@@ -1,27 +1,14 @@
 package de.thm.fmi.musicrun.application;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import wseemann.media.FFmpegMediaMetadataRetriever;
 import de.thm.fmi.musicrun.R;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.app.Fragment;
-import android.app.ProgressDialog;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 public class PlayerFragment extends Fragment  {
@@ -35,7 +22,7 @@ public class PlayerFragment extends Fragment  {
 	
 	// MediaPlayer
 	private MediaPlayer mediaPlayer;
-	private Playlist playlist;
+	private PlayerController pc;
 	
 	// Database
 	DatabaseManager db;
@@ -62,16 +49,13 @@ public class PlayerFragment extends Fragment  {
 		// get buttons from fragment and set listeners
 		view = this.initButtons(view);
 		
-		// MediaPlayer
+		// MusicPlayer
 		this.mediaPlayer = new MediaPlayer();
-		this.playlist = new Playlist(this.getActivity());
+		this.pc = new PlayerController(this.getActivity());
 		
 		// DATABASE
 		this.db = new DatabaseManager(getActivity());
 
-		// Playlist
-		this.playlist = new Playlist(this.getActivity());
-		
 		// PREFERENCES
 		this.prefsManager = new PreferencesManager(this.getActivity());
 
@@ -238,7 +222,7 @@ public class PlayerFragment extends Fragment  {
 			@Override
 			public void onClick(View v) {
 				if(D) Log.i(TAG, "TRACK IMAGE CLICKED");
-				playlist.getPlayList();
+				
 			}
 		}); 
 		
