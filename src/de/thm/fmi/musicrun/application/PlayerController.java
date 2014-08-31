@@ -6,19 +6,23 @@ import java.util.List;
 
 import de.thm.fmi.musicrun.R;
 import wseemann.media.FFmpegMediaMetadataRetriever;
-import android.app.AlertDialog;
+import android.app.Activity;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 public class PlayerController {
 
 	// Fragment
+	PlayerFragment playerFragment;
 	Context context;
 	
 	// Database
@@ -36,16 +40,26 @@ public class PlayerController {
 	
 	// ------------------------------------------------------------------------
 
+	// Constructor
 	public PlayerController(Context context){
 		
 		this.context = context;
-		
 		// DATABASE
 		this.db = new DatabaseManager(this.context);
-		
 		// Preferences
 		this.prefsManager = new PreferencesManager(this.context);
 
+	}
+	
+	// Override Constructor
+	public PlayerController(Context context, PlayerFragment fragment){
+		
+		this.playerFragment = fragment;
+		this.context = context;
+		// DATABASE
+		this.db = new DatabaseManager(this.context);
+		// Preferences
+		this.prefsManager = new PreferencesManager(this.context);
 	}
 
 	// ------------------------------------------------------------------------
@@ -60,6 +74,9 @@ public class PlayerController {
 	
 	public void scanMusicFolder(){
 
+		// delete Table TRACK before adding new tracks by scanning folder
+		db.deleteAllTracks();
+		
 		this.msg = new Message();
 		
 		this.progress = new ProgressDialog(this.context);
@@ -129,7 +146,7 @@ public class PlayerController {
 		        
 //		        	Toast.makeText(context, msg.obj.toString() + " files scanned", Toast.LENGTH_LONG).show();
 		    		String toastMsg = context.getResources().getString(R.string.dialog_label_musicplayer_libraryscan_postDialog_desc);
-		        	new CustomToast(context, msg.obj.toString() + " " + toastMsg, R.drawable.ic_folderscan_blue_50, 300);
+		        	new CustomToast(context, msg.obj.toString() + " " + toastMsg, R.drawable.ic_folderscan_blue_50, 600);
 		        return false;
 		    }
 		});
@@ -144,11 +161,43 @@ public class PlayerController {
 		if(D) Log.i(TAG, "#########################################################");
 		if(D) Log.i(TAG, "Database tuple: " + playlist.size());
 		if(D) Log.i(TAG, "#########################################################");
-		for(int i = 0; i < playlist.size(); i++){
-			Track t;
-			t = this.db.getTrack(i);
-			Log.i(TAG, t.getArtist() + " - " + t.getTitle() + " - " + t.getAlbum());
-		}
+//		for(int i = 0; i < playlist.size(); i++){
+//			Track t;
+//			t = this.db.getTrack(i);
+//			Log.i(TAG, t.getArtist() + " - " + t.getTitle() + " - " + t.getAlbum());
+//		}
+		
+		new CustomToast(context, playlist.size() + " files in database", R.drawable.ic_folderscan_blue_50, 600);
 	}
 
+	// ------------------------------------------------------------------------
+	
+	public void getPlaylistFragment(){
+		
+		// Create new fragment and transaction
+		PlaylistFragment newFragment = new PlaylistFragment();
+		android.app.FragmentTransaction transaction = ((Activity) this.context).getFragmentManager().beginTransaction();
+		
+		// Replace whatever is in the fragment_container view with this fragment,
+		// and add the transaction to the back stack
+		transaction.replace(R.id.player_frame, newFragment);
+
+		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+		
+		transaction.addToBackStack(null);
+		
+		// Commit the transaction
+		transaction.commit();
+		
+		//TODO
+		// this is pretty dirty coded;
+		// because the replacing of the playerFragment replaces only the parent node in xml
+		// not the children. so here every single child is deactivating here 
+		this.playerFragment.getBtnLast().setVisibility(ImageView.INVISIBLE);
+		this.playerFragment.getBtnNext().setVisibility(ImageView.INVISIBLE);
+		this.playerFragment.getBtnPlay().setVisibility(ImageView.INVISIBLE);
+		this.playerFragment.getBtnList().setVisibility(ImageView.INVISIBLE);
+		this.playerFragment.getBtnTrackImage().setVisibility(ImageView.INVISIBLE);
+
+	}
 }

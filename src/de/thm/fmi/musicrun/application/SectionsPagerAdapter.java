@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v13.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.maps.MapsFragment;
@@ -17,7 +18,7 @@ import de.thm.fmi.musicrun.pedometer.PedometerFragment;
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
+public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	
 	private List<Fragment> sections = new ArrayList<Fragment>();
 	private Activity activity;
@@ -41,13 +42,20 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 	
 	public void setSections(){
 		
-		if(D)Log.i(TAG, "SectionPagerAdapter setSections");
-		
 		this.sections.add(new PlayerFragment());
 		this.sections.add(new PedometerFragment()); 
+//		this.sections.add(new PlaylistFragment());
 		this.sections.add(new MapsFragment()); 
 		this.sections.add(new SettingsFragment()); 
 //		this.sections.add(PlaceholderFragment.newInstance(1));
+	}
+	
+	// --------------------------------------------------------------------
+	
+	public void setSection(Fragment fragment, int position){
+		
+		this.sections.add(position, fragment);
+		
 	}
 	
 	// --------------------------------------------------------------------
@@ -55,7 +63,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 	@Override
 	public Fragment getItem(int position) {
 
-		if(D)Log.i(TAG, "SectionPagerAdapter - getItem - Instantiate sections from List on position: " + position);
 		return this.sections.get(position);
 	}
 

@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DatabaseManager extends SQLiteOpenHelper {
-
+	
 	// Database constants
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "musicRunDb";
@@ -51,6 +51,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 //								",trackmimetype TEXT,trackartist INTEGER,trackcategory INTEGER,"+
 //								"FOREIGN KEY(trackartist) REFERENCES artist(artistid),FOREIGN KEY(trackcategory) REFERENCES category(categoryid));";
 //		
+
 		String CREATE_TRACK = 	
 				"CREATE TABLE track("
 				+ "trackid INTEGER,"
@@ -63,7 +64,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
 				+ "trackcategory TEXT"
 				+ ");";
 		
-		
 		// CREATE DATABASE
 		String CREATE_DATABASE_TABLES = /*CREATE_ARTIST_TABLE +  CREATE_CATEGORY_TABLE +*/ CREATE_TRACK;
 		db.execSQL(CREATE_DATABASE_TABLES);
@@ -75,8 +75,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		
-		db.execSQL("DROP TABLE IF EXISTS artist");
-		db.execSQL("DROP TABLE IF EXISTS category");
+//		db.execSQL("DROP TABLE IF EXISTS artist");
+//		db.execSQL("DROP TABLE IF EXISTS category");
 		db.execSQL("DROP TABLE IF EXISTS track");
 		
 		this.onCreate(db);
@@ -182,4 +182,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
 	   }
 	
 	// ------------------------------------------------------------------------
+	
+	public void deleteAllTracks(){
+		
+		SQLiteDatabase db = this.getWritableDatabase();
+		
+		// DELETE TABLE before adding tracks by scanning the music folder
+		// Query doesn't work with *
+		db.execSQL("DELETE FROM track");
+		
+	}
 }

@@ -3,7 +3,6 @@ package de.thm.fmi.musicrun.application;
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -11,10 +10,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
@@ -41,8 +36,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 		this.pc = new PlayerController(this.getActivity());
 
 	}
-	
-
 	
 	// ------------------------------------------------------------------------
 
@@ -88,7 +81,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 				return true;
 			}
 		});
-
 
 		Preference dialogPreference = (Preference) getPreferenceScreen().findPreference("pref_key_libraryscan_test");
 

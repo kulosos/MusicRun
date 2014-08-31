@@ -3,6 +3,7 @@ package de.thm.fmi.musicrun.application;
 import de.thm.fmi.musicrun.R;
 import android.app.Activity;
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
@@ -22,8 +23,8 @@ import android.content.SharedPreferences;
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
 	// App Navigation
-	SectionsPagerAdapter mSectionsPagerAdapter;
-	ViewPager mViewPager;
+	public SectionsPagerAdapter mSectionsPagerAdapter;
+	public ViewPager mViewPager;
 
 	// Typefaces
 	TypefaceManager typefaceMgr;
@@ -168,5 +169,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	@Override
 	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 	}
+	
 	
 }
