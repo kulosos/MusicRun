@@ -8,7 +8,7 @@
         android:background="#252525"
         android:icon="@drawable/ic_player1"
         android:key="pref_key_storage_settings"
-        android:title="@string/title_section1" 
+        android:title="@string/title_section_settings" 
         android:textColor="#FFFFFF">
         
         <EditTextPreference
@@ -39,7 +39,7 @@
     <!-- PEDOMETER SETTINGS  -->
     <PreferenceCategory
         android:key="pref_key_storage_settings"
-        android:title="@string/title_section2" 
+        android:title="@string/title_section_pedometer" 
         android:textColor="#FFFFFF">
         
         <EditTextPreference
@@ -57,7 +57,7 @@
     <!-- MAPS SETTINGS -->
     <PreferenceCategory
         android:key="pref_key_storage_settings"
-        android:title="@string/title_section3"
+        android:title="@string/title_section_maps"
         android:textColor="#FFFFFF" >
 
     </PreferenceCategory>

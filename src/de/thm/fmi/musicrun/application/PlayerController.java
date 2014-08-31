@@ -170,34 +170,5 @@ public class PlayerController {
 		new CustomToast(context, playlist.size() + " files in database", R.drawable.ic_folderscan_blue_50, 600);
 	}
 
-	// ------------------------------------------------------------------------
-	
-	public void getPlaylistFragment(){
-		
-		// Create new fragment and transaction
-		PlaylistFragment newFragment = new PlaylistFragment();
-		android.app.FragmentTransaction transaction = ((Activity) this.context).getFragmentManager().beginTransaction();
-		
-		// Replace whatever is in the fragment_container view with this fragment,
-		// and add the transaction to the back stack
-		transaction.replace(R.id.player_frame, newFragment);
 
-		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-		
-		transaction.addToBackStack(null);
-		
-		// Commit the transaction
-		transaction.commit();
-		
-		//TODO
-		// this is pretty dirty coded;
-		// because the replacing of the playerFragment replaces only the parent node in xml
-		// not the children. so here every single child is deactivating here 
-		this.playerFragment.getBtnLast().setVisibility(ImageView.INVISIBLE);
-		this.playerFragment.getBtnNext().setVisibility(ImageView.INVISIBLE);
-		this.playerFragment.getBtnPlay().setVisibility(ImageView.INVISIBLE);
-		this.playerFragment.getBtnList().setVisibility(ImageView.INVISIBLE);
-		this.playerFragment.getBtnTrackImage().setVisibility(ImageView.INVISIBLE);
-
-	}
 }

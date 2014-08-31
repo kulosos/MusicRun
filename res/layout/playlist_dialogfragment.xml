@@ -10,7 +10,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"
-        android:contentDescription="@string/title_section1"
+        android:contentDescription="@string/title_section_playlist"
         android:src="@drawable/ic_player1" />
 
     <TextView

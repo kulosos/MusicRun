@@ -223,7 +223,6 @@ public class PlayerFragment extends Fragment  {
 			public void onClick(View v) {
 				if(D) Log.i(TAG, "BUTTON LIST CLICKED");
 
-				showPlaylistFragment();	
 			}
 		}); 
 		
@@ -239,104 +238,5 @@ public class PlayerFragment extends Fragment  {
 		
 		return view;
 	}
-	
-	// ------------------------------------------------------------------------
-	
-	public void showPlaylistFragment(){
-		
-		// Create new fragment and transaction
-		PlaylistFragment newFragment = new PlaylistFragment();
-		android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		
-		// Replace whatever is in the fragment_container view with this fragment,
-		// and add the transaction to the back stack
-		transaction.replace(R.id.player_frame, newFragment);
-
-		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-		
-		transaction.addToBackStack(null);
-		
-		// Commit the transaction
-		transaction.commit();
-		
-		//TODO
-		// this is pretty dirty coded;
-		// because the replacing of the playerFragment replaces only the parent node in xml
-		// not the children. so here every single child is deactivating here 
-		this.btnLast.setVisibility(ImageView.INVISIBLE);
-		this.btnNext.setVisibility(ImageView.INVISIBLE);
-		this.btnPlay.setVisibility(ImageView.INVISIBLE);
-		this.btnList.setVisibility(ImageView.INVISIBLE);
-		this.btnTrackImage.setVisibility(ImageView.INVISIBLE);
-
-	}
-
-	// ------------------------- SETTERS / GETTERS ----------------------------
-	
-	public ImageView getBtnPlay() {
-		return btnPlay;
-	}
-
-	public void setBtnPlay(ImageView btnPlay) {
-		this.btnPlay = btnPlay;
-	}
-
-	public ImageView getBtnStop() {
-		return btnStop;
-	}
-
-	public void setBtnStop(ImageView btnStop) {
-		this.btnStop = btnStop;
-	}
-
-	public ImageView getBtnPause() {
-		return btnPause;
-	}
-
-	public void setBtnPause(ImageView btnPause) {
-		this.btnPause = btnPause;
-	}
-
-	public ImageView getBtnNext() {
-		return btnNext;
-	}
-
-	public void setBtnNext(ImageView btnNext) {
-		this.btnNext = btnNext;
-	}
-
-	public ImageView getBtnLast() {
-		return btnLast;
-	}
-
-	public void setBtnLast(ImageView btnLast) {
-		this.btnLast = btnLast;
-	}
-
-	public ImageView getBtnList() {
-		return btnList;
-	}
-
-	public void setBtnList(ImageView btnList) {
-		this.btnList = btnList;
-	}
-
-	public ImageView getBtnTrackImage() {
-		return btnTrackImage;
-	}
-
-	public void setBtnTrackImage(ImageView btnTrackImage) {
-		this.btnTrackImage = btnTrackImage;
-	}
-
-	public MediaPlayer getMediaPlayer() {
-		return mediaPlayer;
-	}
-
-	public void setMediaPlayer(MediaPlayer mediaPlayer) {
-		this.mediaPlayer = mediaPlayer;
-	}
-	
-	// ------------------------------------------------------------------------
 	
 }

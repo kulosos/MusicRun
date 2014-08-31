@@ -43,8 +43,8 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	public void setSections(){
 		
 		this.sections.add(new PlayerFragment());
+		this.sections.add(new PlaylistFragment());
 		this.sections.add(new PedometerFragment()); 
-//		this.sections.add(new PlaylistFragment());
 		this.sections.add(new MapsFragment()); 
 		this.sections.add(new SettingsFragment()); 
 //		this.sections.add(PlaceholderFragment.newInstance(1));
@@ -77,17 +77,19 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	
 	@Override
 	public CharSequence getPageTitle(int position) {
-	
+
 		Locale l = Locale.getDefault();
 		switch (position) {
 		case 0:
-			return this.activity.getString(R.string.title_section1).toUpperCase(l);
+			return this.activity.getString(R.string.title_section_player).toUpperCase(l);
 		case 1:
-			return this.activity.getString(R.string.title_section2).toUpperCase(l);
+			return this.activity.getString(R.string.title_section_playlist).toUpperCase(l);
 		case 2:
-			return this.activity.getString(R.string.title_section3).toUpperCase(l);
+			return this.activity.getString(R.string.title_section_pedometer).toUpperCase(l);
 		case 3:
-			return this.activity.getString(R.string.title_section4).toUpperCase(l);
+			return this.activity.getString(R.string.title_section_maps).toUpperCase(l);
+		case 4:
+			return this.activity.getString(R.string.title_section_settings).toUpperCase(l);
 		}
 		return null;
 	}
