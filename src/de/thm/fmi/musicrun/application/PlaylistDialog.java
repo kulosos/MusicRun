@@ -20,7 +20,7 @@ public class PlaylistDialog extends DialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.playlist_dialogfragment, container);
+		View view = inflater.inflate(R.layout.playlist_item, container);
 
 		return view;
 	}

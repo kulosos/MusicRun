@@ -4,7 +4,7 @@
     android:padding="6dip" >
 
     <ImageView
-        android:id="@+id/icon"
+        android:id="@+id/playlistitem_image"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
@@ -14,25 +14,26 @@
         android:src="@drawable/ic_player1" />
 
     <TextView
-        android:id="@+id/secondLine"
+        android:id="@+id/playlistitem_title"
         android:layout_width="fill_parent"
         android:layout_height="26dip"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/icon"
+        android:layout_toRightOf="@id/playlistitem_image"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="@string/btn_cancel"
         android:textSize="12sp" />
 
     <TextView
+        android:id="@+id/playlistitem_interpret"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/secondLine"
+        android:layout_above="@id/playlistitem_title"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toRightOf="@id/icon"
+        android:layout_toRightOf="@id/playlistitem_image"
         android:gravity="center_vertical"
         android:text="@string/btn_ok"
         android:textSize="16sp" />
