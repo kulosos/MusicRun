@@ -14,7 +14,8 @@ import android.preference.PreferenceFragment;
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
 	// Player
-	PlayerController pc;
+	private PlayerController pc;
+	private PlaylistController plc;
 //	ProgressDialog progress;
 	
 	// DEBUG
@@ -33,7 +34,9 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 		// init events for preferences view
 		this.settingsEvents();
 		
+		// instantiate playerController & Playlist
 		this.pc = new PlayerController(this.getActivity());
+		this.plc = new PlaylistController();
 
 	}
 	
@@ -66,6 +69,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 				builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						pc.scanMusicFolder();
+						plc.onScannedMusicFilesChanged(getActivity());
 					}
 				});
 

@@ -40,7 +40,6 @@ public class PlayerController {
 	
 	// ------------------------------------------------------------------------
 
-	// Constructor
 	public PlayerController(Context context){
 		
 		this.context = context;
@@ -48,7 +47,6 @@ public class PlayerController {
 		this.db = new DatabaseManager(this.context);
 		// Preferences
 		this.prefsManager = new PreferencesManager(this.context);
-
 	}
 	
 	// Override Constructor
