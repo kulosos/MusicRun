@@ -3,11 +3,13 @@ package de.thm.fmi.musicrun.application;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.maps.MapsFragment;
@@ -65,10 +67,8 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	
 	// ------------------------------------------------------------------------
 	
-	public void setSection(Fragment fragment, int position){
-		
+	public void addSectionAtPosition(Fragment fragment, int position){
 		this.sections.add(position, fragment);
-		
 	}
 	
 	// ------------------------------------------------------------------------

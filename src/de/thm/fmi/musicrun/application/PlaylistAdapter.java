@@ -19,7 +19,7 @@ public class PlaylistAdapter extends ArrayAdapter<String>{
 
 	// ------------------------------------------------------------------------
 
-	public PlaylistAdapter(Activity context, String[] titles, String[] artists) {
+	public PlaylistAdapter(Context context, String[] titles, String[] artists) {
 		super(context, R.layout.playlist_item, titles);
 		this.context = context;
 		this.titles = titles;
@@ -40,7 +40,7 @@ public class PlaylistAdapter extends ArrayAdapter<String>{
 		TextView txtArtist = (TextView) rowView.findViewById(R.id.playlistitem_artist);
 		ImageView imageView = (ImageView) rowView.findViewById(R.id.playlistitem_image);
 		
-		txtTitle.setText(titles[position]);
+		txtTitle.setText(position + ": " + titles[position]);
 		txtArtist.setText(artists[position]);
 //		imageView.setImageResource(imageId[position]);
 		imageView.setImageResource(R.drawable.ic_player1);

@@ -60,7 +60,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 				builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						PlayerController.getInstance().scanMusicFolder();
-						PlaylistController.getInstance().onScannedMusicFilesChanged(getActivity());
 					}
 				});
 

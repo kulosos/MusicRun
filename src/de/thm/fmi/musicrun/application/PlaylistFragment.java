@@ -17,9 +17,7 @@ import android.widget.Toast;
 public class PlaylistFragment extends Fragment {
 
 	// Playlist
-	ListView playlistView, list;
-	
-	String[] titles, artists;
+	private ListView playlistView;
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -28,7 +26,6 @@ public class PlaylistFragment extends Fragment {
 	// ------------------------------------------------------------------------
 
 	public PlaylistFragment(){
-
 	}
 	
 	// -----------------------------------------------------------------------
@@ -40,27 +37,16 @@ public class PlaylistFragment extends Fragment {
 		
 		if(D) Log.i(TAG, "CustomPlaylistFragment onCreate()");
 		
+		playlistView = (ListView)view.findViewById(R.id.playlistView);
+		
 		// instantiate PlaylistController Singleton
 		PlaylistController.initInstance(this, getActivity());
 		
-		//get titles and artists lists
-		this.titles = PlaylistController.getInstance().getTitles();
-		this.artists = PlaylistController.getInstance().getArtists();
-		
-		// set PlayListAdapter
-		PlaylistAdapter adapter = new PlaylistAdapter(getActivity(), this.titles, this.artists);
-		
-		list = (ListView)view.findViewById(R.id.playlistView);
-		list.setAdapter(adapter);
-		
-		// set list item listener
-		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-				Toast.makeText(getActivity(), "You Clicked at " +titles[+ position] +" - "+ artists[+ position], Toast.LENGTH_SHORT).show();
-			}
-		});
+		// get list from fragment
+		playlistView = (ListView)view.findViewById(R.id.playlistView);
 
+		PlaylistController.getInstance().initPlaylist();
+		
 		return view;
 	}
 
@@ -77,4 +63,15 @@ public class PlaylistFragment extends Fragment {
 	public void onPause(){
 		super.onPause();
 	}
+	
+	// ------------------------- SETTERS / GETTERS ----------------------------
+	
+	public ListView getPlaylistView() {
+		return playlistView;
+	}
+
+	public void setPlaylistView(ListView list) {
+		this.playlistView = list;
+	}
+	
 }

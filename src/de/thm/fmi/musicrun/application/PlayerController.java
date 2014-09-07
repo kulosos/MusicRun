@@ -154,10 +154,13 @@ public class PlayerController {
 //		        	Toast.makeText(context, msg.obj.toString() + " files scanned", Toast.LENGTH_LONG).show();
 		    		String toastMsg = context.getResources().getString(R.string.dialog_label_musicplayer_libraryscan_postDialog_desc);
 		        	new CustomToast(context, msg.obj.toString() + " " + toastMsg, R.drawable.ic_folderscan_blue_50, 600);
+		        	
+		        	// refresh Playlist after scanning
+		        	PlaylistController.getInstance().onScannedMusicFilesChanged();
+		        	
 		        return false;
 		    }
 		});
-
 	}
 
 	// ------------------------------------------------------------------------
