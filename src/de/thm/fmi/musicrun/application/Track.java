@@ -1,5 +1,7 @@
 package de.thm.fmi.musicrun.application;
 
+import android.widget.ImageView;
+
 public class Track {
 
 	private int id;
@@ -10,12 +12,13 @@ public class Track {
 	private int bpm;
 	private String category;
 	private String mimeType;
+	private ImageView img;
 
 	
 	// ------------------------------------------------------------------------
 	
 	public Track(){
-		
+		super();
 	}
 	
 //	public Track(int id, String title){
@@ -23,6 +26,8 @@ public class Track {
 //		this.id = id;
 //		this.title = title;
 //	}
+	
+	// ------------------------------------------------------------------------
 	
 	public Track(int id, String title, String artist, String album, String year, int bpm, String category, String mimeType){
 		super();
@@ -34,6 +39,8 @@ public class Track {
 		this.bpm = bpm;
 		this.category = category;
 		this.mimeType = mimeType;
+//		this.img = findViewById(R.drawable.ic_player1);
+		
 	}
 	
 	// ------------------------------------------------------------------------

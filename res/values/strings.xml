@@ -24,5 +24,7 @@
     <string name="settings_label_musicplayer_libraryscan_desc">Scan the music folder for music files.\nThis process could take a long time.</string>
    	<string name="dialog_label_musicplayer_libraryscan_postDialog">Music folder scan</string>
     <string name="dialog_label_musicplayer_libraryscan_postDialog_desc">files scanned and added to database.</string>
+    <string name="playlist_placeholder_artist">Artist</string>
+    <string name="playlist_placeholder_title">Title</string>
     
 </resources>

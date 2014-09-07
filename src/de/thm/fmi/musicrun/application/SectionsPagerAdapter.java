@@ -42,7 +42,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	public void setSections(){
 		
 		this.sections.add(new PlayerFragment());
-		this.sections.add(new PlaylistFragment());
+		this.sections.add(new CustomPlaylistFragment());
 		this.sections.add(new PedometerFragment()); 
 		this.sections.add(new MapsFragment()); 
 		this.sections.add(new SettingsFragment()); 

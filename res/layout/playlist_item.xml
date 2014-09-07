@@ -1,41 +1,44 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:padding="6dip" >
+    android:layout_height="70dp"
+    android:layout_margin="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    android:padding="5dp" >
 
     <ImageView
         android:id="@+id/playlistitem_image"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginRight="6dip"
         android:contentDescription="@string/title_section_playlist"
         android:src="@drawable/ic_player1" />
 
-    <TextView
-        android:id="@+id/playlistitem_title"
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="26dip"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/playlistitem_image"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:text="@string/btn_cancel"
-        android:textSize="12sp" />
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/playlistitem_interpret"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/playlistitem_title"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_toRightOf="@id/playlistitem_image"
-        android:gravity="center_vertical"
-        android:text="@string/btn_ok"
-        android:textSize="16sp" />
+        <TextView
+            android:id="@+id/playlistitem_title"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/playlist_placeholder_title"
+            android:textSize="22sp" />
 
-</RelativeLayout> 
+        <TextView
+            android:id="@+id/playlistitem_artist"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="@string/playlist_placeholder_artist"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

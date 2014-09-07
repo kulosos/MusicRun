@@ -31,7 +31,7 @@ public  class PlaylistFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) { 
 
 		// instantiate PlaylistController
-		this.plc = new PlaylistController(this, getActivity());
+//		this.plc = new PlaylistController(this, getActivity());
 		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(inflater.getContext(), android.R.layout.simple_list_item_1, this.plc.getTitles());  
 		setListAdapter(adapter);  

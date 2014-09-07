@@ -8,7 +8,7 @@ import android.util.Log;
 
 public class PlaylistController {
 
-	PlaylistFragment plf;
+	CustomPlaylistFragment plf;
 	Context context;
 	
 	// DATABASE
@@ -32,7 +32,7 @@ public class PlaylistController {
 	public PlaylistController(){
 	}
 	
-	public PlaylistController(PlaylistFragment plf, Context context){
+	public PlaylistController(CustomPlaylistFragment plf, Context context){
 		
 		this.plf = plf;
 		this.context = context;	
@@ -80,6 +80,29 @@ public class PlaylistController {
 		}
 
 	}
+	
+	// ------------------------------------------------------------------------
+//	
+//	public Track[] getListData(){
+//		
+//		if(D) Log.i(TAG, "TRACKLIST LIST SIZE: " + this.tracks.size());
+//		
+//		Track[] listData = new Track[this.tracks.size()];
+//		
+//		if(D) Log.i(TAG, "TRACKLIST ARRAY SIZE: " + listData.length);
+//		
+//		for(int i = 0; i < listData.length; i++){
+//			
+//			// convert the List<Track> to Track[]
+//			// is needed for setting the List adapter
+//			listData[i] = this.tracks.get(i);	
+//		}
+//		
+//		return listData;
+//	}
+//	
+	
+	// ------------------------------------------------------------------------
 
 	public DatabaseManager getDb() {
 		return db;
