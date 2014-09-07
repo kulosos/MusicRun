@@ -40,7 +40,7 @@ public class PlaylistAdapter extends ArrayAdapter<String>{
 		TextView txtArtist = (TextView) rowView.findViewById(R.id.playlistitem_artist);
 		ImageView imageView = (ImageView) rowView.findViewById(R.id.playlistitem_image);
 		
-		txtTitle.setText(position + ": " + titles[position]);
+		txtTitle.setText(titles[position]);
 		txtArtist.setText(artists[position]);
 //		imageView.setImageResource(imageId[position]);
 		imageView.setImageResource(R.drawable.ic_player1);

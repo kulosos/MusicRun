@@ -11,6 +11,8 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
@@ -22,70 +24,166 @@ import android.widget.ImageView;
 public class PlayerController {
 
 	private static PlayerController instance;
-	
+
 	// Fragment
 	PlayerFragment playerFragment;
 	Context context;
 	
+	// MediaPlayer
+	private MediaPlayer mediaPlayer;
+
 	ProgressDialog progress;
 	Message msg;
 	Handler handler;
-	
+
 	// Preferences
 	PreferencesManager prefsManager;
-	
+
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
 	private static final boolean D = true;
-	
+
 	// ------------------------------------------------------------------------
 
-	private PlayerController(Context context){
-		
-		this.context = context;
-		// Preferences
-		this.prefsManager = new PreferencesManager(this.context);
-	}
-	
-	// Override Constructor
-	public PlayerController(Context context, PlayerFragment fragment){
-		
-		this.playerFragment = fragment;
-		this.context = context;
+	private PlayerController(Context context, PlayerFragment pf){
 
+		this.context = context;
+		this.playerFragment = pf;
+		
+		// MusicPlayer
+		this.mediaPlayer = new MediaPlayer();
+		
 		// Preferences
 		this.prefsManager = new PreferencesManager(this.context);
 	}
 
 	// ------------------- SINGLETON METHODS ----------------------------------
-	
-	public static void initInstance(Context context){
+
+	public static void initInstance(Context context, PlayerFragment pf){
 		if(instance == null){
-			instance = new PlayerController(context);
+			instance = new PlayerController(context, pf);
 		}
 	}
 
 	public static PlayerController getInstance(){
 		return instance;
 	}
-	
+
 	// ------------------------------------------------------------------------
-	
+
+	public void playMusic(){
+
+		if(!this.mediaPlayer.isPlaying()){
+			// check for external storage isReadable
+			if(this.isExternalStorageReadable()){
+
+				// change Play Button to PauseIcon
+				this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
+
+				String fileName = "TryHarder.mp3";
+
+				String filePath = this.prefsManager.getMusicFilepath() + fileName; 
+				//			if(D) Log.d(TAG, "MUSIC FILE PATH: " +  filePath);
+
+
+				//			File f = new File(filePath);
+				//			if(f.exists()) {
+				//				if(D) Log.i(TAG, "FILE EXISTS");
+				//			}else{
+				//				if(D) Log.w(TAG, "FILE DOESN'T EXISTS");
+				//			}
+
+				try {
+					this.mediaPlayer.setDataSource(filePath);
+				} catch (Exception e) {
+					e.printStackTrace();
+					if(D) Log.e(TAG, e.toString());
+				}
+
+				try {
+					this.mediaPlayer.prepare();
+				} catch (Exception e) {
+					e.printStackTrace();
+					if(D) Log.e(TAG, e.toString());
+				} 
+
+				this.mediaPlayer.start();
+
+			}
+			else{
+				Log.e(TAG, "EXTERNAL STORAGE IS NOT READABLE");
+			}
+		}
+		else{
+			this.pauseMusic();
+		}
+	}
+
+	// ------------------------------------------------------------------------
+
+	public void pauseMusic() {
+
+		if(this.mediaPlayer.isPlaying()){
+
+			// change PauseButton to PlayIcon
+			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
+
+			this.mediaPlayer.pause();
+		}
+		else{
+			this.mediaPlayer.release();
+		}
+	}
+
+	// ------------------------------------------------------------------------
+
+	public void stopMusic() {
+
+		if(this.mediaPlayer.isPlaying()){
+			this.mediaPlayer.stop();
+		}
+	}
+
+	// ------------------------------------------------------------------------
+
+	/* Checks if external storage is available for read and write */
+	public boolean isExternalStorageWritable() {
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+			return true;
+		}
+		return false;
+	}
+
+	// ------------------------------------------------------------------------
+
+	/* Checks if external storage is available to at least read */
+	public boolean isExternalStorageReadable() {
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state) ||
+				Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+			return true;
+		}
+		return false;
+	}
+
+	// ------------------------------------------------------------------------
+
 	public File[] getFileList(){
-		
+
 		File file = new File(this.prefsManager.getMusicFilepath()) ; 		
 		return file.listFiles();
 	}
-	
+
 	// ------------------------------------------------------------------------
-	
+
 	public void scanMusicFolder(){
 
 		// delete Table TRACK before adding new tracks by scanning folder
 		DatabaseManager.getInstance().deleteAllTracks();
-		
+
 		this.msg = new Message();
-		
+
 		this.progress = new ProgressDialog(this.context);
 
 		progress.setMessage("Scanning music folder");
@@ -93,18 +191,18 @@ public class PlayerController {
 		progress.setIndeterminate(false);
 		progress.setCancelable(false);
 		progress.setIcon(R.drawable.ic_folderscan_blue_50);
-		
+
 		final int filesInFolder = this.getFileList().length;
 		progress.setMax(filesInFolder);
 		progress.show();
-		
+
 		final Thread t = new Thread(){
 
 			@Override
 			public void run(){
 
 				for(int i=1; i < filesInFolder; i++){
-					
+
 					List<String> musicfiles = new ArrayList<String>();
 					musicfiles.add(getFileList()[i].getName());
 
@@ -129,38 +227,38 @@ public class PlayerController {
 					mmr.release();
 
 					DatabaseManager.getInstance().addTrack(new Track(i, title, artist, album, year, bpm, category, mimetype, filepath));
-					
+
 					progress.setProgress(i);
-					
+
 					if(i == filesInFolder-1){
 						progress.dismiss();
-						
+
 					}
 				}
-				
+
 				// handler message
 				msg.obj=filesInFolder;
-		        handler.sendMessage(msg);
+				handler.sendMessage(msg);
 			}
 
 		};
 		t.start();
-		
+
 		// start handler msg box after scanning
 		handler = new Handler(new Handler.Callback() {
 
-		    @Override
-		    public boolean handleMessage(Message msg) {
-		        
-//		        	Toast.makeText(context, msg.obj.toString() + " files scanned", Toast.LENGTH_LONG).show();
-		    		String toastMsg = context.getResources().getString(R.string.dialog_label_musicplayer_libraryscan_postDialog_desc);
-		        	new CustomToast(context, msg.obj.toString() + " " + toastMsg, R.drawable.ic_folderscan_blue_50, 600);
-		        	
-		        	// refresh Playlist after scanning
-		        	PlaylistController.getInstance().onScannedMusicFilesChanged();
-		        	
-		        return false;
-		    }
+			@Override
+			public boolean handleMessage(Message msg) {
+
+				//		        	Toast.makeText(context, msg.obj.toString() + " files scanned", Toast.LENGTH_LONG).show();
+				String toastMsg = context.getResources().getString(R.string.dialog_label_musicplayer_libraryscan_postDialog_desc);
+				new CustomToast(context, msg.obj.toString() + " " + toastMsg, R.drawable.ic_folderscan_blue_50, 600);
+
+				// refresh Playlist after scanning
+				PlaylistController.getInstance().onScannedMusicFilesChanged();
+
+				return false;
+			}
 		});
 	}
 
@@ -169,17 +267,7 @@ public class PlayerController {
 	public void getAllTracks(){
 
 		List<Track> playlist = DatabaseManager.getInstance().getAllTracks();
-		if(D) Log.i(TAG, "#########################################################");
-		if(D) Log.i(TAG, "Database tuple: " + playlist.size());
-		if(D) Log.i(TAG, "#########################################################");
-//		for(int i = 0; i < playlist.size(); i++){
-//			Track t;
-//			t = this.db.getTrack(i);
-//			Log.i(TAG, t.getArtist() + " - " + t.getTitle() + " - " + t.getAlbum());
-//		}
-		
 		new CustomToast(context, playlist.size() + " files in database", R.drawable.ic_folderscan_blue_50, 600);
 	}
-
 
 }

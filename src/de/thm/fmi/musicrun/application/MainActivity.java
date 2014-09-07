@@ -50,8 +50,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		// init Singleton classes
 		SectionsPagerAdapter.initInstance(getFragmentManager(), this);
 		DatabaseManager.initInstance(this);
-		PlayerController.initInstance(this);
-		
 		
 		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();

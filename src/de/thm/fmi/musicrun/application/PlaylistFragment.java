@@ -35,8 +35,6 @@ public class PlaylistFragment extends Fragment {
 		
 		View view = inflater.inflate(R.layout.fragment_playlist, container, false);
 		
-		if(D) Log.i(TAG, "CustomPlaylistFragment onCreate()");
-		
 		playlistView = (ListView)view.findViewById(R.id.playlistView);
 		
 		// instantiate PlaylistController Singleton

@@ -53,8 +53,8 @@ public class PlaylistController {
 	public void initPlaylist(){
 		
 		//get titles and artists lists
-		this.titles = this.getTitles();
-		this.artists = this.getArtists();
+//		this.titles = this.getTitles();
+//		this.artists = this.getArtists();
 
 		// set PlayListAdapter
 		PlaylistAdapter adapter = new PlaylistAdapter(this.context, this.titles, this.artists);
@@ -65,7 +65,8 @@ public class PlaylistController {
 		this.plf.getPlaylistView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-				Toast.makeText(getInstance().context,tracks.get(position).getFilepath(), Toast.LENGTH_SHORT).show();
+				playSelectedTrack(id);
+				//Toast.makeText(getInstance().context,tracks.get(position).getFilepath(), Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
@@ -110,8 +111,8 @@ public class PlaylistController {
 	
 	// ListItemClickEvent
 	public void playSelectedTrack(long id){
-	
-		new CustomToast(this.context, artists[(int) id] +" - "+ titles[(int) id], R.drawable.ic_launcher, 600);     
+		new CustomToast(this.context, this.tracks.get((int)id).getTitle() +" - "+ this.tracks.get((int)id).getArtist(), R.drawable.ic_launcher, 600);
+//		PlayerController
 	}
 	
 	// ------------------------------------------------------------------------
