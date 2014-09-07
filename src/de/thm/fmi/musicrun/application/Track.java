@@ -13,6 +13,7 @@ public class Track {
 	private String category;
 	private String mimeType;
 	private ImageView img;
+	private String filepath;
 
 	
 	// ------------------------------------------------------------------------
@@ -29,7 +30,7 @@ public class Track {
 	
 	// ------------------------------------------------------------------------
 	
-	public Track(int id, String title, String artist, String album, String year, int bpm, String category, String mimeType){
+	public Track(int id, String title, String artist, String album, String year, int bpm, String category, String mimeType, String filepath){
 		super();
 		this.id = id;
 		this.title = title;
@@ -39,6 +40,7 @@ public class Track {
 		this.bpm = bpm;
 		this.category = category;
 		this.mimeType = mimeType;
+		this.filepath = filepath;
 //		this.img = findViewById(R.drawable.ic_player1);
 		
 	}
@@ -46,7 +48,8 @@ public class Track {
 	// ------------------------------------------------------------------------
 	
 	public String toString(){
-		return "[id=" + this.id + ", " + this.title + ", " + this.artist + ", " + this.album + ", " + this.year + ", " + this.bpm + ", " + this.category + ", " + this.mimeType; 
+		return "[id=" + this.id + ", " + this.title + ", " + this.artist + ", " + this.album + ", " 
+					+ this.year + ", " + this.bpm + ", " + this.category + ", " + this.mimeType + ", " + this.filepath + "]"; 
 	}
 
 	// -------------------- SETTER / GETTERS ----------------------------------
@@ -114,6 +117,16 @@ public class Track {
 	public String getMimeType() {
 		return mimeType;
 	}
+
+	public String getFilepath() {
+		return filepath;
+	}
+
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
+	}
+	
+	
 	
 	
 }

@@ -65,7 +65,7 @@ public class PlaylistController {
 		this.plf.getPlaylistView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-				Toast.makeText(getInstance().context, titles[+ position] +" - "+ artists[+ position], Toast.LENGTH_SHORT).show();
+				Toast.makeText(getInstance().context,tracks.get(position).getFilepath(), Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
@@ -83,15 +83,11 @@ public class PlaylistController {
 	// called in settings dialog when music is renew scanning 
 	public void onScannedMusicFilesChanged() {
 
-		if(D) Log.i(TAG, "SCANNING ON CHANGED");
-		
-//		this.clearPlaylist();
-		if(D) Log.i(TAG, "SCANNING ON CHANGED - BEFORE " + this.tracks.size() + " und " + this.titles.length);
+		this.clearPlaylist();
+
 		// Get current TrackList form database
 		this.tracks = DatabaseManager.getInstance().getAllTracks();
-		
-		if(D) Log.i(TAG, "SCANNING ON CHANGED - AFTER " + this.tracks.size() + " und " + this.titles.length);
-		
+
 		this.setTrackList();
 		this.initPlaylist();
 	}
@@ -117,27 +113,6 @@ public class PlaylistController {
 	
 		new CustomToast(this.context, artists[(int) id] +" - "+ titles[(int) id], R.drawable.ic_launcher, 600);     
 	}
-	
-	// ------------------------------------------------------------------------
-//	
-//	public Track[] getListData(){
-//		
-//		if(D) Log.i(TAG, "TRACKLIST LIST SIZE: " + this.tracks.size());
-//		
-//		Track[] listData = new Track[this.tracks.size()];
-//		
-//		if(D) Log.i(TAG, "TRACKLIST ARRAY SIZE: " + listData.length);
-//		
-//		for(int i = 0; i < listData.length; i++){
-//			
-//			// convert the List<Track> to Track[]
-//			// is needed for setting the List adapter
-//			listData[i] = this.tracks.get(i);	
-//		}
-//		
-//		return listData;
-//	}
-//	
 	
 	// ------------------------------------------------------------------------
 
