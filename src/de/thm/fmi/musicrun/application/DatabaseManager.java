@@ -12,6 +12,8 @@ import android.util.Log;
 
 public class DatabaseManager extends SQLiteOpenHelper {
 	
+	private static DatabaseManager instance;
+	
 	// Database constants
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "musicRunDb";
@@ -35,10 +37,22 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
 	// ------------------------------------------------------------------------
 	
-	public DatabaseManager(Context context) {
+	private DatabaseManager(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
+	// ------------------- SINGLETON METHODS ----------------------------------
+	
+	public static void initInstance(Context context){
+		if(instance == null){
+			instance = new DatabaseManager(context);
+		}
+	}
+	
+	public static DatabaseManager getInstance(){
+		return instance;
+	}
+	
 	// ------------------------------------------------------------------------
 	
 	@Override

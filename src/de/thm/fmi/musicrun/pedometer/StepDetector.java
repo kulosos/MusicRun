@@ -16,8 +16,7 @@ import android.util.Log;
 //import android.widget.Toast;
 //import android.content.Context;
 
-public class StepDetector implements SensorEventListener
-{
+public class StepDetector implements SensorEventListener{
 
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();

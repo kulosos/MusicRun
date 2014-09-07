@@ -13,11 +13,6 @@ import android.preference.PreferenceFragment;
 
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
-	// Player
-	private PlayerController pc;
-	private PlaylistController plc;
-//	ProgressDialog progress;
-	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
 	private static final boolean D = false;
@@ -33,10 +28,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
 		// init events for preferences view
 		this.settingsEvents();
-		
-		// instantiate playerController & Playlist
-		this.pc = new PlayerController(this.getActivity());
-		this.plc = new PlaylistController();
 
 	}
 	
@@ -68,8 +59,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
 				builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						pc.scanMusicFolder();
-						plc.onScannedMusicFilesChanged(getActivity());
+						PlayerController.getInstance().scanMusicFolder();
+						PlaylistController.getInstance().onScannedMusicFilesChanged(getActivity());
 					}
 				});
 
@@ -91,7 +82,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 		dialogPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
 
-				pc.getAllTracks();
+				PlayerController.getInstance().getAllTracks();
 				
 				return true;
 			}

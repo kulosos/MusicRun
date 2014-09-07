@@ -8,11 +8,11 @@ import android.util.Log;
 
 public class PlaylistController {
 
-	CustomPlaylistFragment plf;
+	private static PlaylistController instance;
+	
+	PlaylistFragment plf;
 	Context context;
 	
-	// DATABASE
-	public DatabaseManager db;
 	public List<Track> tracks;
 
 	String[] titles, artists; /*= new String[] { "one", "two", "three", "four",  
@@ -28,22 +28,30 @@ public class PlaylistController {
 	private static final boolean D = true;
 	
 	// ------------------------------------------------------------------------
-	
-	public PlaylistController(){
-	}
-	
-	public PlaylistController(CustomPlaylistFragment plf, Context context){
+
+	private PlaylistController(PlaylistFragment plf, Context context){
 		
 		this.plf = plf;
 		this.context = context;	
 		
 		
 		// Get TrackList form database
-		this.db = new DatabaseManager(this.context);
-		this.tracks = db.getAllTracks();
+		this.tracks = DatabaseManager.getInstance().getAllTracks();
 		
 		this.setTrackList();
 		
+	}
+	
+	// ------------------- SINGLETON METHODS ----------------------------------
+	
+	public static void initInstance(PlaylistFragment playlistFragment, Context context){
+		if(instance == null){
+			instance = new PlaylistController(playlistFragment, context);
+		}
+	}
+
+	public static PlaylistController getInstance(){
+		return instance;
 	}
 	
 	// ------------------------------------------------------------------------
@@ -53,8 +61,7 @@ public class PlaylistController {
 		if(D) Log.i(TAG, "SCANNING ON CHANGED");
 		
 		// update playlist
-		this.db = new DatabaseManager(context);
-		this.tracks = this.db.getAllTracks();
+		this.tracks = DatabaseManager.getInstance().getAllTracks();
 
 		this.setTrackList();
 	}
@@ -103,14 +110,6 @@ public class PlaylistController {
 //	
 	
 	// ------------------------------------------------------------------------
-
-	public DatabaseManager getDb() {
-		return db;
-	}
-
-	public void setDb(DatabaseManager db) {
-		this.db = db;
-	}
 
 	public List<Track> getTracks() {
 		return tracks;

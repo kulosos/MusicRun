@@ -21,12 +21,12 @@ import android.widget.ImageView;
 
 public class PlayerController {
 
+	private static PlayerController instance;
+	
 	// Fragment
 	PlayerFragment playerFragment;
 	Context context;
 	
-	// Database
-	DatabaseManager db;
 	ProgressDialog progress;
 	Message msg;
 	Handler handler;
@@ -40,11 +40,9 @@ public class PlayerController {
 	
 	// ------------------------------------------------------------------------
 
-	public PlayerController(Context context){
+	private PlayerController(Context context){
 		
 		this.context = context;
-		// DATABASE
-		this.db = new DatabaseManager(this.context);
 		// Preferences
 		this.prefsManager = new PreferencesManager(this.context);
 	}
@@ -54,14 +52,25 @@ public class PlayerController {
 		
 		this.playerFragment = fragment;
 		this.context = context;
-		// DATABASE
-		this.db = new DatabaseManager(this.context);
+
 		// Preferences
 		this.prefsManager = new PreferencesManager(this.context);
 	}
 
-	// ------------------------------------------------------------------------
+	// ------------------- SINGLETON METHODS ----------------------------------
+	
+	public static void initInstance(Context context){
+		if(instance == null){
+			instance = new PlayerController(context);
+		}
+	}
 
+	public static PlayerController getInstance(){
+		return instance;
+	}
+	
+	// ------------------------------------------------------------------------
+	
 	public File[] getFileList(){
 		
 		File file = new File(this.prefsManager.getMusicFilepath()) ; 		
@@ -73,7 +82,7 @@ public class PlayerController {
 	public void scanMusicFolder(){
 
 		// delete Table TRACK before adding new tracks by scanning folder
-		db.deleteAllTracks();
+		DatabaseManager.getInstance().deleteAllTracks();
 		
 		this.msg = new Message();
 		
@@ -118,7 +127,7 @@ public class PlayerController {
 
 					mmr.release();
 
-					db.addTrack(new Track(i, title, artist, album, year, bpm, category, mimetype));
+					DatabaseManager.getInstance().addTrack(new Track(i, title, artist, album, year, bpm, category, mimetype));
 					
 					progress.setProgress(i);
 					
@@ -155,7 +164,7 @@ public class PlayerController {
 
 	public void getAllTracks(){
 
-		List<Track> playlist = db.getAllTracks();
+		List<Track> playlist = DatabaseManager.getInstance().getAllTracks();
 		if(D) Log.i(TAG, "#########################################################");
 		if(D) Log.i(TAG, "Database tuple: " + playlist.size());
 		if(D) Log.i(TAG, "#########################################################");

@@ -19,6 +19,8 @@ import de.thm.fmi.musicrun.pedometer.PedometerFragment;
  */
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	
+	private static SectionsPagerAdapter instance;
+	
 	private List<Fragment> sections = new ArrayList<Fragment>();
 	private Activity activity;
 	
@@ -26,9 +28,9 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	private static final String TAG = MainActivity.class.getName();
 	private static final boolean D = false;
 	
-	// --------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	
-	public SectionsPagerAdapter(FragmentManager fm, Activity activity) {
+	private SectionsPagerAdapter(FragmentManager fm, Activity activity) {
 	
 		super(fm);
 		
@@ -37,19 +39,31 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 		this.setSections();
 	}
 	
-	// --------------------------------------------------------------------
+	// ------------------- SINGLETON METHODS ----------------------------------
+	
+	public static void initInstance(FragmentManager fm, Activity activity){
+		if(instance == null){
+			instance = new SectionsPagerAdapter(fm, activity);
+		}
+	}
+	
+	public static SectionsPagerAdapter getInstance(){
+		return instance;
+	}
+	
+	// ------------------------------------------------------------------------
 	
 	public void setSections(){
 		
 		this.sections.add(new PlayerFragment());
-		this.sections.add(new CustomPlaylistFragment());
+		this.sections.add(new PlaylistFragment());
 		this.sections.add(new PedometerFragment()); 
 		this.sections.add(new MapsFragment()); 
 		this.sections.add(new SettingsFragment()); 
 //		this.sections.add(PlaceholderFragment.newInstance(1));
 	}
 	
-	// --------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	
 	public void setSection(Fragment fragment, int position){
 		
@@ -57,7 +71,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 		
 	}
 	
-	// --------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 
 	@Override
 	public Fragment getItem(int position) {
@@ -65,14 +79,14 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 		return this.sections.get(position);
 	}
 
-	// --------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	
 	@Override
 	public int getCount() {
 		return this.sections.size();
 	}
 
-	// --------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	
 	@Override
 	public CharSequence getPageTitle(int position) {
