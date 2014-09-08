@@ -72,7 +72,7 @@ public class PlayerFragment extends Fragment  {
 			@Override
 			public void onClick(View v) {
 				if(D) Log.i(TAG, "BUTTON PLAY CLICKED");
-				PlayerController.getInstance().playMusic();
+				PlayerController.getInstance().pauseMusic();
 			}
 		}); 
 		

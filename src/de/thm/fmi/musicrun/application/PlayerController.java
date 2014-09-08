@@ -3,11 +3,8 @@ package de.thm.fmi.musicrun.application;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import de.thm.fmi.musicrun.R;
 import wseemann.media.FFmpegMediaMetadataRetriever;
-import android.app.Activity;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,11 +12,7 @@ import android.media.MediaPlayer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.widget.ImageView;
 
 public class PlayerController {
 
@@ -31,6 +24,7 @@ public class PlayerController {
 	
 	// MediaPlayer
 	private MediaPlayer mediaPlayer;
+	private Track currentPlayingTrack;
 
 	ProgressDialog progress;
 	Message msg;
@@ -71,28 +65,31 @@ public class PlayerController {
 
 	// ------------------------------------------------------------------------
 
-	public void playMusic(){
+	public void playTrackFromPlaylist(Track track){
+		
+//		this.currentPlayingTrack = track;
 
-		if(!this.mediaPlayer.isPlaying()){
+		this.stopMusic();
+		this.playMusic(track);
+	
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	private void playMusic(Track track){
+
+//		if(!this.mediaPlayer.isPlaying()){
 			// check for external storage isReadable
 			if(this.isExternalStorageReadable()){
-
+				
 				// change Play Button to PauseIcon
 				this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
 
-				String fileName = "TryHarder.mp3";
-
+				String fileName = track.getFilepath();
 				String filePath = this.prefsManager.getMusicFilepath() + fileName; 
-				//			if(D) Log.d(TAG, "MUSIC FILE PATH: " +  filePath);
 
-
-				//			File f = new File(filePath);
-				//			if(f.exists()) {
-				//				if(D) Log.i(TAG, "FILE EXISTS");
-				//			}else{
-				//				if(D) Log.w(TAG, "FILE DOESN'T EXISTS");
-				//			}
-
+				new CustomToast(this.context, fileName, R.drawable.ic_launcher, 400);
+				
 				try {
 					this.mediaPlayer.setDataSource(filePath);
 				} catch (Exception e) {
@@ -114,10 +111,10 @@ public class PlayerController {
 				Log.e(TAG, "EXTERNAL STORAGE IS NOT READABLE");
 			}
 		}
-		else{
-			this.pauseMusic();
-		}
-	}
+//		else{
+//			this.pauseMusic();
+//		}
+//	}
 
 	// ------------------------------------------------------------------------
 
@@ -131,7 +128,7 @@ public class PlayerController {
 			this.mediaPlayer.pause();
 		}
 		else{
-			this.mediaPlayer.release();
+			this.mediaPlayer.start();
 		}
 	}
 
@@ -141,30 +138,8 @@ public class PlayerController {
 
 		if(this.mediaPlayer.isPlaying()){
 			this.mediaPlayer.stop();
+			this.mediaPlayer.reset();
 		}
-	}
-
-	// ------------------------------------------------------------------------
-
-	/* Checks if external storage is available for read and write */
-	public boolean isExternalStorageWritable() {
-		String state = Environment.getExternalStorageState();
-		if (Environment.MEDIA_MOUNTED.equals(state)) {
-			return true;
-		}
-		return false;
-	}
-
-	// ------------------------------------------------------------------------
-
-	/* Checks if external storage is available to at least read */
-	public boolean isExternalStorageReadable() {
-		String state = Environment.getExternalStorageState();
-		if (Environment.MEDIA_MOUNTED.equals(state) ||
-				Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-			return true;
-		}
-		return false;
 	}
 
 	// ------------------------------------------------------------------------
@@ -268,6 +243,29 @@ public class PlayerController {
 
 		List<Track> playlist = DatabaseManager.getInstance().getAllTracks();
 		new CustomToast(context, playlist.size() + " files in database", R.drawable.ic_folderscan_blue_50, 600);
+	}
+	
+	// ------------------------------------------------------------------------
+
+	/* Checks if external storage is available for read and write */
+	public boolean isExternalStorageWritable() {
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+			return true;
+		}
+		return false;
+	}
+
+	// ------------------------------------------------------------------------
+
+	/* Checks if external storage is available to at least read */
+	public boolean isExternalStorageReadable() {
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state) ||
+				Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+			return true;
+		}
+		return false;
 	}
 
 }

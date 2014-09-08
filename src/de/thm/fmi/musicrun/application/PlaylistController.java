@@ -111,8 +111,8 @@ public class PlaylistController {
 	
 	// ListItemClickEvent
 	public void playSelectedTrack(long id){
-		new CustomToast(this.context, this.tracks.get((int)id).getTitle() +" - "+ this.tracks.get((int)id).getArtist(), R.drawable.ic_launcher, 600);
-//		PlayerController
+//		new CustomToast(this.context, this.tracks.get((int)id).getTitle() +" - "+ this.tracks.get((int)id).getArtist(), R.drawable.ic_launcher, 600);
+		PlayerController.getInstance().playTrackFromPlaylist(this.tracks.get((int)id));
 	}
 	
 	// ------------------------------------------------------------------------
