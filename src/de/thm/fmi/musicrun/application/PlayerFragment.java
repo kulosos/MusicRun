@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-public class PlayerFragment extends Fragment  {
+public class PlayerFragment extends Fragment {
 
-	// Buttons
+	// GUI Elements
 	private ImageView btnPlay, btnStop, btnPause, btnNext, btnLast, btnList, btnTrackImage;
+	private TextView labelArtist, labelTitle;
 	
 	// Preferences
 	PreferencesManager prefsManager;
@@ -40,8 +42,8 @@ public class PlayerFragment extends Fragment  {
 		PlayerController.initInstance(getActivity(), this);
 		
 		// get buttons from fragment and set listeners
-		view = this.initButtons(view);
-		
+		view = this.initGUIElements(view);
+
 		// PREFERENCES
 		this.prefsManager = new PreferencesManager(this.getActivity());
 
@@ -64,7 +66,7 @@ public class PlayerFragment extends Fragment  {
 	
 	// ------------------------------------------------------------------------
 	
-	private View initButtons(View view){
+	private View initGUIElements(View view){
 
 		// play / pause button on fragment and add listener
 		this.btnPlay = (ImageView) view.findViewById(R.id.btn_play);
@@ -113,6 +115,10 @@ public class PlayerFragment extends Fragment  {
 				
 			}
 		}); 
+		
+		// TextView for current playing Title - Artist
+		this.labelTitle = (TextView) view.findViewById(R.id.label_currentTitle);
+		this.labelArtist = (TextView) view.findViewById(R.id.label_currentArtist);
 		
 		return view;
 	}
@@ -173,5 +179,24 @@ public class PlayerFragment extends Fragment  {
 
 	public void setBtnTrackImage(ImageView btnTrackImage) {
 		this.btnTrackImage = btnTrackImage;
-	}	
+	}
+
+	public TextView getLabelArtist() {
+		return labelArtist;
+	}
+
+	public void setLabelArtist(TextView labelArtist) {
+		this.labelArtist = labelArtist;
+	}
+
+	public TextView getLabelTitle() {
+		return labelTitle;
+	}
+
+	public void setLabelTitle(TextView labelTitle) {
+		this.labelTitle = labelTitle;
+	}
+	
+	
+	
 }

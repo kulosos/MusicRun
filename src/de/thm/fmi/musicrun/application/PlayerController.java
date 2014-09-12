@@ -14,17 +14,17 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-public class PlayerController {
+public class PlayerController implements IPlaylistObserver {
 
 	private static PlayerController instance;
 
 	// Fragment
-	PlayerFragment playerFragment;
+	public PlayerFragment playerFragment;
 	Context context;
 	
 	// MediaPlayer
 	private MediaPlayer mediaPlayer;
-	private Track currentPlayingTrack;
+//	private Track currentPlayingTrack;
 
 	ProgressDialog progress;
 	Message msg;
@@ -43,6 +43,18 @@ public class PlayerController {
 
 		this.context = context;
 		this.playerFragment = pf;
+		
+		// TODO
+		// It would be great if it would working without this hack here
+		// its neccessary to avoid the NullPointer Expection
+		// because the PlaylistController instantiates later then PlayerController
+		// and at now if wasn't able to find the error source
+		PlaylistFragment plf = (PlaylistFragment)SectionsPagerAdapter.getInstance().getItem(1);
+		PlaylistController.initInstance(plf, context);
+
+		// register observer
+		
+		PlaylistController.getInstance().attachObserver(this);
 		
 		// MusicPlayer
 		this.mediaPlayer = new MediaPlayer();
@@ -65,6 +77,16 @@ public class PlayerController {
 
 	// ------------------------------------------------------------------------
 
+	// Observer Update
+	@Override
+	public void updateCurrentPlayingTrack(Track track) {
+
+		this.playerFragment.getLabelTitle().setText(track.getTitle());
+		this.playerFragment.getLabelArtist().setText(track.getArtist());
+		
+	}
+	// ------------------------------------------------------------------------
+	
 	public void playTrackFromPlaylist(Track track){
 		
 //		this.currentPlayingTrack = track;

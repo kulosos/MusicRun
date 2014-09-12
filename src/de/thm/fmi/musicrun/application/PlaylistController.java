@@ -1,13 +1,10 @@
 package de.thm.fmi.musicrun.application;
 
 import java.util.List;
-
-import de.thm.fmi.musicrun.R;
+import java.util.Vector;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 public class PlaylistController {
 
@@ -19,6 +16,9 @@ public class PlaylistController {
 	private List<Track> tracks;
 	private String[] titles, artists; 
 
+	// Observer
+	public Vector observers;
+	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
 	private static final boolean D = true;
@@ -34,6 +34,9 @@ public class PlaylistController {
 		this.tracks = DatabaseManager.getInstance().getAllTracks();
 		
 		this.setTrackList();
+
+		// instantiate observer vector
+		this.observers = new Vector();
 	}
 	
 	// ------------------- SINGLETON METHODS ----------------------------------
@@ -46,6 +49,23 @@ public class PlaylistController {
 
 	public static PlaylistController getInstance(){
 		return instance;
+	}
+
+	// ------------------------- OBSERVER -------------------------------------
+
+	public void attachObserver(IPlaylistObserver sdo){
+		this.observers.addElement(sdo);
+	}
+
+	public void detachObserver(IPlaylistObserver sdo){
+		observers.removeElement(sdo);
+	}
+
+	public void notifyObserver(Track track){
+			
+		for (int i=0; i< observers.size(); i++) {
+			((IPlaylistObserver)(observers.elementAt(i))).updateCurrentPlayingTrack(track);
+		}
 	}
 	
 	// ------------------------------------------------------------------------
@@ -111,11 +131,11 @@ public class PlaylistController {
 	
 	// ListItemClickEvent
 	public void playSelectedTrack(long id){
-//		new CustomToast(this.context, this.tracks.get((int)id).getTitle() +" - "+ this.tracks.get((int)id).getArtist(), R.drawable.ic_launcher, 600);
 		PlayerController.getInstance().playTrackFromPlaylist(this.tracks.get((int)id));
+		this.notifyObserver(this.tracks.get((int)id));
 	}
 	
-	// ------------------------------------------------------------------------
+	// ----------------------- SETTER / GETTER --------------------------------
 
 	public List<Track> getTracks() {
 		return tracks;
@@ -140,8 +160,5 @@ public class PlaylistController {
 	public void setArtists(String[] artists) {
 		this.artists = artists;
 	}
-	
-	// ------------------------------------------------------------------------
-	
 	
 }
