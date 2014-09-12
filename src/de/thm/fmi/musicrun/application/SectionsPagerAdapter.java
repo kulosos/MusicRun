@@ -57,6 +57,9 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	
 	public void setSections(){
 		
+		//TODO
+		// its neccessary to avoid nullPointer causes Observer registration
+		// please look at PlayerController 
 		PlaylistFragment plf = new PlaylistFragment();
 		PlayerFragment pf = new PlayerFragment();
 		
