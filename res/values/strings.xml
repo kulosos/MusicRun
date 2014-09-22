@@ -26,5 +26,7 @@
     <string name="dialog_label_musicplayer_libraryscan_postDialog_desc">files scanned and added to database.</string>
     <string name="playlist_placeholder_artist">Artist</string>
     <string name="playlist_placeholder_title">Title</string>
+    <string name="playlist_placeholder_duration">3:33</string>
+    <string name="playlist_placeholder_bpm">140 BPM</string>
     
 </resources>

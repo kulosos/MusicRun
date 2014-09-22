@@ -21,7 +21,10 @@ public  class StandardPlaylistFragment extends ListFragment {
 	
 	@Override  
 	public void onListItemClick(ListView l, View v, int position, long id) {  
-
+		
+		//TODO
+		// check for duplicate call here
+		// the other call is in PlaylistController.initPlaylist...
 		plc.playSelectedTrack(id);
 	}  
 

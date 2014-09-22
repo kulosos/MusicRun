@@ -24,7 +24,7 @@ public class PlayerController implements IPlaylistObserver {
 	
 	// MediaPlayer
 	private MediaPlayer mediaPlayer;
-//	private Track currentPlayingTrack;
+	private Track currentPlayingTrack;
 
 	ProgressDialog progress;
 	Message msg;
@@ -81,6 +81,8 @@ public class PlayerController implements IPlaylistObserver {
 	@Override
 	public void updateCurrentPlayingTrack(Track track) {
 
+		this.currentPlayingTrack = track;
+		
 		this.playerFragment.getLabelTitle().setText(track.getTitle());
 		this.playerFragment.getLabelArtist().setText(track.getArtist());
 		
@@ -89,8 +91,6 @@ public class PlayerController implements IPlaylistObserver {
 	
 	public void playTrackFromPlaylist(Track track){
 		
-//		this.currentPlayingTrack = track;
-
 		this.stopMusic();
 		this.playMusic(track);
 	
@@ -165,6 +165,19 @@ public class PlayerController implements IPlaylistObserver {
 	}
 
 	// ------------------------------------------------------------------------
+	
+	public void playLastTrack(){
+		
+		
+	}
+	
+	// ------------------------------------------------------------------------
+
+	public void playNextTrack(){
+
+	}
+	
+	// ------------------------------------------------------------------------
 
 	public File[] getFileList(){
 
@@ -172,6 +185,8 @@ public class PlayerController implements IPlaylistObserver {
 		return file.listFiles();
 	}
 
+	// ------------------------------------------------------------------------
+	
 	// ------------------------------------------------------------------------
 
 	public void scanMusicFolder(){

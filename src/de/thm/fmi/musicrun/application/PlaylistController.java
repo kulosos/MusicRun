@@ -14,7 +14,8 @@ public class PlaylistController {
 	public PlaylistFragment plf;
 	
 	private List<Track> tracks;
-	private String[] titles, artists; 
+	private String[] titles, artists, durations; 
+	private int[] bpms; 
 
 	// Observer
 	public Vector observers;
@@ -124,6 +125,7 @@ public class PlaylistController {
 		for(int i = 0; i < this.tracks.size(); i++){
 			this.titles[i] = this.tracks.get(i).getTitle();
 			this.artists[i] = this.tracks.get(i).getArtist();
+			this.bpms[i] = this.tracks.get(i).getBpm();
 		}
 	}
 	
@@ -131,6 +133,7 @@ public class PlaylistController {
 	
 	// ListItemClickEvent
 	public void playSelectedTrack(long id){
+		
 		PlayerController.getInstance().playTrackFromPlaylist(this.tracks.get((int)id));
 		this.notifyObserver(this.tracks.get((int)id));
 	}

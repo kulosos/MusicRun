@@ -84,6 +84,7 @@ public class PlayerFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				if(D) Log.i(TAG, "BUTTON LAST CLICKED");
+				PlayerController.getInstance().playLastTrack();
 			}
 		}); 
 		
@@ -93,6 +94,7 @@ public class PlayerFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				if(D) Log.i(TAG, "BUTTON NEXT CLICKED");
+				PlayerController.getInstance().playNextTrack();
 			}
 		}); 
 		
