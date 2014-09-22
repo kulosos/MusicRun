@@ -78,7 +78,7 @@ public class PlaylistController {
 //		this.artists = this.getArtists();
 
 		// set PlayListAdapter
-		PlaylistAdapter adapter = new PlaylistAdapter(this.context, this.titles, this.artists);
+		PlaylistAdapter adapter = new PlaylistAdapter(this.context, this.titles, this.artists, this.durations, this.bpms);
 
 		this.plf.getPlaylistView().setAdapter(adapter);
 
@@ -98,6 +98,8 @@ public class PlaylistController {
 	public void clearPlaylist(){
 		this.titles = new String[0];
 		this.artists = new String[0];
+		this.durations = new String[0];
+		this.bpms = new int[0];
 	}
 	
 	// ------------------------------------------------------------------------
@@ -121,10 +123,13 @@ public class PlaylistController {
 
 		this.titles = new String[this.tracks.size()];
 		this.artists = new String[this.tracks.size()];
+		this.durations = new String[this.tracks.size()];
+		this.bpms = new int[this.tracks.size()];
 
 		for(int i = 0; i < this.tracks.size(); i++){
 			this.titles[i] = this.tracks.get(i).getTitle();
 			this.artists[i] = this.tracks.get(i).getArtist();
+			this.durations[i] = this.tracks.get(i).getDuration();
 			this.bpms[i] = this.tracks.get(i).getBpm();
 		}
 	}

@@ -30,12 +30,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
 	private static final String TRACK_CATEGORY = "trackcategory";
 	
 	private static final String TRACK_FILEPATH = "trackfilepath";
+	private static final String TRACK_DURATION = "trackduration";
 	
-	private static final String[] COLUMNS = {TRACK_ID, TRACK_TITLE, TRACK_ARTIST, TRACK_ALBUM, TRACK_YEAR, TRACK_BPM, TRACK_MIMETYPE, TRACK_CATEGORY, TRACK_FILEPATH};
+	private static final String[] COLUMNS = {TRACK_ID, TRACK_TITLE, TRACK_ARTIST, TRACK_ALBUM, TRACK_YEAR, TRACK_BPM, TRACK_MIMETYPE, TRACK_CATEGORY, TRACK_FILEPATH, TRACK_DURATION};
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
-	private static final boolean D = false;
+	private static final boolean D = true;
 
 	// ------------------------------------------------------------------------
 	
@@ -78,7 +79,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
 				+ "trackbpm INTEGER,"
 				+ "trackmimetype TEXT,"
 				+ "trackcategory TEXT,"
-				+ "trackfilepath TEXT"
+				+ "trackfilepath TEXT,"
+				+ "trackduration TEXT"
 				+ ");";
 		
 		// CREATE DATABASE
@@ -118,6 +120,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         values.put(TRACK_BPM, track.getBpm());
         values.put(TRACK_CATEGORY, track.getCategory());
         values.put(TRACK_FILEPATH, track.getFilepath());
+        values.put(TRACK_DURATION, track.getDuration());
  
         db.insert(TABLE_TRACKS, null, values); 
  
@@ -131,14 +134,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor cursor = 
-				db.query(TABLE_TRACKS, // a. table
-						COLUMNS, // b. column names
-						" trackid = ?", // c. selections 
-						new String[] { String.valueOf(id) }, // d. selections args
-						null, // e. group by
-						null, // f. having
-						null, // g. order by
-						null); // h. limit
+				db.query(TABLE_TRACKS,
+						COLUMNS, 
+						" trackid = ?", 
+						new String[] { String.valueOf(id) }, 
+						null, // group by
+						null, // having
+						null, // order by
+						null); // limit
 
 		if (cursor != null)
 			cursor.moveToFirst();
@@ -156,6 +159,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 		track.setMimeType(cursor.getString(6));
 		track.setCategory(cursor.getString(7));
 		track.setFilepath(cursor.getString(8));
+		track.setDuration(cursor.getString(9));
 
 		//log 
 		if(D) Log.d("getTrack("+id+")", track.toString());
@@ -191,6 +195,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 	    		   track.setMimeType(cursor.getString(6));
 	    		   track.setCategory(cursor.getString(7));
 	    		   track.setFilepath(cursor.getString(8));
+	    		   track.setDuration(cursor.getString(9));
 
 	    		   tracks.add(track);
 	    	   } while (cursor.moveToNext());

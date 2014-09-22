@@ -232,13 +232,14 @@ public class PlayerController implements IPlaylistObserver {
 					String category = "category";
 					String mimetype = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ENCODER);
 					String filepath = getFileList()[i].getName();
+					String duration = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION);
 
 					Bitmap b = mmr.getFrameAtTime(2000000, FFmpegMediaMetadataRetriever.OPTION_CLOSEST); // frame at 2 seconds
 					byte [] artwork = mmr.getEmbeddedPicture();
 
 					mmr.release();
 
-					DatabaseManager.getInstance().addTrack(new Track(i, title, artist, album, year, bpm, category, mimetype, filepath));
+					DatabaseManager.getInstance().addTrack(new Track(i, title, artist, album, year, bpm, category, mimetype, filepath, duration));
 
 					progress.setProgress(i);
 
