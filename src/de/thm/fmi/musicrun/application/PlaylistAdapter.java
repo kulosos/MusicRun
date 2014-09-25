@@ -14,13 +14,12 @@ public class PlaylistAdapter extends ArrayAdapter<String>{
 	
 	Context context;
 
-	private final String[] titles, artists, durations;
-	private final int[] bpms;
+	private final String[] titles, artists, durations, bpms;
 //	private final Integer[] imageId;
 
 	// ------------------------------------------------------------------------
 
-	public PlaylistAdapter(Context context, String[] titles, String[] artists, String[] durations, int[] bpms) {
+	public PlaylistAdapter(Context context, String[] titles, String[] artists, String[] durations, String[] bpms) {
 		super(context, R.layout.playlist_item, titles);
 		this.context = context;
 		this.titles = titles;
@@ -48,7 +47,7 @@ public class PlaylistAdapter extends ArrayAdapter<String>{
 		txtTitle.setText(titles[position]);
 		txtArtist.setText(artists[position]);
 		txtDuration.setText(durations[position]);
-		txtBpm.setText(Integer.toString(bpms[position]));
+		txtBpm.setText(bpms[position]);
 //		imageView.setImageResource(imageId[position]);
 		imageView.setImageResource(R.drawable.ic_player1);
 		

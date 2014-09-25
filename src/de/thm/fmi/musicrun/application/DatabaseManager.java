@@ -154,7 +154,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
 		track.setAlbum(cursor.getString(3));
 		track.setYear(cursor.getString(4));
 		
-		if(cursor.getString(5) != null) track.setBpm(Integer.parseInt(cursor.getString(5))); else track.setBpm(0);
+//		if(cursor.getString(5) != null) track.setBpm(Integer.parseInt(cursor.getString(5))); else track.setBpm(0);
+		track.setBpm(cursor.getString(5));
 		
 		track.setMimeType(cursor.getString(6));
 		track.setCategory(cursor.getString(7));
@@ -190,8 +191,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
 	    		   track.setArtist(cursor.getString(2));
 	    		   track.setAlbum(cursor.getString(3));
 	    		   track.setYear(cursor.getString(4));
-	    		   if(cursor.getString(5) != null) track.setBpm(Integer.parseInt(cursor.getString(5))); else track.setBpm(0);
-//	    		   track.setBpm(Integer.parseInt(cursor.getString(6)));
+//	    		   if(cursor.getString(5) != null) track.setBpm(Integer.parseInt(cursor.getString(5))); else track.setBpm(0);
+	    		   track.setBpm(cursor.getString(5));
 	    		   track.setMimeType(cursor.getString(6));
 	    		   track.setCategory(cursor.getString(7));
 	    		   track.setFilepath(cursor.getString(8));

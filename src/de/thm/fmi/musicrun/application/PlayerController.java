@@ -3,11 +3,13 @@ package de.thm.fmi.musicrun.application;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import de.thm.fmi.musicrun.R;
 import wseemann.media.FFmpegMediaMetadataRetriever;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.os.Handler;
@@ -219,16 +221,24 @@ public class PlayerController implements IPlaylistObserver {
 					musicfiles.add(getFileList()[i].getName());
 
 					FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
-
 					mmr.setDataSource(prefsManager.getMusicFilepath() + getFileList()[i].getName());
+					
+//					MediaMetadataRetriever mmr2 = new MediaMetadataRetriever();
+//					mmr2.setDataSource(prefsManager.getMusicFilepath() + getFileList()[i].getName());
+					
 
 					String title = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE);
 					String artist = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST);
 					String album = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM);
 					String year = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DATE);
+					
 					//TODO
 					//bpm and category are temp hard coded here
-					int bpm = 120;
+//					int bpm = 120;
+//					String bpm = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_COMMENT);
+					
+					String bpm = getBpmString(getFileList()[i].getName());
+					
 					String category = "category";
 					String mimetype = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ENCODER);
 					String filepath = getFileList()[i].getName();
@@ -304,6 +314,38 @@ public class PlayerController implements IPlaylistObserver {
 			return true;
 		}
 		return false;
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	public String getBpmString(String str){
+		
+		String bpmString = str;
+		
+		if(D)Log.i(TAG, "#################1-" + str);
+
+		if(bpmString.contains("_") && bpmString.contains("\\.")){
+			String[] parts = bpmString.split("_");
+			if(D)Log.i(TAG, "#################2-" + parts[1]);
+
+			String[] parts2 = parts[1].split("\\.");
+			if(D)Log.i(TAG, "#################3-" + parts2[0]);
+
+			if(this.isNumeric(parts2[0])){
+				return parts2[0];
+			}
+		}
+		return "0";
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	//Check for numeric
+	public static boolean isNumeric(String str)  
+	{  
+		try  {  int i = Integer.parseInt(str);  }  
+		catch(NumberFormatException nfe) {  return false;  }  
+		return true;  
 	}
 
 }
