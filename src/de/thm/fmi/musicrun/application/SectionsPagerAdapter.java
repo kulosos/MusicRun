@@ -8,17 +8,20 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.maps.MapsFragment;
 import de.thm.fmi.musicrun.pedometer.PedometerFragment;
-import de.thm.fmi.musicrun.player.PlayerFragment;
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
+public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+	
+	private static SectionsPagerAdapter instance;
 	
 	private List<Fragment> sections = new ArrayList<Fragment>();
 	private Activity activity;
@@ -27,9 +30,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 	private static final String TAG = MainActivity.class.getName();
 	private static final boolean D = false;
 	
-	// --------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	
-	public SectionsPagerAdapter(FragmentManager fm, Activity activity) {
+	private SectionsPagerAdapter(FragmentManager fm, Activity activity) {
 	
 		super(fm);
 		
@@ -38,50 +41,75 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 		this.setSections();
 	}
 	
-	// --------------------------------------------------------------------
+	// ------------------- SINGLETON METHODS ----------------------------------
+	
+	public static void initInstance(FragmentManager fm, Activity activity){
+		if(instance == null){
+			instance = new SectionsPagerAdapter(fm, activity);
+		}
+	}
+	
+	public static SectionsPagerAdapter getInstance(){
+		return instance;
+	}
+	
+	// ------------------------------------------------------------------------
 	
 	public void setSections(){
 		
-		if(D)Log.i(TAG, "SectionPagerAdapter setSections");
+		//TODO
+		// its neccessary to avoid nullPointer causes Observer registration
+		// please look at PlayerController 
+		PlaylistFragment plf = new PlaylistFragment();
+		PlayerFragment pf = new PlayerFragment();
 		
-		this.sections.add(new PlayerFragment());
+		this.sections.add(pf);
+		this.sections.add(plf);	
 		this.sections.add(new PedometerFragment()); 
 		this.sections.add(new MapsFragment()); 
 		this.sections.add(new SettingsFragment()); 
+		
 //		this.sections.add(PlaceholderFragment.newInstance(1));
 	}
 	
-	// --------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	
+	public void addSectionAtPosition(Fragment fragment, int position){
+		this.sections.add(position, fragment);
+	}
+	
+	// ------------------------------------------------------------------------
 
 	@Override
 	public Fragment getItem(int position) {
 
-		if(D)Log.i(TAG, "SectionPagerAdapter - getItem - Instantiate sections from List on position: " + position);
 		return this.sections.get(position);
 	}
 
-	// --------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	
 	@Override
 	public int getCount() {
 		return this.sections.size();
 	}
 
-	// --------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	
 	@Override
 	public CharSequence getPageTitle(int position) {
-	
+
 		Locale l = Locale.getDefault();
 		switch (position) {
 		case 0:
-			return this.activity.getString(R.string.title_section1).toUpperCase(l);
+			return this.activity.getString(R.string.title_section_player).toUpperCase(l);
 		case 1:
-			return this.activity.getString(R.string.title_section2).toUpperCase(l);
+			return this.activity.getString(R.string.title_section_playlist).toUpperCase(l);
 		case 2:
-			return this.activity.getString(R.string.title_section3).toUpperCase(l);
+			return this.activity.getString(R.string.title_section_pedometer).toUpperCase(l);
 		case 3:
-			return this.activity.getString(R.string.title_section4).toUpperCase(l);
+			return this.activity.getString(R.string.title_section_maps).toUpperCase(l);
+		case 4:
+			return this.activity.getString(R.string.title_section_settings).toUpperCase(l);
 		}
 		return null;
 	}

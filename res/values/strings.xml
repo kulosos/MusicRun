@@ -2,10 +2,11 @@
 <resources>
 
     <string name="app_name">MusicRun</string>
-    <string name="title_section1">MusicPlayer</string>
-    <string name="title_section2">Pedometer</string>
-    <string name="title_section3">Maps</string>
-    <string name="title_section4">Settings</string>
+    <string name="title_section_player">MusicPlayer</string>
+    <string name="title_section_playlist">Playlist</string>
+    <string name="title_section_pedometer">Pedometer</string>
+    <string name="title_section_maps">Maps</string>
+    <string name="title_section_settings">Settings</string>
     <string name="action_settings">Settings</string>
     <string name="placeholder_null">0</string>
     <string name="label_totalsteps">total steps (Accelerometer)</string>
@@ -17,7 +18,15 @@
     <string name="btn_pedometer_pause">Pause step detection</string><string name="btn_ok">OK</string><string name="btn_cancel">Cancel</string>
     <string name="settings_label_pedometer_steplength">Step length (cm)</string>
     <string name="settings_label_pedometer_steplength_desc">Please enter your step length in cm</string>
-    <string name="settings_label_musicplayer_filepath">Music file path</string>
+    <string name="settings_label_musicplayer_filepath">Music Folder</string>
     <string name="settings_label_musicplayer_filepath_desc">Please enter the path to your music files</string>
-   	
+    <string name="settings_label_musicplayer_libraryscan">Scan music folder</string>
+    <string name="settings_label_musicplayer_libraryscan_desc">Scan the music folder for music files.\nThis process could take a long time.</string>
+   	<string name="dialog_label_musicplayer_libraryscan_postDialog">Music folder scan</string>
+    <string name="dialog_label_musicplayer_libraryscan_postDialog_desc">files scanned and added to database.</string>
+    <string name="playlist_placeholder_artist">Artist</string>
+    <string name="playlist_placeholder_title">Title</string>
+    <string name="playlist_placeholder_duration">3:33</string>
+    <string name="playlist_placeholder_bpm">140 BPM</string>
+    
 </resources>
