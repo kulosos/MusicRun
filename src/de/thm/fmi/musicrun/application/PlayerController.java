@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.thm.fmi.musicrun.R;
+import de.thm.fmi.musicrun.pedometer.PedometerController;
 import wseemann.media.FFmpegMediaMetadataRetriever;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -100,78 +101,82 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	
 	public void playTrackFromPlaylist(Track track){
 		
+		this.currentPlayingTrack = track;
+
 		this.stopMusic();
-		this.playMusic(track);
-	
+		this.playMusic(this.currentPlayingTrack);
+		PedometerController.getInstance().startStepDetection();
+
+		// change PauseButton to PlayIcon
+//		this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
+
 	}
 	
 	// ------------------------------------------------------------------------
 	
 	private void playMusic(Track track){
 
-//		if(!this.mediaPlayer.isPlaying()){
-			// check for external storage isReadable
-			if(this.isExternalStorageReadable()){
-				
-				// change Play Button to PauseIcon
-				this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
+		// check for external storage isReadable
+		if(this.isExternalStorageReadable()){
 
-				String fileName = track.getFilepath();
-				String filePath = this.prefsManager.getMusicFilepath() + fileName; 
+			// change Play Button to PauseIcon
+			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
 
-				new CustomToast(this.context, fileName, R.drawable.ic_launcher, 400);
-				
-				try {
-					this.mediaPlayer.setDataSource(filePath);
-					this.mediaPlayer.prepare();
-					this.mediaPlayer.start();
-					
-					// set Progress bar values
-					this.playerFragment.getSongProgressSeekBar().setProgress(0);
-					this.playerFragment.getSongProgressSeekBar().setMax(100);
-					
-					// updating progress bar
-					this.updateProgressBar();
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-					if(D) Log.e(TAG, e.toString());
-				}
+			String fileName = track.getFilepath();
+			String filePath = this.prefsManager.getMusicFilepath() + fileName; 
 
+			new CustomToast(this.context, fileName, R.drawable.ic_launcher, 400);
+
+			try {
+				this.mediaPlayer.setDataSource(filePath);
+				this.mediaPlayer.prepare();
+				this.mediaPlayer.start();
+
+				// set Progress bar values
+				this.playerFragment.getSongProgressSeekBar().setProgress(0);
+				this.playerFragment.getSongProgressSeekBar().setMax(100);
+
+				// updating progress bar
+				this.updateProgressBar();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				if(D) Log.e(TAG, e.toString());
 			}
-			else{
-				Log.e(TAG, "EXTERNAL STORAGE IS NOT READABLE");
-			}
+
 		}
-//		else{
-//			this.pauseMusic();
-//		}
-//	}
+		else{
+			Log.e(TAG, "EXTERNAL STORAGE IS NOT READABLE");
+		}
+	}
 
 	// ------------------------------------------------------------------------
 
 	public void pauseMusic() {
-
+				
 		if(this.mediaPlayer.isPlaying()){
+			
+			this.mediaPlayer.pause();
+
+			PedometerController.getInstance().pauseStepDetection();
 
 			// change PauseButton to PlayIcon
 			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
-
-			this.mediaPlayer.pause();
 		}
 		else{
 			this.mediaPlayer.start();
+			PedometerController.getInstance().startStepDetection();
+
+			// change Play Button to PauseIcon
+			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
 		}
 	}
 
 	// ------------------------------------------------------------------------
 
 	public void stopMusic() {
-
-		if(this.mediaPlayer.isPlaying()){
-			this.mediaPlayer.stop();
-			this.mediaPlayer.reset();
-		}
+		this.mediaPlayer.stop();
+		this.mediaPlayer.reset();
 	}
 
 	// ------------------------------------------------------------------------
@@ -202,7 +207,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	// Update playback time on seekbar in PlayerFragment
 	public void updateProgressBar() {
 		this.seekbarHandler.postDelayed(updateSeekarTimeProgress, 100);
-		
 	}   
 
 	// backround thread for Update playback time on seekbar in PlayerFragment
@@ -259,6 +263,8 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	public void updateSeekbarRemoveCallbacks(){
 		this.seekbarHandler.removeCallbacks(updateSeekarTimeProgress);
 	}
+	
+	// ------------------------------------------------------------------------
 	
 	public void updateSeekbarPosition(){
 		int totalDuration = this.mediaPlayer.getDuration();

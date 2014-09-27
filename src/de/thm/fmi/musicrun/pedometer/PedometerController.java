@@ -35,7 +35,7 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 	// Runnable Thread / Timer
 	private Handler customHandlerPerSecond;
 	StopWatch sw = new StopWatch();
-	private boolean isPaused = true;
+	public boolean stepDetecionIsPaused = true;
 
 	// TypefaceManager
 	TypefaceManager typefaceMgr;
@@ -87,7 +87,7 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 
 	public void startStepDetection(){
 
-		this.isPaused = false;
+		this.stepDetecionIsPaused = false;
 
 		// time interval, needed for average step calculation
 		if(customHandlerPerSecond==null){
@@ -129,7 +129,7 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 
 	public void pauseStepDetection(){
 
-		this.isPaused = true;
+		this.stepDetecionIsPaused = true;
 
 		// start the stopWatch
 		this.sw.pause();
@@ -178,7 +178,7 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 	@Override
 	public void update() {
 
-		if(!isPaused){
+		if(!stepDetecionIsPaused){
 			// count the recognized steps
 			this.stepcount += 1;
 			//			if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
@@ -196,7 +196,7 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 	@Override
 	public void updateForAPILevel19() {
 
-		if(!isPaused){
+		if(!stepDetecionIsPaused){
 			// count the recognized steps
 			this.stepcountAPI19 += 1;
 			//			if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
@@ -226,13 +226,11 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 
 	// ------------------------------------------------------------------------
 
-	// ------------------------------------------------------------------------
-
 	public void setStopWatch() {
 
 		//		if(D) Log.i(TAG, "StopWatch: " + sw.getElapsedTimeHour() + ":" + sw.getElapsedTimeMin() + ":" +  sw.getElapsedTimeSecs() + ":" + sw.getElapsedTimeMili());
 
-		if(!isPaused){
+		if(!stepDetecionIsPaused){
 			String hours = "", minutes = "", seconds = "";
 
 			if(sw.getElapsedTimeHour()<10){
