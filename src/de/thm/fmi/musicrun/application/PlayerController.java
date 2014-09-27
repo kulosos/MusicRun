@@ -11,12 +11,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-public class PlayerController implements IPlaylistObserver {
+public class PlayerController implements IPlaylistObserver, OnCompletionListener {
 
 	private static PlayerController instance;
 
@@ -60,6 +61,7 @@ public class PlayerController implements IPlaylistObserver {
 		
 		// MusicPlayer
 		this.mediaPlayer = new MediaPlayer();
+		this.mediaPlayer.setOnCompletionListener(this);
 		
 		// Preferences
 		this.prefsManager = new PreferencesManager(this.context);
@@ -179,6 +181,16 @@ public class PlayerController implements IPlaylistObserver {
 
 	}
 	
+
+	// ------------------------------------------------------------------------
+	
+	@Override
+	public void onCompletion(MediaPlayer mp) {
+
+		new CustomToast(this.context, "MP onCompletion BAMERAM", R.drawable.ic_player1, 500);
+		this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
+	}
+	
 	// ------------------------------------------------------------------------
 
 	public File[] getFileList(){
@@ -223,6 +235,7 @@ public class PlayerController implements IPlaylistObserver {
 					FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
 					mmr.setDataSource(prefsManager.getMusicFilepath() + getFileList()[i].getName());
 					
+					
 //					MediaMetadataRetriever mmr2 = new MediaMetadataRetriever();
 //					mmr2.setDataSource(prefsManager.getMusicFilepath() + getFileList()[i].getName());
 					
@@ -236,7 +249,6 @@ public class PlayerController implements IPlaylistObserver {
 					//bpm and category are temp hard coded here
 //					int bpm = 120;
 //					String bpm = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_COMMENT);
-					
 					String bpm = getBpmString(getFileList()[i].getName());
 					
 					String category = "category";
@@ -294,6 +306,8 @@ public class PlayerController implements IPlaylistObserver {
 	}
 	
 	// ------------------------------------------------------------------------
+	
+	// ------------------------------------------------------------------------
 
 	/* Checks if external storage is available for read and write */
 	public boolean isExternalStorageWritable() {
@@ -303,6 +317,9 @@ public class PlayerController implements IPlaylistObserver {
 		}
 		return false;
 	}
+	
+	// ------------------------------------------------------------------------
+	
 
 	// ------------------------------------------------------------------------
 
@@ -324,7 +341,7 @@ public class PlayerController implements IPlaylistObserver {
 		
 		if(D)Log.i(TAG, "#################1-" + str);
 
-		if(bpmString.contains("_") && bpmString.contains("\\.")){
+		if(bpmString.contains("_") && bpmString.contains(".")){
 			String[] parts = bpmString.split("_");
 			if(D)Log.i(TAG, "#################2-" + parts[1]);
 
