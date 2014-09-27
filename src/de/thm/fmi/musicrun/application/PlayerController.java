@@ -31,7 +31,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	ProgressDialog progress;
 	Message msg;
-	Handler handler;
+	public Handler handler, seekbarHandler;
 
 	// Preferences
 	PreferencesManager prefsManager;
@@ -63,8 +63,12 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		this.mediaPlayer = new MediaPlayer();
 		this.mediaPlayer.setOnCompletionListener(this);
 		
+		// background thread for seekbar song playback updating
+		this.seekbarHandler = new Handler();
+		
 		// Preferences
 		this.prefsManager = new PreferencesManager(this.context);
+		
 	}
 
 	// ------------------- SINGLETON METHODS ----------------------------------
@@ -91,6 +95,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		this.playerFragment.getLabelArtist().setText(track.getArtist());
 		
 	}
+	
 	// ------------------------------------------------------------------------
 	
 	public void playTrackFromPlaylist(Track track){
@@ -118,19 +123,20 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 				
 				try {
 					this.mediaPlayer.setDataSource(filePath);
+					this.mediaPlayer.prepare();
+					this.mediaPlayer.start();
+					
+					// set Progress bar values
+					this.playerFragment.getSongProgressSeekBar().setProgress(0);
+					this.playerFragment.getSongProgressSeekBar().setMax(100);
+					
+					// updating progress bar
+					this.updateProgressBar();
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 					if(D) Log.e(TAG, e.toString());
 				}
-
-				try {
-					this.mediaPlayer.prepare();
-				} catch (Exception e) {
-					e.printStackTrace();
-					if(D) Log.e(TAG, e.toString());
-				} 
-
-				this.mediaPlayer.start();
 
 			}
 			else{
@@ -181,9 +187,89 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	}
 	
-
 	// ------------------------------------------------------------------------
 	
+	public void setCurrentSongPlaybackPosition(int positionPercentage){
+		
+		Track track = this.currentPlayingTrack;
+		long duration = Math.round(Integer.parseInt(track.getDurationInMilliseconds()));
+		int pos = (int)(duration * positionPercentage / 100);
+		this.mediaPlayer.seekTo(pos); 
+	}
+	
+	// ------------------------------------------------------------------------
+
+	// Update playback time on seekbar in PlayerFragment
+	public void updateProgressBar() {
+		this.seekbarHandler.postDelayed(updateSeekarTimeProgress, 100);
+		
+	}   
+
+	// backround thread for Update playback time on seekbar in PlayerFragment
+	private Runnable updateSeekarTimeProgress = new Runnable() {
+		public void run() {
+			long totalDuration = mediaPlayer.getDuration();
+			long currentDuration = mediaPlayer.getCurrentPosition();
+
+			// Displaying Total Duration time
+			//               songTotalDurationLabel.setText(""+utils.milliSecondsToTimer(totalDuration));
+			// Displaying time completed playing
+			//               songCurrentDurationLabel.setText(""+utils.milliSecondsToTimer(currentDuration));
+
+			// Updating progress bar
+			int progress = (int)(getProgressPercentage(currentDuration, totalDuration));
+			//Log.d("Progress", ""+progress);
+			playerFragment.getSongProgressSeekBar().setProgress(progress);
+
+			// Running this thread after 100 milliseconds
+			seekbarHandler.postDelayed(this, 100);
+		}
+	};
+
+	// ------------------------------------------------------------------------
+
+	// percentage Value, needed for update playback time on seekbar in PlayerFragment
+	public int getProgressPercentage(long currentDuration, long totalDuration){
+		Double percentage = (double) 0;
+
+		long currentSeconds = (int) (currentDuration / 1000);
+		long totalSeconds = (int) (totalDuration / 1000);
+
+		// calculating percentage
+		percentage =(((double)currentSeconds)/totalSeconds)*100;
+
+		// return percentage
+		return percentage.intValue();
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	public int progressToTimer(int progress, int totalDuration) {
+		int currentDuration = 0;
+		totalDuration = (int) (totalDuration / 1000);
+		currentDuration = (int) ((((double)progress) / 100) * totalDuration);
+
+		// return current duration in milliseconds
+		return currentDuration * 1000;
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	// remove message Handler from updating progress bar
+	public void updateSeekbarRemoveCallbacks(){
+		this.seekbarHandler.removeCallbacks(updateSeekarTimeProgress);
+	}
+	
+	public void updateSeekbarPosition(){
+		int totalDuration = this.mediaPlayer.getDuration();
+		int currentPosition = this.progressToTimer(this.playerFragment.getSongProgressSeekBar().getProgress(), totalDuration);
+		
+		updateProgressBar();
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	// listen for playback end of track
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 
@@ -199,8 +285,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		return file.listFiles();
 	}
 
-	// ------------------------------------------------------------------------
-	
 	// ------------------------------------------------------------------------
 
 	public void scanMusicFolder(){
@@ -306,8 +390,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	}
 	
 	// ------------------------------------------------------------------------
-	
-	// ------------------------------------------------------------------------
 
 	/* Checks if external storage is available for read and write */
 	public boolean isExternalStorageWritable() {
@@ -317,9 +399,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		}
 		return false;
 	}
-	
-	// ------------------------------------------------------------------------
-	
 
 	// ------------------------------------------------------------------------
 
@@ -339,14 +418,14 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		
 		String bpmString = str;
 		
-		if(D)Log.i(TAG, "#################1-" + str);
+//		if(D)Log.i(TAG, "#################1-" + str);
 
 		if(bpmString.contains("_") && bpmString.contains(".")){
 			String[] parts = bpmString.split("_");
-			if(D)Log.i(TAG, "#################2-" + parts[1]);
+//			if(D)Log.i(TAG, "#################2-" + parts[1]);
 
 			String[] parts2 = parts[1].split("\\.");
-			if(D)Log.i(TAG, "#################3-" + parts2[0]);
+//			if(D)Log.i(TAG, "#################3-" + parts2[0]);
 
 			if(this.isNumeric(parts2[0])){
 				return parts2[0];

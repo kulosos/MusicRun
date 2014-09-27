@@ -17,7 +17,8 @@ public class Track {
 	private String mimeType;
 	private ImageView img;
 	private String filepath;
-	private String duration;
+	private String durationFormattedString;
+	private String durationInMilliseconds;
 
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -42,7 +43,7 @@ public class Track {
 		this.category = category;
 		this.mimeType = mimeType;
 		this.filepath = filepath;
-		this.duration = duration;
+		this.durationFormattedString = duration;
 //		this.img = findViewById(R.drawable.ic_player1);
 		
 	}
@@ -51,7 +52,7 @@ public class Track {
 	
 	public String toString(){
 		return "[id=" + this.id + ", " + this.title + ", " + this.artist + ", " + this.album + ", " + this.year + ", " +
-				this.duration + ", " + this.bpm + ", " + this.category + ", " + this.mimeType + ", " + this.filepath + "]"; 
+				this.durationFormattedString + ", " + this.bpm + ", " + this.category + ", " + this.mimeType + ", " + this.filepath + "]"; 
 	}
 
 	// ------------------------------------------------------------------------
@@ -138,12 +139,16 @@ public class Track {
 		this.filepath = filepath;
 	}
 
-	public String getDuration() {
+	public String getDurationInMilliseconds(){
+		return this.durationInMilliseconds;
+	}
 	
+	public String getDurationAsFormattedString() {
+
 		// if the correct formatted string is already saved, return only this string
 		// otherwise format the string
-		if(isNumeric(this.duration)){
-			long millis = Integer.parseInt(this.duration);
+		if(isNumeric(this.durationFormattedString)){
+			long millis = Integer.parseInt(this.durationFormattedString);
 			long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
 			long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis));	
 			String dur;
@@ -158,13 +163,13 @@ public class Track {
 			}
 		}
 		else{
-			return this.duration;
+			return this.durationFormattedString;
 		}
-		
 	}
 	
 	public void setDuration(String duration) {
-		this.duration = duration;
+		this.durationFormattedString = duration;
+		this.durationInMilliseconds = duration;
 	}
 
 	
