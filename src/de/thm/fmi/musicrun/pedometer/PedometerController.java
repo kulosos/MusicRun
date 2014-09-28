@@ -87,41 +87,43 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 
 	public void startStepDetection(){
 
-		this.stepDetecionIsPaused = false;
+		if(this.stepDetecionIsPaused){
+			this.stepDetecionIsPaused = false;
 
-		// time interval, needed for average step calculation
-		if(customHandlerPerSecond==null){
-			this.customHandlerPerSecond = new Handler();
-			this.customHandlerPerSecond.postDelayed(updateTimerPerSecond, 0);
-		}
+			// time interval, needed for average step calculation
+			if(customHandlerPerSecond==null){
+				this.customHandlerPerSecond = new Handler();
+				this.customHandlerPerSecond.postDelayed(updateTimerPerSecond, 0);
+			}
 
-		// start the stopWatch
-		this.sw.resume();
+			// start the stopWatch
+			this.sw.resume();
 
-		// Initialize StepDetector
-		if(stepDetector==null){
-			stepDetector = new StepDetector(this.context.getSystemService(Context.SENSOR_SERVICE));
-		}
+			// Initialize StepDetector
+			if(stepDetector==null){
+				stepDetector = new StepDetector(this.context.getSystemService(Context.SENSOR_SERVICE));
+			}
 
-		// Start StepDetection
-		this.stepDetector.setActivityRunning(true);
-		this.stepDetector.registerSensorManager();
-		this.isRunning = true;
+			// Start StepDetection
+			this.stepDetector.setActivityRunning(true);
+			this.stepDetector.registerSensorManager();
+			this.isRunning = true;
 
-		// attach Observer to this activity
-		this.stepDetector.attachObserver(this);
+			// attach Observer to this activity
+			this.stepDetector.attachObserver(this);
 
 
-		// change the button label to stop
-		this.pedometerFragment.getBtnStart().setText(this.context.getResources().getString(R.string.btn_pedometer_pause));
+			// change the button label to stop
+			this.pedometerFragment.getBtnStart().setText(this.context.getResources().getString(R.string.btn_pedometer_pause));
 
-		Resources res = this.context.getResources();
-		int color = res.getColor(R.color.red);
-		pedometerFragment.getBtnStart().setTextColor(color);
+			Resources res = this.context.getResources();
+			int color = res.getColor(R.color.red);
+			pedometerFragment.getBtnStart().setTextColor(color);
 
-		// deactivate when api level < 19
-		if(this.stepDetector.getApiLevel()<19){
-			this.pedometerFragment.getTvStepsTotalSinceStart().setText("n.a.");
+			// deactivate when api level < 19
+			if(this.stepDetector.getApiLevel()<19){
+				this.pedometerFragment.getTvStepsTotalSinceStart().setText("n.a.");
+			}
 		}
 	}
 
@@ -129,22 +131,24 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 
 	public void pauseStepDetection(){
 
-		this.stepDetecionIsPaused = true;
+		if(!this.stepDetecionIsPaused){
+			this.stepDetecionIsPaused = true;
 
-		// start the stopWatch
-		this.sw.pause();
+			// start the stopWatch
+			this.sw.pause();
 
-		// attach Observer to this activity
-		this.stepDetector.detachObserver(this);
-		this.stepDetector.setActivityRunning(false);
-		this.isRunning = false;
+			// attach Observer to this activity
+			this.stepDetector.detachObserver(this);
+			this.stepDetector.setActivityRunning(false);
+			this.isRunning = false;
 
-		// change the button label to start
-		this.pedometerFragment.getBtnStart().setText(this.context.getResources().getString(R.string.btn_pedometer_start));
+			// change the button label to start
+			this.pedometerFragment.getBtnStart().setText(this.context.getResources().getString(R.string.btn_pedometer_start));
 
-		Resources res = this.context.getResources();
-		int color = res.getColor(R.color.systemLightBlue);
-		this.pedometerFragment.getBtnStart().setTextColor(color);
+			Resources res = this.context.getResources();
+			int color = res.getColor(R.color.systemLightBlue);
+			this.pedometerFragment.getBtnStart().setTextColor(color);
+		}
 	}
 
 	// ------------------------------------------------------------------------

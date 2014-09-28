@@ -127,9 +127,7 @@ public class PlayerFragment extends Fragment {
 		// get seekbar for song progress and setListener
 		this.songProgressSeekBar = (SeekBar) view.findViewById(R.id.songProgressSeekbar);
 		this.songProgressSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			
 			int progressChanged = 0;
-
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
 				if(fromUser){
@@ -139,7 +137,6 @@ public class PlayerFragment extends Fragment {
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
 			}
-
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				// seek to position
@@ -147,8 +144,6 @@ public class PlayerFragment extends Fragment {
 				PlayerController.getInstance().updateSeekbarPosition();	
 			}
 		});
-		
-		
 		
 		return view;
 	}

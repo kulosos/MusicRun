@@ -102,14 +102,9 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	public void playTrackFromPlaylist(Track track){
 		
 		this.currentPlayingTrack = track;
-
 		this.stopMusic();
 		this.playMusic(this.currentPlayingTrack);
 		PedometerController.getInstance().startStepDetection();
-
-		// change PauseButton to PlayIcon
-//		this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
-
 	}
 	
 	// ------------------------------------------------------------------------
