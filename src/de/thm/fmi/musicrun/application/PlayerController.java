@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.thm.fmi.musicrun.R;
+import de.thm.fmi.musicrun.pedometer.PedometerController;
 import wseemann.media.FFmpegMediaMetadataRetriever;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -31,10 +32,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	ProgressDialog progress;
 	Message msg;
-	Handler handler;
-
-	// Preferences
-	PreferencesManager prefsManager;
+	public Handler handler, seekbarHandler;
 
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -63,8 +61,8 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		this.mediaPlayer = new MediaPlayer();
 		this.mediaPlayer.setOnCompletionListener(this);
 		
-		// Preferences
-		this.prefsManager = new PreferencesManager(this.context);
+		// background thread for seekbar song playback updating
+		this.seekbarHandler = new Handler();
 	}
 
 	// ------------------- SINGLETON METHODS ----------------------------------
@@ -91,81 +89,85 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		this.playerFragment.getLabelArtist().setText(track.getArtist());
 		
 	}
+	
 	// ------------------------------------------------------------------------
 	
 	public void playTrackFromPlaylist(Track track){
 		
+		this.currentPlayingTrack = track;
 		this.stopMusic();
-		this.playMusic(track);
-	
+		this.playMusic(this.currentPlayingTrack);
+		if(PreferencesManager.getInstance().isAutostartPedometer()){
+			PedometerController.getInstance().startStepDetection();
+		}
 	}
 	
 	// ------------------------------------------------------------------------
 	
 	private void playMusic(Track track){
 
-//		if(!this.mediaPlayer.isPlaying()){
-			// check for external storage isReadable
-			if(this.isExternalStorageReadable()){
-				
-				// change Play Button to PauseIcon
-				this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
+		// check for external storage isReadable
+		if(this.isExternalStorageReadable()){
 
-				String fileName = track.getFilepath();
-				String filePath = this.prefsManager.getMusicFilepath() + fileName; 
+			// change Play Button to PauseIcon
+			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
 
-				new CustomToast(this.context, fileName, R.drawable.ic_launcher, 400);
-				
-				try {
-					this.mediaPlayer.setDataSource(filePath);
-				} catch (Exception e) {
-					e.printStackTrace();
-					if(D) Log.e(TAG, e.toString());
-				}
+			String fileName = track.getFilepath();
+			String filePath = PreferencesManager.getInstance().getMusicFilepath() + fileName; 
 
-				try {
-					this.mediaPlayer.prepare();
-				} catch (Exception e) {
-					e.printStackTrace();
-					if(D) Log.e(TAG, e.toString());
-				} 
+			new CustomToast(this.context, fileName, R.drawable.ic_launcher, 400);
 
+			try {
+				this.mediaPlayer.setDataSource(filePath);
+				this.mediaPlayer.prepare();
 				this.mediaPlayer.start();
 
+				// set Progress bar values
+				this.playerFragment.getSongProgressSeekBar().setProgress(0);
+				this.playerFragment.getSongProgressSeekBar().setMax(100);
+
+				// updating progress bar
+				this.updateProgressBar();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				if(D) Log.e(TAG, e.toString());
 			}
-			else{
-				Log.e(TAG, "EXTERNAL STORAGE IS NOT READABLE");
-			}
+
 		}
-//		else{
-//			this.pauseMusic();
-//		}
-//	}
+		else{
+			Log.e(TAG, "EXTERNAL STORAGE IS NOT READABLE");
+		}
+	}
 
 	// ------------------------------------------------------------------------
 
 	public void pauseMusic() {
-
+				
 		if(this.mediaPlayer.isPlaying()){
+			
+			this.mediaPlayer.pause();
+
+			PedometerController.getInstance().pauseStepDetection();
 
 			// change PauseButton to PlayIcon
 			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
-
-			this.mediaPlayer.pause();
 		}
 		else{
 			this.mediaPlayer.start();
+			if(PreferencesManager.getInstance().isAutostartPedometer()){
+				PedometerController.getInstance().startStepDetection();
+			}
+			// change Play Button to PauseIcon
+			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
 		}
 	}
 
 	// ------------------------------------------------------------------------
 
 	public void stopMusic() {
-
-		if(this.mediaPlayer.isPlaying()){
-			this.mediaPlayer.stop();
-			this.mediaPlayer.reset();
-		}
+		this.mediaPlayer.stop();
+		this.mediaPlayer.reset();
 	}
 
 	// ------------------------------------------------------------------------
@@ -181,9 +183,89 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	}
 	
+	// ------------------------------------------------------------------------
+	
+	public void setCurrentSongPlaybackPosition(int positionPercentage){
+		
+		Track track = this.currentPlayingTrack;
+		long duration = Math.round(Integer.parseInt(track.getDurationInMilliseconds()));
+		int pos = (int)(duration * positionPercentage / 100);
+		this.mediaPlayer.seekTo(pos); 
+	}
+	
+	// ------------------------------------------------------------------------
+
+	// Update playback time on seekbar in PlayerFragment
+	public void updateProgressBar() {
+		this.seekbarHandler.postDelayed(updateSeekBarTimeProgress, 100);
+	}   
 
 	// ------------------------------------------------------------------------
 	
+	// backround thread for Update playback time on seekbar in PlayerFragment
+	private Runnable updateSeekBarTimeProgress = new Runnable() {
+		
+		
+		public void run() {
+			long totalDuration = mediaPlayer.getDuration();
+			long currentDuration = mediaPlayer.getCurrentPosition();
+			int progress = (int)(getProgressPercentage(currentDuration, totalDuration));
+			
+			playerFragment.getSongProgressSeekBar().setProgress(progress);
+
+			// TODO
+			// this will spam the logcat console
+			// Running this thread after 1000 milliseconds
+			seekbarHandler.postDelayed(this, 1000);
+		}
+	};
+
+	// ------------------------------------------------------------------------
+
+	// percentage Value, needed for update playback time on seekbar in PlayerFragment
+	public int getProgressPercentage(long currentDuration, long totalDuration){
+		Double percentage = (double) 0;
+
+		long currentSeconds = (int) (currentDuration / 1000);
+		long totalSeconds = (int) (totalDuration / 1000);
+
+		// calculating percentage
+		percentage =(((double)currentSeconds)/totalSeconds)*100;
+
+		// return percentage
+		return percentage.intValue();
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	public int progressToTimer(int progress, int totalDuration) {
+		int currentDuration = 0;
+		totalDuration = (int) (totalDuration / 1000);
+		currentDuration = (int) ((((double)progress) / 100) * totalDuration);
+
+		// return current duration in milliseconds
+		return currentDuration * 1000;
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	// remove message Handler from updating progress bar
+	public void updateSeekbarRemoveCallbacks(){
+		this.seekbarHandler.removeCallbacks(updateSeekBarTimeProgress);
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	public void updateSeekbarPosition(){
+		int totalDuration = this.mediaPlayer.getDuration();
+		int currentPosition = this.progressToTimer(this.playerFragment.getSongProgressSeekBar().getProgress(), totalDuration);
+		
+		this.updateProgressBar();
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	// listen for playback end of track
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 
@@ -195,12 +277,10 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	public File[] getFileList(){
 
-		File file = new File(this.prefsManager.getMusicFilepath()) ; 		
+		File file = new File(PreferencesManager.getInstance().getMusicFilepath()) ; 		
 		return file.listFiles();
 	}
 
-	// ------------------------------------------------------------------------
-	
 	// ------------------------------------------------------------------------
 
 	public void scanMusicFolder(){
@@ -233,13 +313,11 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 					musicfiles.add(getFileList()[i].getName());
 
 					FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
-					mmr.setDataSource(prefsManager.getMusicFilepath() + getFileList()[i].getName());
-					
+					mmr.setDataSource(PreferencesManager.getInstance().getMusicFilepath() + getFileList()[i].getName());
 					
 //					MediaMetadataRetriever mmr2 = new MediaMetadataRetriever();
 //					mmr2.setDataSource(prefsManager.getMusicFilepath() + getFileList()[i].getName());
 					
-
 					String title = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE);
 					String artist = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST);
 					String album = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM);
@@ -285,7 +363,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			@Override
 			public boolean handleMessage(Message msg) {
 
-				//		        	Toast.makeText(context, msg.obj.toString() + " files scanned", Toast.LENGTH_LONG).show();
+				// Toast.makeText(context, msg.obj.toString() + " files scanned", Toast.LENGTH_LONG).show();
 				String toastMsg = context.getResources().getString(R.string.dialog_label_musicplayer_libraryscan_postDialog_desc);
 				new CustomToast(context, msg.obj.toString() + " " + toastMsg, R.drawable.ic_folderscan_blue_50, 600);
 
@@ -306,8 +384,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	}
 	
 	// ------------------------------------------------------------------------
-	
-	// ------------------------------------------------------------------------
 
 	/* Checks if external storage is available for read and write */
 	public boolean isExternalStorageWritable() {
@@ -317,9 +393,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		}
 		return false;
 	}
-	
-	// ------------------------------------------------------------------------
-	
 
 	// ------------------------------------------------------------------------
 
@@ -339,15 +412,10 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		
 		String bpmString = str;
 		
-		if(D)Log.i(TAG, "#################1-" + str);
-
 		if(bpmString.contains("_") && bpmString.contains(".")){
 			String[] parts = bpmString.split("_");
-			if(D)Log.i(TAG, "#################2-" + parts[1]);
-
 			String[] parts2 = parts[1].split("\\.");
-			if(D)Log.i(TAG, "#################3-" + parts2[0]);
-
+			
 			if(this.isNumeric(parts2[0])){
 				return parts2[0];
 			}

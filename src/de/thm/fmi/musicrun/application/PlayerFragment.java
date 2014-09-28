@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class PlayerFragment extends Fragment {
@@ -15,9 +17,7 @@ public class PlayerFragment extends Fragment {
 	// GUI Elements
 	private ImageView btnPlay, btnStop, btnPause, btnNext, btnLast, btnList, btnTrackImage;
 	private TextView labelArtist, labelTitle;
-	
-	// Preferences
-	PreferencesManager prefsManager;
+	private SeekBar songProgressSeekBar;
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -43,9 +43,6 @@ public class PlayerFragment extends Fragment {
 		
 		// get buttons from fragment and set listeners
 		view = this.initGUIElements(view);
-
-		// PREFERENCES
-		this.prefsManager = new PreferencesManager(this.getActivity());
 
 		return view;
 	}
@@ -114,13 +111,33 @@ public class PlayerFragment extends Fragment {
 			@Override
 			public void onClick(View v) {	
 				if(D) Log.i(TAG, "TRACK IMAGE CLICKED");
-				
 			}
 		}); 
 		
 		// TextView for current playing Title - Artist
 		this.labelTitle = (TextView) view.findViewById(R.id.label_currentTitle);
 		this.labelArtist = (TextView) view.findViewById(R.id.label_currentArtist);
+		
+		// get seekbar for song progress and setListener
+		this.songProgressSeekBar = (SeekBar) view.findViewById(R.id.songProgressSeekbar);
+		this.songProgressSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			int progressChanged = 0;
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
+				if(fromUser){
+					progressChanged = progress;	
+				}
+			}
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				// seek to position
+				PlayerController.getInstance().setCurrentSongPlaybackPosition(progressChanged);
+				PlayerController.getInstance().updateSeekbarPosition();	
+			}
+		});
 		
 		return view;
 	}
@@ -197,6 +214,14 @@ public class PlayerFragment extends Fragment {
 
 	public void setLabelTitle(TextView labelTitle) {
 		this.labelTitle = labelTitle;
+	}
+
+	public SeekBar getSongProgressSeekBar() {
+		return songProgressSeekBar;
+	}
+
+	public void setSongProgressSeekBar(SeekBar songProgressSeekBar) {
+		this.songProgressSeekBar = songProgressSeekBar;
 	}
 	
 	

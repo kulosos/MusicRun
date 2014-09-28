@@ -120,7 +120,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         values.put(TRACK_BPM, track.getBpm());
         values.put(TRACK_CATEGORY, track.getCategory());
         values.put(TRACK_FILEPATH, track.getFilepath());
-        values.put(TRACK_DURATION, track.getDuration());
+        values.put(TRACK_DURATION, track.getDurationAsFormattedString());
  
         db.insert(TABLE_TRACKS, null, values); 
  

@@ -18,6 +18,10 @@
     <string name="btn_pedometer_pause">Pause step detection</string><string name="btn_ok">OK</string><string name="btn_cancel">Cancel</string>
     <string name="settings_label_pedometer_steplength">Step length (cm)</string>
     <string name="settings_label_pedometer_steplength_desc">Please enter your step length in cm</string>
+    <string name="settings_label_pedometer_autostart_playback">Autostart Pedometer</string>
+    <string name="settings_label_pedometer_autostart_playback_desc">Start pedometer automatically with starting playback</string>
+    <string name="settings_label_pedometer_minimum_playbacktime">Minimum plackback time (seconds)</string>
+    <string name="settings_label_pedometer_minimum_playbacktime_desc">Please enter minimum playback time for songs in seconds</string>
     <string name="settings_label_musicplayer_filepath">Music Folder</string>
     <string name="settings_label_musicplayer_filepath_desc">Please enter the path to your music files</string>
     <string name="settings_label_musicplayer_libraryscan">Scan music folder</string>

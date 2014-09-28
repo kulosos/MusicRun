@@ -129,7 +129,7 @@ public class PlaylistController {
 		for(int i = 0; i < this.tracks.size(); i++){
 			this.titles[i] = this.tracks.get(i).getTitle();
 			this.artists[i] = this.tracks.get(i).getArtist();
-			this.durations[i] = this.tracks.get(i).getDuration();
+			this.durations[i] = this.tracks.get(i).getDurationAsFormattedString();
 			this.bpms[i] = this.tracks.get(i).getBpm();
 		}
 	}

@@ -2,6 +2,7 @@ package de.thm.fmi.musicrun.pedometer;
 
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
+import de.thm.fmi.musicrun.application.PreferencesManager;
 import de.thm.fmi.musicrun.application.TypefaceManager;
 import de.thm.fmi.musicrun.application.TypefaceManager.FontStyle;
 import android.app.Activity;
@@ -14,7 +15,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-public class PedometerController implements IStepDetectionObserver, OnSharedPreferenceChangeListener {
+public class PedometerController implements IStepDetectionObserver {
 
 	private static PedometerController instance;
 
@@ -35,15 +36,11 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 	// Runnable Thread / Timer
 	private Handler customHandlerPerSecond;
 	StopWatch sw = new StopWatch();
-	private boolean isPaused = true;
+	public boolean stepDetecionIsPaused = true;
 
 	// TypefaceManager
 	TypefaceManager typefaceMgr;
-
-	// Preferences
-	private SharedPreferences prefs;
-	private Float stepLength = 120.0f;
-
+	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
 	private static final boolean D = true;
@@ -62,13 +59,6 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 		Typeface fontBold = Typeface.createFromAsset(this.context.getAssets(), this.typefaceMgr.getTypeface(FontStyle.BOLD));
 		this.pedometerFragment.getBtnStart().setTypeface(fontBold);
 		this.pedometerFragment.getBtnReset().setTypeface(fontBold);
-	    
-	    // PREFERENCES
-	    this.prefs = PreferenceManager.getDefaultSharedPreferences(this.context);
-        // register preference change listener
-        prefs.registerOnSharedPreferenceChangeListener(this);
-        // and set remembered preferences
-        this.stepLength = Float.parseFloat((prefs.getString("pref_key_steplength", "120.0")));
 	}
 	
 	// ------------------- SINGLETON METHODS ----------------------------------
@@ -87,41 +77,43 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 
 	public void startStepDetection(){
 
-		this.isPaused = false;
+		if(this.stepDetecionIsPaused){
+			this.stepDetecionIsPaused = false;
 
-		// time interval, needed for average step calculation
-		if(customHandlerPerSecond==null){
-			this.customHandlerPerSecond = new Handler();
-			this.customHandlerPerSecond.postDelayed(updateTimerPerSecond, 0);
-		}
+			// time interval, needed for average step calculation
+			if(customHandlerPerSecond==null){
+				this.customHandlerPerSecond = new Handler();
+				this.customHandlerPerSecond.postDelayed(updateTimerPerSecond, 0);
+			}
 
-		// start the stopWatch
-		this.sw.resume();
+			// start the stopWatch
+			this.sw.resume();
 
-		// Initialize StepDetector
-		if(stepDetector==null){
-			stepDetector = new StepDetector(this.context.getSystemService(Context.SENSOR_SERVICE));
-		}
+			// Initialize StepDetector
+			if(stepDetector==null){
+				stepDetector = new StepDetector(this.context.getSystemService(Context.SENSOR_SERVICE));
+			}
 
-		// Start StepDetection
-		this.stepDetector.setActivityRunning(true);
-		this.stepDetector.registerSensorManager();
-		this.isRunning = true;
+			// Start StepDetection
+			this.stepDetector.setActivityRunning(true);
+			this.stepDetector.registerSensorManager();
+			this.isRunning = true;
 
-		// attach Observer to this activity
-		this.stepDetector.attachObserver(this);
+			// attach Observer to this activity
+			this.stepDetector.attachObserver(this);
 
 
-		// change the button label to stop
-		this.pedometerFragment.getBtnStart().setText(this.context.getResources().getString(R.string.btn_pedometer_pause));
+			// change the button label to stop
+			this.pedometerFragment.getBtnStart().setText(this.context.getResources().getString(R.string.btn_pedometer_pause));
 
-		Resources res = this.context.getResources();
-		int color = res.getColor(R.color.red);
-		pedometerFragment.getBtnStart().setTextColor(color);
+			Resources res = this.context.getResources();
+			int color = res.getColor(R.color.red);
+			pedometerFragment.getBtnStart().setTextColor(color);
 
-		// deactivate when api level < 19
-		if(this.stepDetector.getApiLevel()<19){
-			this.pedometerFragment.getTvStepsTotalSinceStart().setText("n.a.");
+			// deactivate when api level < 19
+			if(this.stepDetector.getApiLevel()<19){
+				this.pedometerFragment.getTvStepsTotalSinceStart().setText("n.a.");
+			}
 		}
 	}
 
@@ -129,22 +121,24 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 
 	public void pauseStepDetection(){
 
-		this.isPaused = true;
+		if(!this.stepDetecionIsPaused){
+			this.stepDetecionIsPaused = true;
 
-		// start the stopWatch
-		this.sw.pause();
+			// start the stopWatch
+			this.sw.pause();
 
-		// attach Observer to this activity
-		this.stepDetector.detachObserver(this);
-		this.stepDetector.setActivityRunning(false);
-		this.isRunning = false;
+			// attach Observer to this activity
+			this.stepDetector.detachObserver(this);
+			this.stepDetector.setActivityRunning(false);
+			this.isRunning = false;
 
-		// change the button label to start
-		this.pedometerFragment.getBtnStart().setText(this.context.getResources().getString(R.string.btn_pedometer_start));
+			// change the button label to start
+			this.pedometerFragment.getBtnStart().setText(this.context.getResources().getString(R.string.btn_pedometer_start));
 
-		Resources res = this.context.getResources();
-		int color = res.getColor(R.color.systemLightBlue);
-		this.pedometerFragment.getBtnStart().setTextColor(color);
+			Resources res = this.context.getResources();
+			int color = res.getColor(R.color.systemLightBlue);
+			this.pedometerFragment.getBtnStart().setTextColor(color);
+		}
 	}
 
 	// ------------------------------------------------------------------------
@@ -178,14 +172,14 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 	@Override
 	public void update() {
 
-		if(!isPaused){
+		if(!stepDetecionIsPaused){
 			// count the recognized steps
 			this.stepcount += 1;
 			//			if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
 			this.pedometerFragment.getTvStepsTotal().setText(Integer.toString(this.stepcount));
 
 			// calculate run distance
-			this.distance = (this.stepcount * (this.stepLength*0.01f)) / 1000;
+			this.distance = (this.stepcount * (PreferencesManager.getInstance().getStepLength()*0.01f)) / 1000;
 			this.pedometerFragment.getTvStepsPerMinute().setText(String.format("%.3f", this.distance));
 		}
 	}
@@ -196,7 +190,7 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 	@Override
 	public void updateForAPILevel19() {
 
-		if(!isPaused){
+		if(!stepDetecionIsPaused){
 			// count the recognized steps
 			this.stepcountAPI19 += 1;
 			//			if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
@@ -226,13 +220,11 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 
 	// ------------------------------------------------------------------------
 
-	// ------------------------------------------------------------------------
-
 	public void setStopWatch() {
 
 		//		if(D) Log.i(TAG, "StopWatch: " + sw.getElapsedTimeHour() + ":" + sw.getElapsedTimeMin() + ":" +  sw.getElapsedTimeSecs() + ":" + sw.getElapsedTimeMili());
 
-		if(!isPaused){
+		if(!stepDetecionIsPaused){
 			String hours = "", minutes = "", seconds = "";
 
 			if(sw.getElapsedTimeHour()<10){
@@ -254,17 +246,6 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 			this.totalTime += 1;
 			//			this.tvStepsTotalSinceStart.setText(Float.toString(totalTime));
 		}
-	}
-
-	// ------------------------------------------------------------------------
-
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
-
-		if (key.equals("pref_key_steplength")) {
-			this.stepLength = Float.parseFloat((prefs.getString("pref_key_steplength", "120.0")));
-		}
-
 	}
 
 	// -----------------------------------------------------------------------

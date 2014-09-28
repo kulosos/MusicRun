@@ -50,6 +50,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		// init Singleton classes
 		SectionsPagerAdapter.initInstance(getFragmentManager(), this);
 		DatabaseManager.initInstance(this);
+		PreferencesManager.initInstance(this);
 		
 		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();
@@ -106,11 +107,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		// Set global Typefaces
 		this.typefaceMgr = new TypefaceManager(this);
 		this.typefaceMgr.setDefaultFont();
-		
-		//TODO
-		// Is this correct here ? Seems like it has to be move to the pedometer class
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String stepLength = prefs.getString("pref_key_steplength", "default value");
 	}
 
 	// ------------------------------------------------------------------------
