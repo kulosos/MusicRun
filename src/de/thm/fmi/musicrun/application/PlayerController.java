@@ -34,9 +34,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	Message msg;
 	public Handler handler, seekbarHandler;
 
-	// Preferences
-	PreferencesManager prefsManager;
-
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
 	private static final boolean D = true;
@@ -66,10 +63,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		
 		// background thread for seekbar song playback updating
 		this.seekbarHandler = new Handler();
-		
-		// Preferences
-		this.prefsManager = new PreferencesManager(this.context);
-		
 	}
 
 	// ------------------- SINGLETON METHODS ----------------------------------
@@ -104,7 +97,9 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		this.currentPlayingTrack = track;
 		this.stopMusic();
 		this.playMusic(this.currentPlayingTrack);
-		PedometerController.getInstance().startStepDetection();
+		if(PreferencesManager.getInstance().isAutostartPedometer()){
+			PedometerController.getInstance().startStepDetection();
+		}
 	}
 	
 	// ------------------------------------------------------------------------
@@ -118,7 +113,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
 
 			String fileName = track.getFilepath();
-			String filePath = this.prefsManager.getMusicFilepath() + fileName; 
+			String filePath = PreferencesManager.getInstance().getMusicFilepath() + fileName; 
 
 			new CustomToast(this.context, fileName, R.drawable.ic_launcher, 400);
 
@@ -160,8 +155,9 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		}
 		else{
 			this.mediaPlayer.start();
-			PedometerController.getInstance().startStepDetection();
-
+			if(PreferencesManager.getInstance().isAutostartPedometer()){
+				PedometerController.getInstance().startStepDetection();
+			}
 			// change Play Button to PauseIcon
 			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
 		}
@@ -281,7 +277,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	public File[] getFileList(){
 
-		File file = new File(this.prefsManager.getMusicFilepath()) ; 		
+		File file = new File(PreferencesManager.getInstance().getMusicFilepath()) ; 		
 		return file.listFiles();
 	}
 
@@ -317,7 +313,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 					musicfiles.add(getFileList()[i].getName());
 
 					FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
-					mmr.setDataSource(prefsManager.getMusicFilepath() + getFileList()[i].getName());
+					mmr.setDataSource(PreferencesManager.getInstance().getMusicFilepath() + getFileList()[i].getName());
 					
 //					MediaMetadataRetriever mmr2 = new MediaMetadataRetriever();
 //					mmr2.setDataSource(prefsManager.getMusicFilepath() + getFileList()[i].getName());

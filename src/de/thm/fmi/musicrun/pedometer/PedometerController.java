@@ -2,6 +2,7 @@ package de.thm.fmi.musicrun.pedometer;
 
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
+import de.thm.fmi.musicrun.application.PreferencesManager;
 import de.thm.fmi.musicrun.application.TypefaceManager;
 import de.thm.fmi.musicrun.application.TypefaceManager.FontStyle;
 import android.app.Activity;
@@ -14,7 +15,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-public class PedometerController implements IStepDetectionObserver, OnSharedPreferenceChangeListener {
+public class PedometerController implements IStepDetectionObserver {
 
 	private static PedometerController instance;
 
@@ -39,11 +40,7 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 
 	// TypefaceManager
 	TypefaceManager typefaceMgr;
-
-	// Preferences
-	private SharedPreferences prefs;
-	private Float stepLength = 120.0f;
-
+	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
 	private static final boolean D = true;
@@ -62,13 +59,6 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 		Typeface fontBold = Typeface.createFromAsset(this.context.getAssets(), this.typefaceMgr.getTypeface(FontStyle.BOLD));
 		this.pedometerFragment.getBtnStart().setTypeface(fontBold);
 		this.pedometerFragment.getBtnReset().setTypeface(fontBold);
-	    
-	    // PREFERENCES
-	    this.prefs = PreferenceManager.getDefaultSharedPreferences(this.context);
-        // register preference change listener
-        prefs.registerOnSharedPreferenceChangeListener(this);
-        // and set remembered preferences
-        this.stepLength = Float.parseFloat((prefs.getString("pref_key_steplength", "120.0")));
 	}
 	
 	// ------------------- SINGLETON METHODS ----------------------------------
@@ -189,7 +179,7 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 			this.pedometerFragment.getTvStepsTotal().setText(Integer.toString(this.stepcount));
 
 			// calculate run distance
-			this.distance = (this.stepcount * (this.stepLength*0.01f)) / 1000;
+			this.distance = (this.stepcount * (PreferencesManager.getInstance().getStepLength()*0.01f)) / 1000;
 			this.pedometerFragment.getTvStepsPerMinute().setText(String.format("%.3f", this.distance));
 		}
 	}
@@ -256,17 +246,6 @@ public class PedometerController implements IStepDetectionObserver, OnSharedPref
 			this.totalTime += 1;
 			//			this.tvStepsTotalSinceStart.setText(Float.toString(totalTime));
 		}
-	}
-
-	// ------------------------------------------------------------------------
-
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
-
-		if (key.equals("pref_key_steplength")) {
-			this.stepLength = Float.parseFloat((prefs.getString("pref_key_steplength", "120.0")));
-		}
-
 	}
 
 	// -----------------------------------------------------------------------

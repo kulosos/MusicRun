@@ -19,9 +19,6 @@ public class PlayerFragment extends Fragment {
 	private TextView labelArtist, labelTitle;
 	private SeekBar songProgressSeekBar;
 	
-	// Preferences
-	PreferencesManager prefsManager;
-	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
 	private static final boolean D = true;
@@ -46,9 +43,6 @@ public class PlayerFragment extends Fragment {
 		
 		// get buttons from fragment and set listeners
 		view = this.initGUIElements(view);
-
-		// PREFERENCES
-		this.prefsManager = new PreferencesManager(this.getActivity());
 
 		return view;
 	}
