@@ -32,6 +32,8 @@ public class PedometerFragment extends Fragment {
 	private TextView tvStepsAverage;
 	private TextView tvStepsPerMinute;
 	private TextView tvStepDetectionDuration;
+	private TextView tvCurrentIntervall;
+	private TextView tvStepsLastIntervall;
 	
 	// Buttons
 	private Button btnStart;
@@ -90,6 +92,8 @@ public class PedometerFragment extends Fragment {
 		this.tvStepsPerMinute			= (TextView) view.findViewById(R.id.tvStepsPerMinute);
 		this.tvStepsAverage 			= (TextView) view.findViewById(R.id.tvStepsAverage);
 		this.tvStepDetectionDuration 	= (TextView) view.findViewById(R.id.tvStepDetectionDuration);
+		this.tvCurrentIntervall			= (TextView) view.findViewById(R.id.tvCurrentIntervall);
+		this.tvStepsLastIntervall		= (TextView) view.findViewById(R.id.tvStepsLastIntervall);
 		
 		// start button on fragment and add listener
 		this.btnStart = (Button) view.findViewById(R.id.btn_start);
@@ -175,4 +179,21 @@ public class PedometerFragment extends Fragment {
 		this.btnReset = btnReset;
 	}
 
+	public TextView getTvCurrentIntervall() {
+		return tvCurrentIntervall;
+	}
+
+	public void setTvCurrentIntervall(TextView tvCurrentIntervall) {
+		this.tvCurrentIntervall = tvCurrentIntervall;
+	}
+
+	public TextView getTvStepsLastIntervall() {
+		return tvStepsLastIntervall;
+	}
+
+	public void setTvStepsLastIntervall(TextView tvStepsLastIntervall) {
+		this.tvStepsLastIntervall = tvStepsLastIntervall;
+	}
+
+	
 }

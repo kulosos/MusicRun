@@ -14,6 +14,8 @@
     <string name="label_stepssincestarte">total steps (StepCounter)</string>
     <string name="label_stepsperminute_average">steps / min average</string>
     <string name="label_stepsdetectionduration">duration</string><string name="btn_pedometer_reset">Reset</string>
+    <string name="label_stepslastintervall">steps average last intervall</string>
+    <string name="label_currentintervall">intervall (seconds)</string>
     <string name="btn_pedometer_start">Start step detection</string>
     <string name="btn_pedometer_pause">Pause step detection</string><string name="btn_ok">OK</string><string name="btn_cancel">Cancel</string>
     <string name="settings_label_pedometer_steplength">Step length (cm)</string>
