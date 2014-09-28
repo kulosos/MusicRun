@@ -206,27 +206,26 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	// Update playback time on seekbar in PlayerFragment
 	public void updateProgressBar() {
-		this.seekbarHandler.postDelayed(updateSeekarTimeProgress, 100);
+		this.seekbarHandler.postDelayed(updateSeekBarTimeProgress, 100);
 	}   
 
+	// ------------------------------------------------------------------------
+	
 	// backround thread for Update playback time on seekbar in PlayerFragment
-	private Runnable updateSeekarTimeProgress = new Runnable() {
+	private Runnable updateSeekBarTimeProgress = new Runnable() {
+		
+		
 		public void run() {
 			long totalDuration = mediaPlayer.getDuration();
 			long currentDuration = mediaPlayer.getCurrentPosition();
-
-			// Displaying Total Duration time
-			//               songTotalDurationLabel.setText(""+utils.milliSecondsToTimer(totalDuration));
-			// Displaying time completed playing
-			//               songCurrentDurationLabel.setText(""+utils.milliSecondsToTimer(currentDuration));
-
-			// Updating progress bar
 			int progress = (int)(getProgressPercentage(currentDuration, totalDuration));
-			//Log.d("Progress", ""+progress);
+			
 			playerFragment.getSongProgressSeekBar().setProgress(progress);
 
-			// Running this thread after 100 milliseconds
-			seekbarHandler.postDelayed(this, 100);
+			// TODO
+			// this will spam the logcat console
+			// Running this thread after 1000 milliseconds
+			seekbarHandler.postDelayed(this, 1000);
 		}
 	};
 
@@ -261,7 +260,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	
 	// remove message Handler from updating progress bar
 	public void updateSeekbarRemoveCallbacks(){
-		this.seekbarHandler.removeCallbacks(updateSeekarTimeProgress);
+		this.seekbarHandler.removeCallbacks(updateSeekBarTimeProgress);
 	}
 	
 	// ------------------------------------------------------------------------
@@ -270,7 +269,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		int totalDuration = this.mediaPlayer.getDuration();
 		int currentPosition = this.progressToTimer(this.playerFragment.getSongProgressSeekBar().getProgress(), totalDuration);
 		
-		updateProgressBar();
+		this.updateProgressBar();
 	}
 	
 	// ------------------------------------------------------------------------
@@ -325,11 +324,9 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 					FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
 					mmr.setDataSource(prefsManager.getMusicFilepath() + getFileList()[i].getName());
 					
-					
 //					MediaMetadataRetriever mmr2 = new MediaMetadataRetriever();
 //					mmr2.setDataSource(prefsManager.getMusicFilepath() + getFileList()[i].getName());
 					
-
 					String title = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE);
 					String artist = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST);
 					String album = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM);
@@ -375,7 +372,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			@Override
 			public boolean handleMessage(Message msg) {
 
-				//		        	Toast.makeText(context, msg.obj.toString() + " files scanned", Toast.LENGTH_LONG).show();
+				// Toast.makeText(context, msg.obj.toString() + " files scanned", Toast.LENGTH_LONG).show();
 				String toastMsg = context.getResources().getString(R.string.dialog_label_musicplayer_libraryscan_postDialog_desc);
 				new CustomToast(context, msg.obj.toString() + " " + toastMsg, R.drawable.ic_folderscan_blue_50, 600);
 
@@ -424,15 +421,10 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		
 		String bpmString = str;
 		
-//		if(D)Log.i(TAG, "#################1-" + str);
-
 		if(bpmString.contains("_") && bpmString.contains(".")){
 			String[] parts = bpmString.split("_");
-//			if(D)Log.i(TAG, "#################2-" + parts[1]);
-
 			String[] parts2 = parts[1].split("\\.");
-//			if(D)Log.i(TAG, "#################3-" + parts2[0]);
-
+			
 			if(this.isNumeric(parts2[0])){
 				return parts2[0];
 			}
