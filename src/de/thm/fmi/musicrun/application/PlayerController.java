@@ -3,6 +3,7 @@ package de.thm.fmi.musicrun.application;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.pedometer.PedometerController;
@@ -174,7 +175,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	
 	public void playLastTrack(){
 		
-		
 	}
 	
 	// ------------------------------------------------------------------------
@@ -265,12 +265,65 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	
 	// ------------------------------------------------------------------------
 	
-	// listen for playback end of track
+	// listen playback for end of track
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 
-		new CustomToast(this.context, "MP onCompletion BAMERAM", R.drawable.ic_player1, 500);
+//		new CustomToast(this.context, "MP onCompletion BAMERAM", R.drawable.ic_player1, 500);
 		this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
+		
+		// search the track from tracklist, which bpm values is the closest to the lastPace
+		List<Track> tracks = PlaylistController.getInstance().getTracks();
+		int nextTrack = this.findBestMatchingTrack(tracks);
+		Track track = tracks.get(nextTrack);
+		this.playTrackFromPlaylist(track);
+//		new CustomToast(this.context, "DEBUG Next Song " + tracks.get(nextTrack).getTitle() + " -bpm: " + tracks.get(nextTrack).getBpm(), R.drawable.ic_launcher, 600);
+	
+		// notify observer (this) directly
+		this.updateCurrentPlayingTrack(tracks.get(nextTrack));
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	public int findBestMatchingTrack(List<Track> trackList){
+		
+		List<Track> tracks = trackList;
+		int lastPace = PedometerController.getInstance().getStepsPerIntervallHistory().get(PedometerController.getInstance().getStepsPerIntervallHistory().size()-1);
+		int playNext = -1;
+		
+		if(lastPace > 0){
+			
+			// Track trackWithClostestBpm;
+			int closestValue = 10000;
+
+			for(int i=0; i < tracks.size(); i++){
+
+				int bpm = Integer.parseInt(tracks.get(i).getBpm());
+
+				// search the track from tracklist, which bpm values is the closest to the lastPace
+				if(Math.abs(bpm - lastPace) < closestValue){
+
+//					if(D) Log.i(TAG, i +" DEBUG " + tracks.get(i).getTitle() + " - bpm: " + tracks.get(i).getBpm());
+//					if(D) Log.i(TAG, "---------------------------------------------------");
+					
+					closestValue = Math.abs(bpm - lastPace);
+					// save the closest track
+					playNext = i;
+//					if(D) Log.i(TAG, i + " DEBUG CLOSEST VALUE " + closestValue);
+//					if(D) Log.i(TAG, i + " DEBUG PLAY NEXT " + playNext);
+				}
+			}
+		}
+		
+		// play next track
+		if(playNext == -1){
+			// getRandom
+			return this.getRandomRangeInt(0, tracks.size());
+		}else{
+			// play the best matching bpm track
+			return playNext;
+		}
+		
 	}
 	
 	// ------------------------------------------------------------------------
@@ -345,7 +398,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 					if(i == filesInFolder-1){
 						progress.dismiss();
-
 					}
 				}
 
@@ -353,7 +405,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 				msg.obj=filesInFolder;
 				handler.sendMessage(msg);
 			}
-
 		};
 		t.start();
 
@@ -431,6 +482,15 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		try  {  int i = Integer.parseInt(str);  }  
 		catch(NumberFormatException nfe) {  return false;  }  
 		return true;  
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	public int getRandomRangeInt(int min, int max) {
+		int randomNum = 0;
+	    Random rand = new Random();
+	    randomNum = rand.nextInt((max - min) + 1) + min;
+	    return randomNum;
 	}
 
 }

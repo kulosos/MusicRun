@@ -48,7 +48,7 @@
                     android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="40sp" />
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/tvStepsTotalLabel"
@@ -68,7 +68,6 @@
                     android:text="@string/label_totalsteps"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -92,7 +91,7 @@
                     android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="40sp" />
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/tvStepsTotalSinceStartLabel"
@@ -112,12 +111,11 @@
                     android:text="@string/label_stepssincestarte"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
-
             </LinearLayout>
         </LinearLayout>
         <!-- FIRST LINEAR HORIZONTAL ROW END -->
-        
-        
+
+
         <!-- SECOND LINEAR HORIZONTAL ROW START -->
 
         <LinearLayout
@@ -146,7 +144,7 @@
                     android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="40sp" />
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/tvStepsPerMinuteLabel"
@@ -166,7 +164,6 @@
                     android:text="@string/label_stepsperminute"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -190,7 +187,7 @@
                     android:paddingRight="5dp"
                     android:text="@string/placeholder_null"
                     android:textColor="#00ccff"
-                    android:textSize="40sp" />
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/tvStepsAverageLabel"
@@ -210,12 +207,109 @@
                     android:text="@string/label_stepsperminute_average"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
-
             </LinearLayout>
         </LinearLayout>
         <!-- SECOND LINEAR HORIZONTAL ROW END -->
 
+
         <!-- THIRD LINEAR HORIZONTAL ROW START -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvCurrentIntervall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="3dp"
+                    android:background="#404040"
+                    android:gravity="right"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="@string/placeholder_null"
+                    android:textColor="#00ccff"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/tvCurrentIntervallLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="0dp"
+                    android:background="#303030"
+                    android:gravity="right"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
+                    android:text="@string/label_currentintervall"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvStepsLastIntervall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="3dp"
+                    android:background="#404040"
+                    android:gravity="right"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="@string/placeholder_null"
+                    android:textColor="#00ccff"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/tvStepsLastIntervallLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="0dp"
+                    android:background="#303030"
+                    android:gravity="right"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
+                    android:text="@string/label_stepslastintervall"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <!-- THIRD LINEAR HORIZONTAL ROW END -->
+
+
+        <!-- FOURTH LINEAR HORIZONTAL ROW START -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -241,7 +335,7 @@
                     android:gravity="center"
                     android:text="00:00:00"
                     android:textColor="#00ccff"
-                    android:textSize="40sp" />
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/tvStepDetectionDurationLabel"
@@ -261,10 +355,9 @@
                     android:text="@string/label_stepsdetectionduration"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
-
             </LinearLayout>
         </LinearLayout>
-        <!-- THIRD LINEAR HORIZONTAL ROW END -->
+        <!-- FOURTH LINEAR HORIZONTAL ROW END -->
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -286,9 +379,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/btn_pedometer_reset"
                 android:textColor="#00ccff" />
-
         </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>

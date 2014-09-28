@@ -15,7 +15,6 @@ public class PlaylistController {
 	
 	private List<Track> tracks;
 	private String[] titles, artists, durations, bpms; 
-//	private int[] bpms; 
 
 	// Observer
 	public Vector observers;

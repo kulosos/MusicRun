@@ -1,5 +1,6 @@
 package de.thm.fmi.musicrun.application;
 
+import de.thm.fmi.musicrun.pedometer.PedometerController;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -67,7 +68,7 @@ public class PreferencesManager implements OnSharedPreferenceChangeListener {
 			this.autostartPedometer = (prefs.getBoolean("pref_key_autostart_pedometer", true));
 		}
 		if (key.equals("pref_key_minimum_playbacktime")) {
-			this.minimumPlaybackTime = (int)(prefs.getLong("pref_key_minimum_playbacktime", 30));
+			this.minimumPlaybackTime = Integer.parseInt((prefs.getString("pref_key_minimum_playbacktime", "30")));
 		}
 		
 	}

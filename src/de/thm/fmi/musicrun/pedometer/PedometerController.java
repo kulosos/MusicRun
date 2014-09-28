@@ -1,5 +1,7 @@
 package de.thm.fmi.musicrun.pedometer;
 
+import java.util.ArrayList;
+import java.util.List;
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
 import de.thm.fmi.musicrun.application.PreferencesManager;
@@ -7,12 +9,9 @@ import de.thm.fmi.musicrun.application.TypefaceManager;
 import de.thm.fmi.musicrun.application.TypefaceManager.FontStyle;
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class PedometerController implements IStepDetectionObserver {
@@ -20,7 +19,7 @@ public class PedometerController implements IStepDetectionObserver {
 	private static PedometerController instance;
 
 	// Fragment
-	private PedometerFragment pedometerFragment;
+	public PedometerFragment pedometerFragment;
 	private Context context;
 	private Activity activity;
 
@@ -28,10 +27,14 @@ public class PedometerController implements IStepDetectionObserver {
 	private StepDetector stepDetector;
 	private int stepcount = 0;	
 	private int stepcountAPI19 = 0;
+	private int stepcountPerIntervall = 0;
 	private int totalTime;
 	private Float stepFrequencyPerMinute;
+	private Float stepFrequencyPerMinuteLastIntervall;
 	public boolean isRunning = false;
 	private Float distance;
+	private int intervallTimer = 0;
+	private List<Integer> stepsPerIntervallHistory = new ArrayList<Integer>();
 
 	// Runnable Thread / Timer
 	private Handler customHandlerPerSecond;
@@ -102,7 +105,6 @@ public class PedometerController implements IStepDetectionObserver {
 			// attach Observer to this activity
 			this.stepDetector.attachObserver(this);
 
-
 			// change the button label to stop
 			this.pedometerFragment.getBtnStart().setText(this.context.getResources().getString(R.string.btn_pedometer_pause));
 
@@ -163,6 +165,8 @@ public class PedometerController implements IStepDetectionObserver {
 			this.pedometerFragment.getTvStepsPerMinute().setText("0");
 			this.pedometerFragment.getTvStepsTotal().setText("0");
 			this.pedometerFragment.getTvStepsTotalSinceStart().setText("0");
+			this.pedometerFragment.getTvCurrentIntervall().setText(Integer.toString(PreferencesManager.getInstance().getMinimumPlaybackTime()));
+			this.pedometerFragment.getTvStepsLastIntervall().setText("0");
 		}
 	}
 
@@ -175,6 +179,7 @@ public class PedometerController implements IStepDetectionObserver {
 		if(!stepDetecionIsPaused){
 			// count the recognized steps
 			this.stepcount += 1;
+			this.stepcountPerIntervall += 1;
 			//			if(D) Log.i(TAG, "Stepcount: " + this.stepcount); // DEBUG
 			this.pedometerFragment.getTvStepsTotal().setText(Integer.toString(this.stepcount));
 
@@ -200,21 +205,40 @@ public class PedometerController implements IStepDetectionObserver {
 
 	// ------------------------------------------------------------------------
 
-	// single thread for timer
+	// seperate thread for timer
 	private Runnable updateTimerPerSecond = new Runnable()
 	{
 		public void run()
 		{
 			int intervallTime = 1000; //milliseconds
-
+			intervallTimer += intervallTime/1000;
+			
 			// calculate step frequency f=n/t
-			stepFrequencyPerMinute = (float)((float)stepcount / (float)totalTime) * 60f;
-
+			stepFrequencyPerMinute = (float)((float)stepcount / (float)totalTime) * 60f; // for total time
+			stepFrequencyPerMinuteLastIntervall =  (float)((float)stepcountPerIntervall / (float)PreferencesManager.getInstance().getMinimumPlaybackTime()) * 60f;
+			
 			// sets the stopWatch, timer textview and counts the totaltime (in stopWach method)
 			setStopWatch();
 			pedometerFragment.getTvStepsAverage().setText(Integer.toString(((int)Math.round(stepFrequencyPerMinute))));
 
 			customHandlerPerSecond.postDelayed(this, intervallTime);
+			
+			// TODO
+			// checks every second, when its not neccessary, too
+			// check for changes in settings
+			// show configured intervall time (from preferences minPlaybackTime)
+			pedometerFragment.getTvCurrentIntervall().setText(Integer.toString(PreferencesManager.getInstance().getMinimumPlaybackTime()));
+
+			if(PreferencesManager.getInstance().getMinimumPlaybackTime() == intervallTimer){
+				
+				pedometerFragment.getTvStepsLastIntervall().setText(Integer.toString(((int)Math.round(stepFrequencyPerMinuteLastIntervall))));
+				stepsPerIntervallHistory.add((int)Math.round(stepFrequencyPerMinuteLastIntervall));
+				
+				// reset values
+				intervallTimer = 0;
+				stepcountPerIntervall = 0;
+				stepFrequencyPerMinuteLastIntervall = 0.0f;
+			}
 		}
 	};
 
@@ -247,6 +271,16 @@ public class PedometerController implements IStepDetectionObserver {
 			//			this.tvStepsTotalSinceStart.setText(Float.toString(totalTime));
 		}
 	}
+	
+	// -------------------- SETTER / GETTER -----------------------------------
+	
+	public List<Integer> getStepsPerIntervallHistory() {
+		return stepsPerIntervallHistory;
+	}
 
-	// -----------------------------------------------------------------------
+	public void setStepsPerIntervallHistory(List<Integer> stepsPerIntervallHistory) {
+		this.stepsPerIntervallHistory = stepsPerIntervallHistory;
+	}
+
+	
 }

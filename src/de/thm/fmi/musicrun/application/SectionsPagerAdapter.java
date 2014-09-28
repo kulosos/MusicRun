@@ -66,7 +66,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 		this.sections.add(pf);
 		this.sections.add(plf);	
 		this.sections.add(new PedometerFragment()); 
-		this.sections.add(new MapsFragment()); 
+		this.sections.add(new StatisticsFragment()); 
 		this.sections.add(new SettingsFragment()); 
 		
 //		this.sections.add(PlaceholderFragment.newInstance(1));

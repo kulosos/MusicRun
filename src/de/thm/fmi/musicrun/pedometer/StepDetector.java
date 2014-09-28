@@ -68,7 +68,7 @@ public class StepDetector implements SensorEventListener{
 
 		isActivityRunning = true;
 
-		//    	TODO: API Level Detection (TYPE_STEP_COUNTER for API Level 19 and higher)
+		// TODO: API Level Detection (TYPE_STEP_COUNTER for API Level 19 and higher)
 		this.apiLevel = Integer.valueOf(android.os.Build.VERSION.SDK);
 		if(D) Log.i(TAG, "Detected API version: " + apiLevel);
 		
@@ -79,7 +79,6 @@ public class StepDetector implements SensorEventListener{
 			sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
 		} else {
 			Log.w(TAG, "DEBUG - API Level < 19 - ERROR: Count sensor not available"); // DEBUG
-			// Toast.makeText(Context.SENSOR_SERVICE, "Count sensor not available!", Toast.LENGTH_LONG).show();
 		}
 
 		// available up to API Level 19
@@ -89,7 +88,6 @@ public class StepDetector implements SensorEventListener{
 			sensorManager.registerListener(this, countSensor2, SensorManager.SENSOR_DELAY_GAME);
 		} else {
 			Log.w(TAG, "DEBUG - API Level >= 19 - ERROR: Count sensor not available"); // DEBUG
-			// Toast.makeText(Context.SENSOR_SERVICE, "Count sensor not available!", Toast.LENGTH_LONG).show();
 		}
 
 
@@ -98,7 +96,6 @@ public class StepDetector implements SensorEventListener{
 	// ------------------------------------------------------------------------
 
 	public void onSensorChanged(SensorEvent event) {
-		//if(D) Log.d(TAG, "DEBUG - onSensorChanged"); // DEBUG
 
 		if(this.apiLevel < 19 || this.apiComparison){
 
@@ -162,7 +159,6 @@ public class StepDetector implements SensorEventListener{
 	// ------------------------------------------------------------------------
 
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// TODO Auto-generated method stub
 	}
 
 	// ------------------------- OBSERVER -------------------------------------
