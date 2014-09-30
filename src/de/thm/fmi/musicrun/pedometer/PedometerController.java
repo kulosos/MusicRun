@@ -2,9 +2,13 @@ package de.thm.fmi.musicrun.pedometer;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.jjoe64.graphview.GraphView.GraphViewData;
+
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
 import de.thm.fmi.musicrun.application.PreferencesManager;
+import de.thm.fmi.musicrun.application.StatisticsController;
 import de.thm.fmi.musicrun.application.TypefaceManager;
 import de.thm.fmi.musicrun.application.TypefaceManager.FontStyle;
 import android.app.Activity;
@@ -35,6 +39,7 @@ public class PedometerController implements IStepDetectionObserver {
 	private Float distance;
 	private int intervallTimer = 0;
 	private List<Integer> stepsPerIntervallHistory = new ArrayList<Integer>();
+	private int graphValueCounter = 3;
 
 	// Runnable Thread / Timer
 	private Handler customHandlerPerSecond;
@@ -167,6 +172,10 @@ public class PedometerController implements IStepDetectionObserver {
 			this.pedometerFragment.getTvStepsTotalSinceStart().setText("0");
 			this.pedometerFragment.getTvCurrentIntervall().setText(Integer.toString(PreferencesManager.getInstance().getMinimumPlaybackTime()));
 			this.pedometerFragment.getTvStepsLastIntervall().setText("0");
+			
+			// statistics graph
+			this.graphValueCounter = 0;
+//			StatisticsController.getInstance().getGraphView().removeSeries(StatisticsController.getInstance().getGraphSeries());
 		}
 	}
 
@@ -231,8 +240,15 @@ public class PedometerController implements IStepDetectionObserver {
 
 			if(PreferencesManager.getInstance().getMinimumPlaybackTime() == intervallTimer){
 				
-				pedometerFragment.getTvStepsLastIntervall().setText(Integer.toString(((int)Math.round(stepFrequencyPerMinuteLastIntervall))));
-				stepsPerIntervallHistory.add((int)Math.round(stepFrequencyPerMinuteLastIntervall));
+				int lastValue = (int)Math.round(stepFrequencyPerMinuteLastIntervall);
+				pedometerFragment.getTvStepsLastIntervall().setText(Integer.toString((lastValue)));
+				stepsPerIntervallHistory.add((int)Math.round(lastValue));
+				
+				graphValueCounter += 1;
+				
+				// append new data to graphView and redraw
+				StatisticsController.getInstance().getGraphSeries().appendData(new GraphViewData(graphValueCounter, Math.round(lastValue)), false, 500);
+				StatisticsController.getInstance().getGraphView().redrawAll();
 				
 				// reset values
 				intervallTimer = 0;
