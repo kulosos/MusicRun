@@ -277,8 +277,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		int nextTrack = this.findBestMatchingTrack(tracks);
 		Track track = tracks.get(nextTrack);
 		this.playTrackFromPlaylist(track);
-//		new CustomToast(this.context, "DEBUG Next Song " + tracks.get(nextTrack).getTitle() + " -bpm: " + tracks.get(nextTrack).getBpm(), R.drawable.ic_launcher, 600);
-	
+
 		// notify observer (this) directly
 		this.updateCurrentPlayingTrack(tracks.get(nextTrack));
 	}
@@ -302,15 +301,9 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 				// search the track from tracklist, which bpm values is the closest to the lastPace
 				if(Math.abs(bpm - lastPace) < closestValue){
-
-//					if(D) Log.i(TAG, i +" DEBUG " + tracks.get(i).getTitle() + " - bpm: " + tracks.get(i).getBpm());
-//					if(D) Log.i(TAG, "---------------------------------------------------");
-					
 					closestValue = Math.abs(bpm - lastPace);
 					// save the closest track
 					playNext = i;
-//					if(D) Log.i(TAG, i + " DEBUG CLOSEST VALUE " + closestValue);
-//					if(D) Log.i(TAG, i + " DEBUG PLAY NEXT " + playNext);
 				}
 			}
 		}

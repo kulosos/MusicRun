@@ -4,7 +4,9 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.LineGraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
+
 import android.content.Context;
+import android.graphics.Color;
 
 public class StatisticsController {
 	
@@ -12,6 +14,10 @@ public class StatisticsController {
 	
 	private StatisticsFragment statsFragment;
 	private Context context;
+	
+	// Graph
+	GraphViewSeries graphSeries;
+	GraphView graphView;
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -42,17 +48,44 @@ public class StatisticsController {
 	public void createGraphView(){
 		
 		// init example series data
-		GraphViewSeries exampleSeries = new GraphViewSeries(new GraphViewData[] {
-		    new GraphViewData(1, 2.0d)
-		    , new GraphViewData(2, 1.5d)
-		    , new GraphViewData(3, 2.5d)
-		    , new GraphViewData(4, 1.0d)
+		this.graphSeries = new GraphViewSeries(new GraphViewData[] {
+//		    new GraphViewData(1, 100.0d)
+//		    , new GraphViewData(2, 90.5d)
 		});
 		
-		GraphView graphView = new LineGraphView(this.context , "GraphViewDemo");
-		graphView.addSeries(exampleSeries);
+		this.graphView = new LineGraphView(this.context , "steps/min intervall history");
+		
+		// set styles
+		this.graphView.getGraphViewStyle().setGridColor(Color.DKGRAY);
+		this.graphView.getGraphViewStyle().setHorizontalLabelsColor(Color.WHITE);
+		this.graphView.getGraphViewStyle().setVerticalLabelsColor(Color.WHITE);
+		this.graphView.getGraphViewStyle().setTextSize(14.0f);
+		this.graphView.getGraphViewStyle().setNumHorizontalLabels(0);
+		this.graphView.getGraphViewStyle().setNumVerticalLabels(20);
+//		this.graphView.getGraphViewStyle().setVerticalLabelsWidth(200);
+		
+		this.graphView.addSeries(this.graphSeries);
 		
 		this.statsFragment.getGraphLayout().addView(graphView);
 	}
+	
+	// -------------------- SETTERS / GETTERS ---------------------------------
 
+	public GraphViewSeries getGraphSeries() {
+		return graphSeries;
+	}
+	
+	public void setGraphSeries(GraphViewSeries graphSeries) {
+		this.graphSeries = graphSeries;
+	}
+
+	public GraphView getGraphView() {
+		return graphView;
+	}
+
+	public void setGraphView(GraphView graphView) {
+		this.graphView = graphView;
+	}
+
+	
 }
