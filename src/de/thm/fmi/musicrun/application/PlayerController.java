@@ -28,12 +28,14 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	Context context;
 	
 	// MediaPlayer
-	private MediaPlayer mediaPlayer;
+	private MediaPlayer mediaPlayerA, mediaPlayerB;
 	private Track currentPlayingTrack;
+	Thread mpThreadA, mpThreadB;
 
+	// music scan dialog
 	ProgressDialog progress;
-	Message msg;
-	public Handler handler, seekbarHandler;
+	Message musicScanResultMsg;
+	public Handler scanMusicPostHandler, seekbarHandler;
 
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -59,8 +61,8 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		PlaylistController.getInstance().attachObserver(this);
 		
 		// MusicPlayer
-		this.mediaPlayer = new MediaPlayer();
-		this.mediaPlayer.setOnCompletionListener(this);
+		this.mediaPlayerA = new MediaPlayer();
+		this.mediaPlayerA.setOnCompletionListener(this);
 		
 		// background thread for seekbar song playback updating
 		this.seekbarHandler = new Handler();
@@ -86,7 +88,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 		this.currentPlayingTrack = track;
 		
-		this.playerFragment.getLabelTitle().setText(track.getTitle());
+		this.playerFragment.getLabelTitle().setText(track.getTitle() + track.getBpm() + " BPM");
 		this.playerFragment.getLabelArtist().setText(track.getArtist());
 		
 	}
@@ -119,9 +121,9 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			new CustomToast(this.context, fileName, R.drawable.ic_launcher, 400);
 
 			try {
-				this.mediaPlayer.setDataSource(filePath);
-				this.mediaPlayer.prepare();
-				this.mediaPlayer.start();
+				this.mediaPlayerA.setDataSource(filePath);
+				this.mediaPlayerA.prepare();
+				this.mediaPlayerA.start();
 
 				// set Progress bar values
 				this.playerFragment.getSongProgressSeekBar().setProgress(0);
@@ -145,9 +147,9 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	public void pauseMusic() {
 				
-		if(this.mediaPlayer.isPlaying()){
+		if(this.mediaPlayerA.isPlaying()){
 			
-			this.mediaPlayer.pause();
+			this.mediaPlayerA.pause();
 
 			PedometerController.getInstance().pauseStepDetection();
 
@@ -155,7 +157,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
 		}
 		else{
-			this.mediaPlayer.start();
+			this.mediaPlayerA.start();
 			if(PreferencesManager.getInstance().isAutostartPedometer()){
 				PedometerController.getInstance().startStepDetection();
 			}
@@ -167,8 +169,8 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	// ------------------------------------------------------------------------
 
 	public void stopMusic() {
-		this.mediaPlayer.stop();
-		this.mediaPlayer.reset();
+		this.mediaPlayerA.stop();
+		this.mediaPlayerA.reset();
 	}
 
 	// ------------------------------------------------------------------------
@@ -190,7 +192,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		Track track = this.currentPlayingTrack;
 		long duration = Math.round(Integer.parseInt(track.getDurationInMilliseconds()));
 		int pos = (int)(duration * positionPercentage / 100);
-		this.mediaPlayer.seekTo(pos); 
+		this.mediaPlayerA.seekTo(pos); 
 	}
 	
 	// ------------------------------------------------------------------------
@@ -207,8 +209,8 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		
 		
 		public void run() {
-			long totalDuration = mediaPlayer.getDuration();
-			long currentDuration = mediaPlayer.getCurrentPosition();
+			long totalDuration = mediaPlayerA.getDuration();
+			long currentDuration = mediaPlayerA.getCurrentPosition();
 			int progress = (int)(getProgressPercentage(currentDuration, totalDuration));
 			
 			playerFragment.getSongProgressSeekBar().setProgress(progress);
@@ -257,7 +259,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	// ------------------------------------------------------------------------
 	
 	public void updateSeekbarPosition(){
-		int totalDuration = this.mediaPlayer.getDuration();
+		int totalDuration = this.mediaPlayerA.getDuration();
 		int currentPosition = this.progressToTimer(this.playerFragment.getSongProgressSeekBar().getProgress(), totalDuration);
 		
 		this.updateProgressBar();
@@ -334,7 +336,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		// delete Table TRACK before adding new tracks by scanning folder
 		DatabaseManager.getInstance().deleteAllTracks();
 
-		this.msg = new Message();
+		this.musicScanResultMsg = new Message();
 
 		this.progress = new ProgressDialog(this.context);
 
@@ -395,14 +397,14 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 				}
 
 				// handler message
-				msg.obj=filesInFolder;
-				handler.sendMessage(msg);
+				musicScanResultMsg.obj=filesInFolder;
+				scanMusicPostHandler.sendMessage(musicScanResultMsg);
 			}
 		};
 		t.start();
 
 		// start handler msg box after scanning
-		handler = new Handler(new Handler.Callback() {
+		scanMusicPostHandler = new Handler(new Handler.Callback() {
 
 			@Override
 			public boolean handleMessage(Message msg) {
