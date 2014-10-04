@@ -28,6 +28,10 @@
     <string name="settings_label_musicplayer_filepath_desc">Please enter the path to your music files</string>
     <string name="settings_label_musicplayer_libraryscan">Scan music folder</string>
     <string name="settings_label_musicplayer_libraryscan_desc">Scan the music folder for music files.\nThis process could take a long time.</string>
+    <string name="settings_label_musicplayer_crossfading_toggle">Crossfading</string>
+    <string name="settings_label_musicplayer_crossfading_toggle_desc">Enables transition between titles</string>
+    <string name="settings_label_musicplayer_crossfading_duration">Crossfading duration</string>
+    <string name="settings_label_musicplayer_crossfading_duration_desc">Please enter duration for crossfading (seconds)</string>
    	<string name="dialog_label_musicplayer_libraryscan_postDialog">Music folder scan</string>
     <string name="dialog_label_musicplayer_libraryscan_postDialog_desc">files scanned and added to database.</string>
     <string name="playlist_placeholder_artist">Artist</string>

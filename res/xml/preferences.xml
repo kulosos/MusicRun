@@ -26,12 +26,27 @@
             android:title="@string/settings_label_musicplayer_libraryscan" 
             android:textColor="#FFFFFF">
         </Preference>
-        
-        <Preference
+                <Preference
             android:key="pref_key_libraryscan_test"
-            android:title="whats up test"
-            android:textColor="#FFFFFF" >
+            android:textColor="#FFFFFF"
+            android:title="database check" >
         </Preference>
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_key_crossfading_toggle"
+            android:summary="@string/settings_label_musicplayer_crossfading_toggle_desc"
+            android:title="@string/settings_label_musicplayer_crossfading_toggle" />
+        
+        <EditTextPreference
+            android:key="pref_key_crossfading_duration"
+            android:inputType="number"
+            android:defaultValue="5"
+            android:summary="@string/settings_label_musicplayer_crossfading_duration_desc"
+            android:title="@string/settings_label_musicplayer_crossfading_duration"  
+            android:textColor="#FFFFFF">
+        </EditTextPreference>
+        
     </PreferenceCategory>
 
     <!-- ################################################### -->

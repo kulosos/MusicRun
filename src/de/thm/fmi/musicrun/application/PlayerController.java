@@ -35,21 +35,31 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	public enum PlayerId { A, B }
 	private Track currentPlayingTrack;
 	private PlayerId activePlayerThread;
+	private Handler volumeHandlerA, volumeHandlerB, fadingHandler;
 	
+	// Volume control
+	float currentVolumeMpA = 1.0f;
+	float currentVolumeMpB = 1.0f;
+	private static final float VOLUME_MIN = 0.0f;
+	private static final float VOLUME_MAX = 1.0f;
+	float fadingDuration = 5000; // default milliseconds
+	long delayTime = 100; // default milliseconds
+	float changeValue = VOLUME_MAX / (fadingDuration / (float)delayTime);
+	public enum VolumeChange { POSITIVE, NEGATIVE }
+	float volumeMpOut, volumeMpIn;
 	
-	
-	
+	// variable of the foreign solution
 	int INT_VOLUME_MAX = 100;
 	int INT_VOLUME_MIN = 0;
 	int iVolume = 0;
 	float FLOAT_VOLUME_MIN = 0.0f;
-	float FLOAT_VOLUME_MAX = 100.0f;
-	int fadeDuration = 10;
+	float FLOAT_VOLUME_MAX = 1.0f;
+	int int_fadeDuration = 10;
 	
 	// music scan dialog
 	ProgressDialog progress;
-	Message musicScanResultMsg;
-	public Handler scanMusicPostHandler, seekbarHandler;
+	Message musicScanResultMsg, fadingPostMsg;
+	public Handler scanMusicPostHandler, seekbarHandler, postFadingHandler;
 
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -108,7 +118,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		
 		this.playerFragment.getLabelTitle().setText(track.getTitle() + track.getBpm() + " BPM");
 		this.playerFragment.getLabelArtist().setText(track.getArtist());
-		
+	
 	}
 	
 	// ------------------------------------------------------------------------
@@ -142,6 +152,14 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			if(D) Log.i(TAG, "PLAYER_A IS PLAYING. START PLAYER B");
 			this.stopMediaPlayer(PlayerId.B);
 			this.startMusicPlayerThread(PlayerId.B);
+			this.mediaPlayerB.setVolume(this.VOLUME_MIN, this.VOLUME_MIN);
+			this.crossFade(this.mediaPlayerA, this.mediaPlayerB);
+			
+//			this.volumeFade(PlayerId.A, VolumeChange.NEGATIVE);
+//			this.stopMediaPlayer(PlayerId.B);
+//			this.startMusicPlayerThread(PlayerId.B);
+//			this.currentVolumeMpB = 0f;
+//			this.volumeFade(PlayerId.B, VolumeChange.POSITIVE);
 			return;
 		}
 
@@ -150,6 +168,8 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			if(D) Log.i(TAG, "PLAYER_B IS PLAYING. START PLAYER A.");
 			this.stopMediaPlayer(PlayerId.A);
 			this.startMusicPlayerThread(PlayerId.A);
+			this.mediaPlayerA.setVolume(this.VOLUME_MIN, this.VOLUME_MIN);
+			this.crossFade(this.mediaPlayerB, this.mediaPlayerA);
 			return;
 		}
 
@@ -160,12 +180,16 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			if(activePlayerThread.equals(PlayerId.A)){
 				this.stopMediaPlayer(PlayerId.B);
 				this.startMusicPlayerThread(PlayerId.B);
+				this.mediaPlayerB.setVolume(this.VOLUME_MIN, this.VOLUME_MIN);
+				this.crossFade(this.mediaPlayerA, this.mediaPlayerB);
 				return;
 			}
 		
 			if(activePlayerThread.equals(PlayerId.B)){
 				this.stopMediaPlayer(PlayerId.A);
 				this.startMusicPlayerThread(PlayerId.A);
+				this.mediaPlayerA.setVolume(this.VOLUME_MIN, this.VOLUME_MIN);
+				this.crossFade(this.mediaPlayerB, this.mediaPlayerA);
 				return;
 			}
 		}
@@ -339,6 +363,54 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		}
 	}
 
+	// ------------------------------------------------------------------------
+	
+	private void crossFade(MediaPlayer mediaPlayerFadeOut, MediaPlayer mediaPlayerFadeIn){
+		
+		final MediaPlayer mpOut = mediaPlayerFadeOut;
+		final MediaPlayer mpIn = mediaPlayerFadeIn;
+		
+		this.volumeMpOut = 1.0f;
+		this.volumeMpIn = 0.0f;
+//		mpOut.setVolume(volumeMpOut, volumeMpOut);
+//		mpIn.setVolume(volumeMpIn, volumeMpIn);
+		
+		// calculate values
+		this.fadingDuration = (float)PreferencesManager.getInstance().getCrossfadingDuration()*1000; // parse to milliseconds
+		this.delayTime = 100; // milliseconds
+		this.changeValue = VOLUME_MAX / (fadingDuration / (float)delayTime);
+		
+		final Thread t = new Thread(){
+
+			@Override
+			public void run(){
+
+				while(volumeMpOut > VOLUME_MIN && volumeMpIn < VOLUME_MAX){
+					
+					try {
+						sleep(delayTime);
+						//fade out
+						mpOut.setVolume(volumeMpOut, volumeMpOut);
+						volumeMpOut = Math.max(0, Math.min(1, volumeMpOut - changeValue)); // clamped between 0 and 1
+						// fade in
+						mpIn.setVolume(volumeMpIn, volumeMpIn);
+						volumeMpIn = Math.max(0, Math.min(1, volumeMpIn + changeValue)); // clamped between 0 and 1
+
+						Log.i(TAG, "volumeOut: " + volumeMpOut);
+						Log.i(TAG, "volumeIn: " + volumeMpIn);
+
+						
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				mpOut.stop();
+				mpOut.reset();
+			}
+		};
+		t.start();	
+	}
+		
 	// ------------------------------------------------------------------------
 	
 	public void playLastTrack(){

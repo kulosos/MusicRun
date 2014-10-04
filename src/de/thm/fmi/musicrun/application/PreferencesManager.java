@@ -16,6 +16,8 @@ public class PreferencesManager implements OnSharedPreferenceChangeListener {
 	private float stepLength = 120.0f;
 	private boolean autostartPedometer = true;
 	private int minimumPlaybackTime = 30;
+	private boolean isCrossfadingActive = true;
+	private int crossfadingDuration = 5;
 
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -32,6 +34,8 @@ public class PreferencesManager implements OnSharedPreferenceChangeListener {
         // and set remembered preferences
         // PLAYER
         this.musicFilepath = (prefs.getString("pref_key_musicfilepath", "/storage/extSdCard/"));
+        this.isCrossfadingActive = (prefs.getBoolean("pref_key_crossfading_toggle", true));
+        this.crossfadingDuration = Integer.parseInt((prefs.getString("pref_key_crossfading_duration", "5")));
         // PEDOMETER
         this.stepLength = Float.parseFloat((prefs.getString("pref_key_steplength", "120.0")));
         this.autostartPedometer = (prefs.getBoolean("pref_key_autostart_pedometer", true));
@@ -58,6 +62,12 @@ public class PreferencesManager implements OnSharedPreferenceChangeListener {
 		// PLAYER
 		if (key.equals("pref_key_musicfilepath")) {
 			this.musicFilepath = (prefs.getString("pref_key_musicfilepath", "/storage/extSd/"));
+		}
+		if (key.equals("pref_key_crossfading_toggle")) {
+			this.isCrossfadingActive = (prefs.getBoolean("pref_key_crossfading_toggle", true));
+		}
+		if (key.equals("pref_key_crossfading_duration")) {
+			this.crossfadingDuration = Integer.parseInt((prefs.getString("pref_key_crossfading_duration", "5")));
 		}
 
 		// PEDOMETER 
@@ -113,6 +123,22 @@ public class PreferencesManager implements OnSharedPreferenceChangeListener {
 
 	public void setStepLength(float stepLength) {
 		this.stepLength = stepLength;
+	}
+
+	public boolean isCrossfadingActive() {
+		return isCrossfadingActive;
+	}
+
+	public void setCrossfadingActive(boolean isCrossfadingActive) {
+		this.isCrossfadingActive = isCrossfadingActive;
+	}
+
+	public int getCrossfadingDuration() {
+		return crossfadingDuration;
+	}
+
+	public void setCrossfadingDuration(int crossfadingDuration) {
+		this.crossfadingDuration = crossfadingDuration;
 	}
 
 	
