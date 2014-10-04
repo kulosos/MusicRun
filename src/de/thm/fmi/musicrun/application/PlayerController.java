@@ -35,26 +35,14 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	public enum PlayerId { A, B }
 	private Track currentPlayingTrack;
 	private PlayerId activePlayerThread;
-	private Handler volumeHandlerA, volumeHandlerB, fadingHandler;
 	
 	// Volume control
-	float currentVolumeMpA = 1.0f;
-	float currentVolumeMpB = 1.0f;
 	private static final float VOLUME_MIN = 0.0f;
 	private static final float VOLUME_MAX = 1.0f;
 	float fadingDuration = 5000; // default milliseconds
 	long delayTime = 100; // default milliseconds
 	float changeValue = VOLUME_MAX / (fadingDuration / (float)delayTime);
-	public enum VolumeChange { POSITIVE, NEGATIVE }
 	float volumeMpOut, volumeMpIn;
-	
-	// variable of the foreign solution
-	int INT_VOLUME_MAX = 100;
-	int INT_VOLUME_MIN = 0;
-	int iVolume = 0;
-	float FLOAT_VOLUME_MIN = 0.0f;
-	float FLOAT_VOLUME_MAX = 1.0f;
-	int int_fadeDuration = 10;
 	
 	// music scan dialog
 	ProgressDialog progress;
@@ -147,28 +135,23 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			this.startMusicPlayerThread(PlayerId.A);
 			return;
 		}
+		
 		// Player A ISPLAYING
 		if(this.mediaPlayerA.isPlaying() && !this.mediaPlayerB.isPlaying()){
 			if(D) Log.i(TAG, "PLAYER_A IS PLAYING. START PLAYER B");
 			this.stopMediaPlayer(PlayerId.B);
 			this.startMusicPlayerThread(PlayerId.B);
-			this.mediaPlayerB.setVolume(this.VOLUME_MIN, this.VOLUME_MIN);
+			this.mediaPlayerB.setVolume(VOLUME_MIN, VOLUME_MIN);
 			this.crossFade(this.mediaPlayerA, this.mediaPlayerB);
-			
-//			this.volumeFade(PlayerId.A, VolumeChange.NEGATIVE);
-//			this.stopMediaPlayer(PlayerId.B);
-//			this.startMusicPlayerThread(PlayerId.B);
-//			this.currentVolumeMpB = 0f;
-//			this.volumeFade(PlayerId.B, VolumeChange.POSITIVE);
 			return;
 		}
-
+		
 		// Player B ISPLAYLING
 		if(!this.mediaPlayerA.isPlaying() && this.mediaPlayerB.isPlaying()){
 			if(D) Log.i(TAG, "PLAYER_B IS PLAYING. START PLAYER A.");
 			this.stopMediaPlayer(PlayerId.A);
 			this.startMusicPlayerThread(PlayerId.A);
-			this.mediaPlayerA.setVolume(this.VOLUME_MIN, this.VOLUME_MIN);
+			this.mediaPlayerA.setVolume(VOLUME_MIN, VOLUME_MIN);
 			this.crossFade(this.mediaPlayerB, this.mediaPlayerA);
 			return;
 		}
@@ -180,7 +163,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			if(activePlayerThread.equals(PlayerId.A)){
 				this.stopMediaPlayer(PlayerId.B);
 				this.startMusicPlayerThread(PlayerId.B);
-				this.mediaPlayerB.setVolume(this.VOLUME_MIN, this.VOLUME_MIN);
+				this.mediaPlayerB.setVolume(VOLUME_MIN, VOLUME_MIN);
 				this.crossFade(this.mediaPlayerA, this.mediaPlayerB);
 				return;
 			}
@@ -188,7 +171,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			if(activePlayerThread.equals(PlayerId.B)){
 				this.stopMediaPlayer(PlayerId.A);
 				this.startMusicPlayerThread(PlayerId.A);
-				this.mediaPlayerA.setVolume(this.VOLUME_MIN, this.VOLUME_MIN);
+				this.mediaPlayerA.setVolume(VOLUME_MIN, VOLUME_MIN);
 				this.crossFade(this.mediaPlayerB, this.mediaPlayerA);
 				return;
 			}
@@ -386,7 +369,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			public void run(){
 
 				while(volumeMpOut > VOLUME_MIN && volumeMpIn < VOLUME_MAX){
-					
 					try {
 						sleep(delayTime);
 						//fade out
@@ -396,10 +378,9 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 						mpIn.setVolume(volumeMpIn, volumeMpIn);
 						volumeMpIn = Math.max(0, Math.min(1, volumeMpIn + changeValue)); // clamped between 0 and 1
 
-						Log.i(TAG, "volumeOut: " + volumeMpOut);
-						Log.i(TAG, "volumeIn: " + volumeMpIn);
+						if(D)Log.i(TAG, "volumeOut: " + volumeMpOut);
+						if(D)Log.i(TAG, "volumeIn: " + volumeMpIn);
 
-						
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -426,36 +407,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	public void playNextTrack(){
 
-	}
-
-	// ------------------------------------------------------------------------
-	
-	private void updateVolume(int change, PlayerId playerId) {
-		
-		//increment or decrement depending on type of fade
-		iVolume = iVolume + change;
-
-		//ensure iVolume within boundaries
-		if (iVolume < INT_VOLUME_MIN)
-			iVolume = INT_VOLUME_MIN;
-		else if (iVolume > INT_VOLUME_MAX)
-			iVolume = INT_VOLUME_MAX;
-
-		//convert to float value
-		float fVolume = 1 - ((float) Math.log(INT_VOLUME_MAX - iVolume) / (float) Math.log(INT_VOLUME_MAX));
-
-		//ensure fVolume within boundaries
-		if (fVolume < FLOAT_VOLUME_MIN)
-			fVolume = FLOAT_VOLUME_MIN;
-		else if (fVolume > FLOAT_VOLUME_MAX)
-			fVolume = FLOAT_VOLUME_MAX;
-
-		if(playerId.equals(playerId.A)){
-			this.mediaPlayerA.setVolume(fVolume, fVolume);
-		}
-		if(playerId.equals(playerId.B)){
-			this.mediaPlayerB.setVolume(fVolume, fVolume);
-		}
 	}
 
 	// ------------------------------------------------------------------------
