@@ -106,20 +106,8 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		
 		this.playerFragment.getLabelTitle().setText(track.getTitle() + track.getBpm() + " BPM");
 		this.playerFragment.getLabelArtist().setText(track.getArtist());
-	
-	}
-	
-	// ------------------------------------------------------------------------
-	
-	public void playTrackFromPlaylist(Track track){
 		
-		this.currentPlayingTrack = track;
-		this.stopMusic();
-//		this.playMusic(this.currentPlayingTrack);
-		this.prepareMusicPlayerThread(track);
-		if(PreferencesManager.getInstance().isAutostartPedometer()){
-			PedometerController.getInstance().startStepDetection();
-		}
+		this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
 	}
 
 	// ------------------------------------------------------------------------
@@ -127,6 +115,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	public void prepareMusicPlayerThread(Track track){
 
 		this.currentPlayingTrack = track;
+		if(PreferencesManager.getInstance().isAutostartPedometer())	PedometerController.getInstance().startStepDetection();
 
 		// PlayerA and PlayerB BOTH NOT PLAYING
 		if(!this.mediaPlayerA.isPlaying() && !this.mediaPlayerB.isPlaying()){
@@ -321,7 +310,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			}
 			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
 			return;
-		}
+		}	
 	}
 
 	// ------------------------------------------------------------------------
@@ -561,7 +550,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		List<Track> tracks = PlaylistController.getInstance().getTracks();
 		int nextTrack = this.findBestMatchingTrack(tracks);
 		Track track = tracks.get(nextTrack);
-		this.playTrackFromPlaylist(track);
+		prepareMusicPlayerThread(track);
 
 		// notify observer (this) directly
 		this.updateCurrentPlayingTrack(tracks.get(nextTrack));
