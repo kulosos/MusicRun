@@ -27,11 +27,11 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	// Fragment
 	public PlayerFragment playerFragment;
-	Context context;
+	private Context context;
 	
 	// MediaPlayer
 	private MediaPlayer mediaPlayerA, mediaPlayerB;
-	Thread mpThreadA, mpThreadB;
+	private Thread mpThreadA, mpThreadB;
 	public enum PlayerId { A, B }
 	private Track currentPlayingTrack;
 	private PlayerId activePlayerThread = PlayerId.A;
@@ -39,15 +39,16 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	// Volume control
 	private static final float VOLUME_MIN = 0.0f;
 	private static final float VOLUME_MAX = 1.0f;
-	float fadingDuration = 5000; // default milliseconds
-	long delayTime = 100; // default milliseconds
-	float changeValue = VOLUME_MAX / (fadingDuration / (float)delayTime);
-	float volumeMpOut, volumeMpIn;
+	private float fadingDuration = 5000; // default milliseconds
+	private long delayTime = 100; // default milliseconds
+	private float changeValue = VOLUME_MAX / (fadingDuration / (float)delayTime);
+	private float volumeMpOut, volumeMpIn;
+	private boolean isFading = false;
 	
 	// music scan dialog
-	ProgressDialog progress;
-	Message musicScanResultMsg, fadingPostMsg;
-	public Handler scanMusicPostHandler, seekbarHandler, postFadingHandler;
+	private ProgressDialog progress;
+	private Message musicScanResultMsg, fadingPostMsg;
+	public Handler scanMusicPostHandler, seekbarHandler, postFadingHandler, onCompletionHandler;
 
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -78,10 +79,12 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		this.mediaPlayerA.setOnCompletionListener(this);
 		this.mediaPlayerB.setOnCompletionListener(this);
 		
-		
-		
 		// background thread for seekbar song playback updating
 		this.seekbarHandler = new Handler();
+		
+		// start on completion listener
+		this.onCompletionHandler = new Handler();
+		this.onCompletionHandler.postDelayed(onCompletionListenerThread, 1000);
 	}
 
 	// ------------------- SINGLETON METHODS ----------------------------------
@@ -145,9 +148,9 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			return;
 		}
 
-		// BOTH Players ARE PLAYING (e.g. while crossfading)
-		if(this.mediaPlayerA.isPlaying() && this.mediaPlayerB.isPlaying()){
-			if(D) Log.i(TAG, "BOTH MEDIAPLAYER ARE PLAYING");
+		// BOTH Players ARE PLAYING SIMULTANEOUSLY (e.g. while crossfading)
+		if(this.mediaPlayerA.isPlaying() && this.mediaPlayerB.isPlaying() && this.isFading){
+			if(D) Log.i(TAG, "BOTH MEDIAPLAYERS ARE PLAYING");
 			
 			if(activePlayerThread.equals(PlayerId.A)){
 				this.stopMediaPlayer(PlayerId.B);
@@ -171,28 +174,30 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	private void startMusicPlayerThread(PlayerId playerId){
 	
-		if(playerId.equals(PlayerId.A)){
-			this.mpThreadA = new Thread(){
-				@Override
-				public void run() {
-					playMusic(currentPlayingTrack, PlayerId.A);
-					activePlayerThread = PlayerId.A;
-				}
-			};
-			this.mpThreadA.start();
-			return;
-		}
-		
-		if(playerId.equals(PlayerId.B)){
-			this.mpThreadB = new Thread(){
-				@Override
-				public void run() {
-					playMusic(currentPlayingTrack, PlayerId.B);
-					activePlayerThread = PlayerId.B;
-				}
-			};
-			this.mpThreadB.start();
-			return;
+		if(!isFading){
+			if(playerId.equals(PlayerId.A)){
+				this.mpThreadA = new Thread(){
+					@Override
+					public void run() {
+						playMusic(currentPlayingTrack, PlayerId.A);
+						activePlayerThread = PlayerId.A;
+					}
+				};
+				this.mpThreadA.start();
+				return;
+			}
+
+			if(playerId.equals(PlayerId.B)){
+				this.mpThreadB = new Thread(){
+					@Override
+					public void run() {
+						playMusic(currentPlayingTrack, PlayerId.B);
+						activePlayerThread = PlayerId.B;
+					}
+				};
+				this.mpThreadB.start();
+				return;
+			}
 		}
 	}
 	
@@ -252,7 +257,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
 			return;
 		}
-		
+
 		// ONE MEDIA PLAYER IS PLAYING
 		if(this.mediaPlayerA.isPlaying()){
 			if(D) Log.d(TAG, "DEBUG -------------------- 1. if");
@@ -261,7 +266,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
 			return;
 		}
-		
+
 		if(this.mediaPlayerB.isPlaying()){
 			if(D) Log.d(TAG, "DEBUG -------------------- 2. if");
 			this.mediaPlayerB.pause();
@@ -280,7 +285,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
 			return;
 		}
-		
+
 		if(!this.mediaPlayerB.isPlaying() && this.currentPlayingTrack != null && this.activePlayerThread.equals(PlayerId.B)){
 			if(D) Log.d(TAG, "DEBUG -------------------- 4. if");
 			this.mediaPlayerB.start();
@@ -359,7 +364,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	
 	// ------------------------------------------------------------------------
 	
-	private void stopMusicPlayerThread(PlayerId playerId){
+	public void stopMusicPlayerThread(PlayerId playerId){
 		
 		if(playerId.equals(PlayerId.A)){
 			this.mediaPlayerA.stop();
@@ -379,8 +384,10 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		final MediaPlayer mpOut = mediaPlayerFadeOut;
 		final MediaPlayer mpIn = mediaPlayerFadeIn;
 		
-		this.volumeMpOut = 1.0f;
-		this.volumeMpIn = 0.0f;
+		if(!isFading){
+			this.volumeMpOut = 1.0f;
+			this.volumeMpIn = 0.0f;
+		}
 //		mpOut.setVolume(volumeMpOut, volumeMpOut);
 //		mpIn.setVolume(volumeMpIn, volumeMpIn);
 		
@@ -393,29 +400,38 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 			@Override
 			public void run(){
-
+				
 				while(volumeMpOut > VOLUME_MIN && volumeMpIn < VOLUME_MAX){
 					try {
 						sleep(delayTime);
+						isFading = true;
+						if(isFading) if(D)Log.i(TAG, "DEBUG fading " + isFading);
 						//fade out
 						mpOut.setVolume(volumeMpOut, volumeMpOut);
 						volumeMpOut = Math.max(0, Math.min(1, volumeMpOut - changeValue)); // clamped between 0 and 1
 						// fade in
 						mpIn.setVolume(volumeMpIn, volumeMpIn);
 						volumeMpIn = Math.max(0, Math.min(1, volumeMpIn + changeValue)); // clamped between 0 and 1
-
+						
 						if(D)Log.i(TAG, "volumeOut: " + volumeMpOut);
 						if(D)Log.i(TAG, "volumeIn: " + volumeMpIn);
-
+						
+//						if(activePlayerThread.equals(PlayerId.A))if(D)Log.i(TAG, "DEBUG PLAYER THREAD A");
+//						if(activePlayerThread.equals(PlayerId.B))if(D)Log.i(TAG, "DEBUG PLAYER THREAD B");
+						
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
 				mpOut.stop();
 				mpOut.reset();
+				isFading = false;
+				if(!isFading) if(D)Log.i(TAG, "DEBUG --------- fading ready");
 			}
 		};
 		t.start();	
+		
+		
 	}
 		
 	// ------------------------------------------------------------------------
@@ -457,7 +473,14 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		Track track = this.currentPlayingTrack;
 		long duration = Math.round(Integer.parseInt(track.getDurationInMilliseconds()));
 		int pos = (int)(duration * positionPercentage / 100);
-		this.mediaPlayerA.seekTo(pos); 
+		
+		if(this.activePlayerThread.equals(PlayerId.A)){
+			this.mediaPlayerA.seekTo(pos); 
+		}
+		if(this.activePlayerThread.equals(PlayerId.B)){
+			this.mediaPlayerB.seekTo(pos); 
+		}
+		
 	}
 	
 	// ------------------------------------------------------------------------
@@ -543,18 +566,57 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	// listen playback for end of track
 	@Override
 	public void onCompletion(MediaPlayer mp) {
-
-//		this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
-		
-		// search the track from tracklist, which bpm values is the closest to the lastPace
-		List<Track> tracks = PlaylistController.getInstance().getTracks();
-		int nextTrack = this.findBestMatchingTrack(tracks);
-		Track track = tracks.get(nextTrack);
-		prepareMusicPlayerThread(track);
-
-		// notify observer (this) directly
-		this.updateCurrentPlayingTrack(tracks.get(nextTrack));
+		// this is only useable for using of one mediaplayer only
+		// for more than one mediaplayer object you need another solution
+		// >> Runnable onCompletionListenerThread
 	}
+
+	// ------------------------------------------------------------------------
+	
+	// own implementation of listening playback end of track
+	private	Runnable onCompletionListenerThread = new Runnable() {
+		@Override
+		public void run() {
+
+			if(currentPlayingTrack != null){
+				if(activePlayerThread.equals(PlayerId.A)){
+
+					int endOfTrack = mediaPlayerA.getDuration()- (PreferencesManager.getInstance().getCrossfadingDuration()*1000)+1000;
+
+					if(mediaPlayerA.getCurrentPosition() >= endOfTrack && !isFading){
+						
+						// search the track from tracklist, which bpm values is the closest to the lastPace
+						List<Track> tracks = PlaylistController.getInstance().getTracks();
+						int nextTrack = findBestMatchingTrack(tracks);
+						Track track = tracks.get(nextTrack);
+						prepareMusicPlayerThread(track);
+
+						// notify observer (this) directly
+						updateCurrentPlayingTrack(tracks.get(nextTrack));
+					}	
+				}
+
+				if(activePlayerThread.equals(PlayerId.B)){
+
+					int endOfTrack = mediaPlayerB.getDuration()- (PreferencesManager.getInstance().getCrossfadingDuration()*1000)+1000;
+
+					if(mediaPlayerB.getCurrentPosition() >= endOfTrack && !isFading){
+
+						// search the track from tracklist, which bpm values is the closest to the lastPace
+						List<Track> tracks = PlaylistController.getInstance().getTracks();
+						int nextTrack = findBestMatchingTrack(tracks);
+						Track track = tracks.get(nextTrack);
+						prepareMusicPlayerThread(track);
+
+						// notify observer (this) directly
+						updateCurrentPlayingTrack(tracks.get(nextTrack));
+					}	
+				}
+			}
+			
+			onCompletionHandler.postDelayed(this, 1000);
+		}
+	};
 
 	// ------------------------------------------------------------------------
 	
