@@ -81,7 +81,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 		dialogPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
 
-				PlayerController.getInstance().getAllTracks();
+				PlayerController.getInstance().dbCheck();
 				
 				return true;
 			}

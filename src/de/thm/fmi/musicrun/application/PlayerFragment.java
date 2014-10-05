@@ -101,7 +101,6 @@ public class PlayerFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				if(D) Log.i(TAG, "BUTTON LIST CLICKED");
-
 			}
 		}); 
 		

@@ -34,7 +34,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	Thread mpThreadA, mpThreadB;
 	public enum PlayerId { A, B }
 	private Track currentPlayingTrack;
-	private PlayerId activePlayerThread;
+	private PlayerId activePlayerThread = PlayerId.A;
 	
 	// Volume control
 	private static final float VOLUME_MIN = 0.0f;
@@ -126,12 +126,12 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	public void prepareMusicPlayerThread(Track track){
 
-		if(D) Log.i(TAG, "###################################################################");
 		this.currentPlayingTrack = track;
 
 		// PlayerA and PlayerB BOTH NOT PLAYING
 		if(!this.mediaPlayerA.isPlaying() && !this.mediaPlayerB.isPlaying()){
 			if(D) Log.i(TAG, "BOTH ARE STOPPED");
+			this.stopMediaPlayer(PlayerId.A);
 			this.startMusicPlayerThread(PlayerId.A);
 			return;
 		}
@@ -215,12 +215,10 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		if(this.isExternalStorageReadable()){
 
 			// change Play Button to PauseIcon
-			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
+//			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
 
 			String fileName = track.getFilepath();
 			String filePath = PreferencesManager.getInstance().getMusicFilepath() + fileName; 
-
-//			new CustomToast(this.context, fileName, R.drawable.ic_launcher, 400);
 
 			try {
 				if(playerId.equals(PlayerId.A)){
@@ -234,12 +232,12 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 					this.mediaPlayerB.start();
 				}
 				
-//				// set Progress bar values
-//				this.playerFragment.getSongProgressSeekBar().setProgress(0);
-//				this.playerFragment.getSongProgressSeekBar().setMax(100);
-//
-//				// updating progress bar
-//				this.updateProgressBar();
+				// set Progress bar values
+				this.playerFragment.getSongProgressSeekBar().setProgress(0);
+				this.playerFragment.getSongProgressSeekBar().setMax(100);
+
+				// updating progress bar
+				this.updateProgressBar();
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -255,35 +253,74 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	// ------------------------------------------------------------------------
 
 	public void pauseMusic() {
-				
-		if(this.mediaPlayerA.isPlaying() || this.mediaPlayerB.isPlaying()){
-			
-			if(this.mediaPlayerA.isPlaying()){
-				this.mediaPlayerA.pause();
-			}
-			if(this.mediaPlayerB.isPlaying()){
-				this.mediaPlayerB.pause();
-			}
-
+		
+		// BOTH MEDIA PLAYERS ARE PLAYING (while crossfading)
+		if(this.mediaPlayerA.isPlaying() && this.mediaPlayerB.isPlaying()){
+			if(D) Log.d(TAG, "DEBUG -------------------- 0. if");
+			this.mediaPlayerA.pause();
+			this.mediaPlayerB.pause();
 			PedometerController.getInstance().pauseStepDetection();
-
-			// change PauseButton to PlayIcon
 			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
+			return;
 		}
-		else{
-			
-			if(this.mediaPlayerA.isPlaying()){
-				this.mediaPlayerA.start();
-			}
-			if(this.mediaPlayerB.isPlaying()){
-				this.mediaPlayerB.start();
-			}
-			
+		
+		// ONE MEDIA PLAYER IS PLAYING
+		if(this.mediaPlayerA.isPlaying()){
+			if(D) Log.d(TAG, "DEBUG -------------------- 1. if");
+			this.mediaPlayerA.pause();
+			PedometerController.getInstance().pauseStepDetection();
+			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
+			return;
+		}
+		
+		if(this.mediaPlayerB.isPlaying()){
+			if(D) Log.d(TAG, "DEBUG -------------------- 2. if");
+			this.mediaPlayerB.pause();
+			PedometerController.getInstance().pauseStepDetection();
+			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
+			return;
+		}
+
+		// MEDIA PLAYER IS NOT PLAYING / STOPPED
+		if(!this.mediaPlayerA.isPlaying() && this.currentPlayingTrack != null && this.activePlayerThread.equals(PlayerId.A)){
+			if(D) Log.d(TAG, "DEBUG -------------------- 3. if");
+			this.mediaPlayerA.start();
 			if(PreferencesManager.getInstance().isAutostartPedometer()){
 				PedometerController.getInstance().startStepDetection();
 			}
-			// change Play Button to PauseIcon
 			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
+			return;
+		}
+		
+		if(!this.mediaPlayerB.isPlaying() && this.currentPlayingTrack != null && this.activePlayerThread.equals(PlayerId.B)){
+			if(D) Log.d(TAG, "DEBUG -------------------- 4. if");
+			this.mediaPlayerB.start();
+			if(PreferencesManager.getInstance().isAutostartPedometer()){
+				PedometerController.getInstance().startStepDetection();
+			}
+			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
+			return;
+		}
+
+		// INITIAL PLAYER STATE - BOTH MEDIA PLAYERS ARE NOT PLAYING
+		if(!this.mediaPlayerA.isPlaying() && this.currentPlayingTrack == null && this.activePlayerThread.equals(PlayerId.A)){
+			if(D) Log.d(TAG, "DEBUG -------------------- 5. if");
+			this.playRandomTrack();
+			if(PreferencesManager.getInstance().isAutostartPedometer()){
+				PedometerController.getInstance().startStepDetection();
+			}
+			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
+			return;
+		}
+
+		if(!this.mediaPlayerB.isPlaying() && this.currentPlayingTrack == null && this.activePlayerThread.equals(PlayerId.B)){
+			if(D) Log.d(TAG, "DEBUG -------------------- 6. if");
+			this.playRandomTrack();
+			if(PreferencesManager.getInstance().isAutostartPedometer()){
+				PedometerController.getInstance().startStepDetection();
+			}
+			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
+			return;
 		}
 	}
 
@@ -396,7 +433,9 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	
 	public void playLastTrack(){
 		
-		this.stopMusic();
+//		this.stopMusic();
+//		this.stopMusicPlayerThread(PlayerId.A);
+//		this.stopMusicPlayerThread(PlayerId.B);
 		
 //		this.mpThreadA.stop();
 //		this.mpThreadB.stop();
@@ -409,6 +448,18 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	}
 
+	// ------------------------------------------------------------------------
+	
+	public void playRandomTrack(){
+		
+		// get random track
+		Track track = PlaylistController.getInstance().getTracks().get(this.getRandomRangeInt(0, PlaylistController.getInstance().getTracks().size())); 
+		this.prepareMusicPlayerThread(track);
+		
+		// notify observer (this) directly
+		this.updateCurrentPlayingTrack(track);
+	}
+	
 	// ------------------------------------------------------------------------
 	
 	// set seekbar to current time position
@@ -433,12 +484,20 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	private Runnable updateSeekBarTimeProgress = new Runnable() {
 	
 		public void run() {
-			long totalDuration = mediaPlayerA.getDuration();
-			long currentDuration = mediaPlayerA.getCurrentPosition();
-			int progress = (int)(getProgressPercentage(currentDuration, totalDuration));
 			
-			playerFragment.getSongProgressSeekBar().setProgress(progress);
-
+			if(activePlayerThread.equals(PlayerId.A)){
+				long totalDuration = mediaPlayerA.getDuration();
+				long currentDuration = mediaPlayerA.getCurrentPosition();
+				int progress = (int)(getProgressPercentage(currentDuration, totalDuration));
+				playerFragment.getSongProgressSeekBar().setProgress(progress);
+			}
+			
+			if(activePlayerThread.equals(PlayerId.B)){
+				long totalDuration = mediaPlayerB.getDuration();
+				long currentDuration = mediaPlayerB.getCurrentPosition();
+				int progress = (int)(getProgressPercentage(currentDuration, totalDuration));
+				playerFragment.getSongProgressSeekBar().setProgress(progress);
+			}
 			// TODO
 			// this will spam the logcat console
 			// Running this thread after 1000 milliseconds
@@ -496,7 +555,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 
-		this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
+//		this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
 		
 		// search the track from tracklist, which bpm values is the closest to the lastPace
 		List<Track> tracks = PlaylistController.getInstance().getTracks();
@@ -513,7 +572,10 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	public int findBestMatchingTrack(List<Track> trackList){
 		
 		List<Track> tracks = trackList;
-		int lastPace = PedometerController.getInstance().getStepsPerIntervallHistory().get(PedometerController.getInstance().getStepsPerIntervallHistory().size()-1);
+		int lastPace = 0;
+		if(PedometerController.getInstance().getStepsPerIntervallHistory().size() > 0){
+			lastPace = PedometerController.getInstance().getStepsPerIntervallHistory().get(PedometerController.getInstance().getStepsPerIntervallHistory().size()-1);
+		}
 		int playNext = -1;
 		
 		if(lastPace > 0){
@@ -537,7 +599,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		// play next track
 		if(playNext == -1){
 			// getRandom
-			return this.getRandomRangeInt(0, tracks.size());
+			return this.getRandomRangeInt(0, tracks.size()-1);
 		}else{
 			// play the best matching bpm track
 			return playNext;
@@ -647,7 +709,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	// ------------------------------------------------------------------------
 
-	public void getAllTracks(){
+	public void dbCheck(){
 
 		List<Track> playlist = DatabaseManager.getInstance().getAllTracks();
 		new CustomToast(context, playlist.size() + " files in database", R.drawable.ic_folderscan_blue_50, 600);
