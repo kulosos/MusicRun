@@ -47,6 +47,15 @@
             android:textColor="#FFFFFF">
         </EditTextPreference>
         
+        <EditTextPreference
+            android:key="pref_key_pitch_value"
+            android:inputType="number"
+            android:defaultValue="5"
+            android:summary="@string/settings_label_musicplayer_pitch_value_desc"
+            android:title="@string/settings_label_musicplayer_pitch_value"  
+            android:textColor="#FFFFFF">
+        </EditTextPreference>
+        
     </PreferenceCategory>
 
     <!-- ################################################### -->

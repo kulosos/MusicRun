@@ -15,8 +15,8 @@ import android.widget.TextView;
 public class PlayerFragment extends Fragment {
 
 	// GUI Elements
-	private ImageView btnPlay, btnStop, btnPause, btnNext, btnLast, btnList, btnTrackImage;
-	private TextView labelArtist, labelTitle;
+	private ImageView btnPlay, btnStop, btnPause, btnNext, btnLast, btnTrackImage, btnPitchPlus, btnPitchMinus;
+	private TextView labelArtist, labelTitle, labelDuration, labelBPM, labelPitch;
 	private SeekBar songProgressSeekBar;
 	
 	// DEBUG
@@ -95,15 +95,6 @@ public class PlayerFragment extends Fragment {
 			}
 		}); 
 		
-		// playlist button on fragment and add listener
-		this.btnList = (ImageView) view.findViewById(R.id.btn_list);
-		this.btnList.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(D) Log.i(TAG, "BUTTON LIST CLICKED");
-			}
-		}); 
-		
 		// track image button on fragment and add listener
 		this.btnTrackImage = (ImageView) view.findViewById(R.id.trackImage);
 		this.btnTrackImage.setOnClickListener(new View.OnClickListener() {
@@ -113,9 +104,25 @@ public class PlayerFragment extends Fragment {
 			}
 		}); 
 		
-		// TextView for current playing Title - Artist
-		this.labelTitle = (TextView) view.findViewById(R.id.label_currentTitle);
-		this.labelArtist = (TextView) view.findViewById(R.id.label_currentArtist);
+		// Pitch Button Plus
+		this.btnPitchPlus = (ImageView) view.findViewById(R.id.btn_pitch_plus);
+		this.btnPitchPlus.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {	
+				if(D) Log.i(TAG, "BUTTON PITCH PLUS CLICKED");
+				PlayerController.getInstance().pitchBPM(PreferencesManager.getInstance().getPitchValue());
+			}
+		}); 
+		
+		// Pitch Button Minus
+		this.btnPitchMinus = (ImageView) view.findViewById(R.id.btn_ptich_minus);
+		this.btnPitchMinus.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {	
+				if(D) Log.i(TAG, "BUTTON PITCH MINUS CLICKED");
+				PlayerController.getInstance().pitchBPM(PreferencesManager.getInstance().getPitchValue()*(-1));
+			}
+		}); 
 		
 		// get seekbar for song progress and setListener
 		this.songProgressSeekBar = (SeekBar) view.findViewById(R.id.songProgressSeekbar);
@@ -137,6 +144,14 @@ public class PlayerFragment extends Fragment {
 				PlayerController.getInstance().updateSeekbarPosition();	
 			}
 		});
+		
+		
+		// Getting TextViews
+		this.labelTitle = (TextView) view.findViewById(R.id.label_currentTitle);
+		this.labelArtist = (TextView) view.findViewById(R.id.label_currentArtist);
+		this.labelDuration = (TextView) view.findViewById(R.id.label_current_duration);
+		this.labelBPM = (TextView) view.findViewById(R.id.label_current_bpm);
+		this.labelPitch = (TextView) view.findViewById(R.id.label_pitchfactor);
 		
 		return view;
 	}
@@ -183,14 +198,6 @@ public class PlayerFragment extends Fragment {
 		this.btnLast = btnLast;
 	}
 
-	public ImageView getBtnList() {
-		return btnList;
-	}
-
-	public void setBtnList(ImageView btnList) {
-		this.btnList = btnList;
-	}
-
 	public ImageView getBtnTrackImage() {
 		return btnTrackImage;
 	}
@@ -221,6 +228,46 @@ public class PlayerFragment extends Fragment {
 
 	public void setSongProgressSeekBar(SeekBar songProgressSeekBar) {
 		this.songProgressSeekBar = songProgressSeekBar;
+	}
+
+	public ImageView getBtnPitchPlus() {
+		return btnPitchPlus;
+	}
+
+	public void setBtnPitchPlus(ImageView btnPitchPlus) {
+		this.btnPitchPlus = btnPitchPlus;
+	}
+
+	public ImageView getBtnPitchMinus() {
+		return btnPitchMinus;
+	}
+
+	public void setBtnPitchMinus(ImageView btnPitchMinus) {
+		this.btnPitchMinus = btnPitchMinus;
+	}
+
+	public TextView getLabelDuration() {
+		return labelDuration;
+	}
+
+	public void setLabelDuration(TextView labelDuration) {
+		this.labelDuration = labelDuration;
+	}
+
+	public TextView getLabelBPM() {
+		return labelBPM;
+	}
+
+	public void setLabelBPM(TextView labelBPM) {
+		this.labelBPM = labelBPM;
+	}
+
+	public TextView getLabelPitch() {
+		return labelPitch;
+	}
+
+	public void setLabelPitch(TextView labelPitch) {
+		this.labelPitch = labelPitch;
 	}
 	
 	

@@ -35,6 +35,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	public enum PlayerId { A, B }
 	private Track currentPlayingTrack;
 	private PlayerId activePlayerThread = PlayerId.A;
+	private int pitchFactor = 0;
 	
 	// Volume control
 	private static final float VOLUME_MIN = 0.0f;
@@ -107,8 +108,10 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 		this.currentPlayingTrack = track;
 		
-		this.playerFragment.getLabelTitle().setText(track.getTitle() + track.getBpm() + " BPM");
+		this.playerFragment.getLabelTitle().setText(track.getTitle());
 		this.playerFragment.getLabelArtist().setText(track.getArtist());
+		this.playerFragment.getLabelDuration().setText(track.getDurationAsFormattedString());
+		this.playerFragment.getLabelBPM().setText(track.getBpm());
 		
 		this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_pause_white));
 	}
@@ -636,7 +639,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 			for(int i=0; i < tracks.size(); i++){
 
-				int bpm = Integer.parseInt(tracks.get(i).getBpm());
+				int bpm = Integer.parseInt(tracks.get(i).getBpm()) + this.pitchFactor;
 
 				// search the track from tracklist, which bpm values is the closest to the lastPace
 				if(Math.abs(bpm - lastPace) < closestValue){
@@ -655,7 +658,14 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			// play the best matching bpm track
 			return playNext;
 		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	public void pitchBPM(int pitch){
 		
+		this.pitchFactor = this.pitchFactor + (pitch);
+		playerFragment.getLabelPitch().setText(Integer.toString(this.pitchFactor));
 	}
 	
 	// ------------------------------------------------------------------------

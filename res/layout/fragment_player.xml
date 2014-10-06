@@ -23,12 +23,52 @@
             android:layout_weight="1"
             android:orientation="vertical" >
 
-            <ImageView
-                android:id="@+id/trackImage"
-                android:layout_width="fill_parent"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:layout_weight="0.5"
-                android:src="@drawable/ic_notebig_blue" />
+                android:layout_weight="0.5" >
+
+                <ImageView
+                    android:id="@+id/trackImage"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.5"
+                    android:src="@drawable/ic_notebig_blue" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:id="@+id/btn_pitch_plus"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_pedometer2" />
+
+                    <TextView
+                        android:id="@+id/label_pitchfactor"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.1"
+                        android:gravity="center_horizontal"
+                        android:text="0"
+                        android:textSize="22sp" />
+
+                    <ImageView
+                        android:id="@+id/btn_ptich_minus"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_pedometer3" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -62,20 +102,42 @@
                         android:text="Artist"
                         android:textColor="@color/white"
                         android:textSize="16sp" />
+
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/btn_list"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/btn_listsmall_white" />
+                    android:layout_weight="0.75"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/label_current_duration"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="3:32"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/label_current_bpm"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="140"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <SeekBar
                 android:id="@+id/songProgressSeekbar"
                 android:layout_width="fill_parent"
                 android:layout_height="55dp"
+                android:layout_margin="10dp"
                 android:minHeight="15dp"
                 android:minWidth="13dp"
                 android:paddingBottom="12dp"
@@ -111,6 +173,7 @@
                     android:layout_weight="3"
                     android:src="@drawable/btn_next_white" />
             </LinearLayout>
+
         </LinearLayout>
 
     </RelativeLayout>

@@ -18,6 +18,7 @@ public class PreferencesManager implements OnSharedPreferenceChangeListener {
 	private int minimumPlaybackTime = 30;
 	private boolean isCrossfadingActive = true;
 	private int crossfadingDuration = 5;
+	private int pitchValue = 5;
 
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -40,6 +41,7 @@ public class PreferencesManager implements OnSharedPreferenceChangeListener {
         this.stepLength = Float.parseFloat((prefs.getString("pref_key_steplength", "120.0")));
         this.autostartPedometer = (prefs.getBoolean("pref_key_autostart_pedometer", true));
         this.minimumPlaybackTime = Integer.parseInt(prefs.getString("pref_key_minimum_playbacktime", "30"));
+        this.pitchValue = Integer.parseInt(prefs.getString("pref_key_pitch_value", "5"));
 	}
 	
 	// ------------------- SINGLETON METHODS ----------------------------------
@@ -69,6 +71,9 @@ public class PreferencesManager implements OnSharedPreferenceChangeListener {
 		if (key.equals("pref_key_crossfading_duration")) {
 			this.crossfadingDuration = Integer.parseInt((prefs.getString("pref_key_crossfading_duration", "5")));
 		}
+		if (key.equals("pref_key_pitch_value")) {
+			this.pitchValue = Integer.parseInt(prefs.getString("pref_key_pitch_value", "5"));
+		}
 
 		// PEDOMETER 
 		if (key.equals("pref_key_steplength")) {
@@ -80,7 +85,6 @@ public class PreferencesManager implements OnSharedPreferenceChangeListener {
 		if (key.equals("pref_key_minimum_playbacktime")) {
 			this.minimumPlaybackTime = Integer.parseInt((prefs.getString("pref_key_minimum_playbacktime", "30")));
 		}
-		
 	}
 
 	// ----------------------- SETTERS / GETTERS ------------------------------
@@ -141,10 +145,13 @@ public class PreferencesManager implements OnSharedPreferenceChangeListener {
 		this.crossfadingDuration = crossfadingDuration;
 	}
 
-	
+	public int getPitchValue() {
+		return pitchValue;
+	}
 
-	
-	
-	
+	public void setPitchValue(int pitchValue) {
+		this.pitchValue = pitchValue;
+	}
+
 	
 }
