@@ -138,7 +138,7 @@ public class PlaylistController {
 	// ListItemClickEvent
 	public void playSelectedTrack(long id){
 		
-		PlayerController.getInstance().playTrackFromPlaylist(this.tracks.get((int)id));
+		PlayerController.getInstance().prepareMusicPlayerThread(this.tracks.get((int)id));
 		this.notifyObserver(this.tracks.get((int)id));
 	}
 	
