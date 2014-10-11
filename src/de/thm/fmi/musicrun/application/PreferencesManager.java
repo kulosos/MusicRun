@@ -1,10 +1,11 @@
 package de.thm.fmi.musicrun.application;
 
-import de.thm.fmi.musicrun.pedometer.PedometerController;
+import de.thm.fmi.musicrun.bpmDetecation.BPMDetectionManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class PreferencesManager implements OnSharedPreferenceChangeListener {
 
@@ -86,7 +87,7 @@ public class PreferencesManager implements OnSharedPreferenceChangeListener {
 			this.minimumPlaybackTime = Integer.parseInt((prefs.getString("pref_key_minimum_playbacktime", "30")));
 		}
 	}
-
+	
 	// ----------------------- SETTERS / GETTERS ------------------------------
 	
 	public SharedPreferences getPreferences() {

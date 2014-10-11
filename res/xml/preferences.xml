@@ -31,6 +31,12 @@
             android:textColor="#FFFFFF"
             android:title="database check" >
         </Preference>
+        
+        <Preference
+            android:key="pref_key_bpmdetection"
+            android:title="@string/settings_label_musicplayer_bpmdetection" 
+            android:textColor="#FFFFFF">
+        </Preference>
 
         <CheckBoxPreference
             android:defaultValue="true"

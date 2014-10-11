@@ -1,13 +1,15 @@
 package de.thm.fmi.musicrun.application;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
+import javazoom.jl.decoder.JavaLayerException;
 import de.thm.fmi.musicrun.R;
+import de.thm.fmi.musicrun.bpmDetecation.BPMDetectionManager;
 import de.thm.fmi.musicrun.pedometer.PedometerController;
 import wseemann.media.FFmpegMediaMetadataRetriever;
 import android.app.ProgressDialog;
@@ -50,7 +52,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	private ProgressDialog progress;
 	private Message musicScanResultMsg, fadingPostMsg;
 	public Handler scanMusicPostHandler, seekbarHandler, postFadingHandler, onCompletionHandler;
-
+	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
 	private static final boolean D = true;
@@ -86,6 +88,8 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		// start on completion listener
 		this.onCompletionHandler = new Handler();
 		this.onCompletionHandler.postDelayed(onCompletionListenerThread, 1000);
+		
+		BPMDetectionManager.initInstance(this.context);
 	}
 
 	// ------------------- SINGLETON METHODS ----------------------------------
@@ -217,28 +221,35 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 			String fileName = track.getFilepath();
 			String filePath = PreferencesManager.getInstance().getMusicFilepath() + fileName; 
 
-			try {
-				if(playerId.equals(PlayerId.A)){
-					this.mediaPlayerA.setDataSource(filePath);
-					this.mediaPlayerA.prepare();
-					this.mediaPlayerA.start();
-				}
-				if(playerId.equals(PlayerId.B)){
-					this.mediaPlayerB.setDataSource(filePath);
-					this.mediaPlayerB.prepare();
-					this.mediaPlayerB.start();
-				}
-				
-				// set Progress bar values
-				this.playerFragment.getSongProgressSeekBar().setProgress(0);
-				this.playerFragment.getSongProgressSeekBar().setMax(100);
+			File f = new File(PreferencesManager.getInstance().getMusicFilepath());
+			if(f.isDirectory()){
+				try {
+					if(playerId.equals(PlayerId.A)){
+						this.mediaPlayerA.setDataSource(filePath);
+						this.mediaPlayerA.prepare();
+						this.mediaPlayerA.start();
+					}
+					if(playerId.equals(PlayerId.B)){
+						this.mediaPlayerB.setDataSource(filePath);
+						this.mediaPlayerB.prepare();
+						this.mediaPlayerB.start();
+					}
 
-				// updating progress bar
-				this.updateProgressBar();
+					// set Progress bar values
+					this.playerFragment.getSongProgressSeekBar().setProgress(0);
+					this.playerFragment.getSongProgressSeekBar().setMax(100);
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				if(D) Log.e(TAG, e.toString());
+					// updating progress bar
+					this.updateProgressBar();
+
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					if(D) Log.e(TAG, e.toString());
+				}
+			}
+			else{
+				if(D) Log.e(TAG, "ERROR: Music folder doesn't exisit.");
 			}
 
 		}
@@ -253,7 +264,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		
 		// BOTH MEDIA PLAYERS ARE PLAYING (while crossfading)
 		if(this.mediaPlayerA.isPlaying() && this.mediaPlayerB.isPlaying()){
-			if(D) Log.d(TAG, "DEBUG -------------------- 0. if");
 			this.mediaPlayerA.pause();
 			this.mediaPlayerB.pause();
 			PedometerController.getInstance().pauseStepDetection();
@@ -263,7 +273,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 		// ONE MEDIA PLAYER IS PLAYING
 		if(this.mediaPlayerA.isPlaying()){
-			if(D) Log.d(TAG, "DEBUG -------------------- 1. if");
 			this.mediaPlayerA.pause();
 			PedometerController.getInstance().pauseStepDetection();
 			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
@@ -271,7 +280,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		}
 
 		if(this.mediaPlayerB.isPlaying()){
-			if(D) Log.d(TAG, "DEBUG -------------------- 2. if");
 			this.mediaPlayerB.pause();
 			PedometerController.getInstance().pauseStepDetection();
 			this.playerFragment.getBtnPlay().setImageDrawable(this.context.getResources().getDrawable(R.drawable.btn_play_white));
@@ -280,7 +288,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 		// MEDIA PLAYER IS NOT PLAYING / STOPPED
 		if(!this.mediaPlayerA.isPlaying() && this.currentPlayingTrack != null && this.activePlayerThread.equals(PlayerId.A)){
-			if(D) Log.d(TAG, "DEBUG -------------------- 3. if");
 			this.mediaPlayerA.start();
 			if(PreferencesManager.getInstance().isAutostartPedometer()){
 				PedometerController.getInstance().startStepDetection();
@@ -290,7 +297,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		}
 
 		if(!this.mediaPlayerB.isPlaying() && this.currentPlayingTrack != null && this.activePlayerThread.equals(PlayerId.B)){
-			if(D) Log.d(TAG, "DEBUG -------------------- 4. if");
 			this.mediaPlayerB.start();
 			if(PreferencesManager.getInstance().isAutostartPedometer()){
 				PedometerController.getInstance().startStepDetection();
@@ -301,7 +307,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 		// INITIAL PLAYER STATE - BOTH MEDIA PLAYERS ARE NOT PLAYING
 		if(!this.mediaPlayerA.isPlaying() && this.currentPlayingTrack == null && this.activePlayerThread.equals(PlayerId.A)){
-			if(D) Log.d(TAG, "DEBUG -------------------- 5. if");
 			this.playRandomTrack();
 			if(PreferencesManager.getInstance().isAutostartPedometer()){
 				PedometerController.getInstance().startStepDetection();
@@ -311,7 +316,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		}
 
 		if(!this.mediaPlayerB.isPlaying() && this.currentPlayingTrack == null && this.activePlayerThread.equals(PlayerId.B)){
-			if(D) Log.d(TAG, "DEBUG -------------------- 6. if");
 			this.playRandomTrack();
 			if(PreferencesManager.getInstance().isAutostartPedometer()){
 				PedometerController.getInstance().startStepDetection();
@@ -453,7 +457,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	// ------------------------------------------------------------------------
 
 	public void playNextTrack(){
-
+		
 	}
 
 	// ------------------------------------------------------------------------
@@ -474,6 +478,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	public void setCurrentSongPlaybackPosition(int positionPercentage){
 		
 		Track track = this.currentPlayingTrack;
+	
 		long duration = Math.round(Integer.parseInt(track.getDurationInMilliseconds()));
 		int pos = (int)(duration * positionPercentage / 100);
 		
@@ -483,7 +488,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		if(this.activePlayerThread.equals(PlayerId.B)){
 			this.mediaPlayerB.seekTo(pos); 
 		}
-		
 	}
 	
 	// ------------------------------------------------------------------------
@@ -680,92 +684,112 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 	public void scanMusicFolder(){
 
-		// delete Table TRACK before adding new tracks by scanning folder
-		DatabaseManager.getInstance().deleteAllTracks();
+		// Check if Folder exists
+		File f = new File(PreferencesManager.getInstance().getMusicFilepath());
+		if(f.isDirectory()){
 
-		this.musicScanResultMsg = new Message();
+			// delete Table TRACK before adding new tracks by scanning folder
+			DatabaseManager.getInstance().deleteAllTracks();
 
-		this.progress = new ProgressDialog(this.context);
+			this.musicScanResultMsg = new Message();
 
-		progress.setMessage("Scanning music folder");
-		progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		progress.setIndeterminate(false);
-		progress.setCancelable(false);
-		progress.setIcon(R.drawable.ic_folderscan_blue_50);
+			this.progress = new ProgressDialog(this.context);
 
-		final int filesInFolder = this.getFileList().length;
-		progress.setMax(filesInFolder);
-		progress.show();
+			progress.setMessage("Scanning music folder");
+			progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			progress.setIndeterminate(false);
+			progress.setCancelable(false);
+			progress.setIcon(R.drawable.ic_folderscan_blue_50);
 
-		final Thread t = new Thread(){
 
-			@Override
-			public void run(){
 
-				for(int i=1; i < filesInFolder; i++){
+			final int filesInFolder = this.getFileList().length;
+			progress.setMax(filesInFolder);
+			progress.show();
 
-					List<String> musicfiles = new ArrayList<String>();
-					musicfiles.add(getFileList()[i].getName());
+			final Thread t = new Thread(){
 
-					FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
-					mmr.setDataSource(PreferencesManager.getInstance().getMusicFilepath() + getFileList()[i].getName());
-					
-//					MediaMetadataRetriever mmr2 = new MediaMetadataRetriever();
-//					mmr2.setDataSource(prefsManager.getMusicFilepath() + getFileList()[i].getName());
-					
-					String title = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE);
-					String artist = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST);
-					String album = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM);
-					String year = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DATE);
-					
-					//TODO
-					//bpm and category are temp hard coded here
-//					int bpm = 120;
-//					String bpm = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_COMMENT);
-					String bpm = getBpmString(getFileList()[i].getName());
-					
-					String category = "category";
-					String mimetype = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ENCODER);
-					String filepath = getFileList()[i].getName();
-					String duration = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION);
+				@Override
+				public void run(){
 
-					Bitmap b = mmr.getFrameAtTime(2000000, FFmpegMediaMetadataRetriever.OPTION_CLOSEST); // frame at 2 seconds
-					byte [] artwork = mmr.getEmbeddedPicture();
+					for(int i=1; i < filesInFolder; i++){
 
-					mmr.release();
+						List<String> musicfiles = new ArrayList<String>();
+						musicfiles.add(getFileList()[i].getName());
 
-					DatabaseManager.getInstance().addTrack(new Track(i, title, artist, album, year, bpm, category, mimetype, filepath, duration));
+						FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
+						mmr.setDataSource(PreferencesManager.getInstance().getMusicFilepath() + getFileList()[i].getName());
 
-					progress.setProgress(i);
+						//					MediaMetadataRetriever mmr2 = new MediaMetadataRetriever();
+						//					mmr2.setDataSource(PreferencesManager.getInstance().getMusicFilepath() + getFileList()[i].getName());
 
-					if(i == filesInFolder-1){
-						progress.dismiss();
+						String title = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE);
+						String artist = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST);
+						String album = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM);
+						String year = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DATE);
+
+						//TODO
+						//bpm and category are temp hard coded here
+						//					int bpm = 120;
+						String bpm = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_COMMENT);
+						//					String bpm = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ENCODED_BY);
+						//					String bpm = mmr2.extractMetadata(MediaMetadataRetriever.);
+
+						// Fallback: get the BPM from Filename (seek for expression "_123.mp3")
+						//					String bpm = getBpmString(getFileList()[i].getName());
+
+						String category = "category";
+						String mimetype = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ENCODER);
+						String filepath = getFileList()[i].getName();
+						String duration = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION);
+						
+						Bitmap b = mmr.getFrameAtTime(2000000, FFmpegMediaMetadataRetriever.OPTION_CLOSEST); // frame at 2 seconds
+						byte [] artwork = mmr.getEmbeddedPicture();
+
+						mmr.release();
+						
+						Track t = new Track(i, title, artist, album, year, bpm, category, mimetype, filepath, duration);
+						DatabaseManager.getInstance().addTrack(t);
+
+						Log.d(TAG, "DEBUG - String from TRACK Object - formatted " + t.getDurationAsFormattedString());
+						Log.d(TAG, "DEBUG - String from TRACK Object - unformatted " + t.getDurationInMilliseconds());
+						
+						progress.setProgress(i);
+
+						if(i == filesInFolder-1){
+							progress.dismiss();
+						}
 					}
+
+					// handler message
+					musicScanResultMsg.obj=filesInFolder;
+					scanMusicPostHandler.sendMessage(musicScanResultMsg);
 				}
+			};
+			t.start();
 
-				// handler message
-				musicScanResultMsg.obj=filesInFolder;
-				scanMusicPostHandler.sendMessage(musicScanResultMsg);
-			}
-		};
-		t.start();
+			// start handler msg box after scanning
+			scanMusicPostHandler = new Handler(new Handler.Callback() {
 
-		// start handler msg box after scanning
-		scanMusicPostHandler = new Handler(new Handler.Callback() {
+				@Override
+				public boolean handleMessage(Message msg) {
 
-			@Override
-			public boolean handleMessage(Message msg) {
+					// Toast.makeText(context, msg.obj.toString() + " files scanned", Toast.LENGTH_LONG).show();
+					String toastMsg = context.getResources().getString(R.string.dialog_label_musicplayer_libraryscan_postDialog_desc);
+					new CustomToast(context, msg.obj.toString() + " " + toastMsg, R.drawable.ic_folderscan_blue_50, 600);
 
-				// Toast.makeText(context, msg.obj.toString() + " files scanned", Toast.LENGTH_LONG).show();
-				String toastMsg = context.getResources().getString(R.string.dialog_label_musicplayer_libraryscan_postDialog_desc);
-				new CustomToast(context, msg.obj.toString() + " " + toastMsg, R.drawable.ic_folderscan_blue_50, 600);
+					// refresh Playlist after scanning
+					PlaylistController.getInstance().onScannedMusicFilesChanged();
 
-				// refresh Playlist after scanning
-				PlaylistController.getInstance().onScannedMusicFilesChanged();
+					return false;
+				}
+			});
 
-				return false;
-			}
-		});
+		}
+		else{
+			new CustomToast(this.context, "Error\n\nMusic folder doesn't exisit.", R.drawable.ic_launcher, 800);
+			Log.e(TAG, "ERROR: Music folder doesn't exisit.");
+		}
 	}
 
 	// ------------------------------------------------------------------------

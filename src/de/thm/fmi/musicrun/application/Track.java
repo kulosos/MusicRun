@@ -17,8 +17,8 @@ public class Track {
 	private String mimeType;
 	private ImageView img;
 	private String filepath;
-	private String durationFormattedString;
-	private String durationInMilliseconds;
+	private String durationFormattedString = "";
+	private String durationInMilliseconds = "";
 
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
@@ -44,6 +44,7 @@ public class Track {
 		this.mimeType = mimeType;
 		this.filepath = filepath;
 		this.durationFormattedString = duration;
+		this.durationInMilliseconds = duration;
 //		this.img = findViewById(R.drawable.ic_player1);
 		
 	}
@@ -145,26 +146,28 @@ public class Track {
 	
 	public String getDurationAsFormattedString() {
 
-		// if the correct formatted string is already saved, return only this string
-		// otherwise format the string
-		if(isNumeric(this.durationFormattedString)){
-			long millis = Integer.parseInt(this.durationFormattedString);
-			long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
-			long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis));	
-			String dur;
+		if(this.durationFormattedString != null){
+			if(isNumeric(this.durationFormattedString)){
+				long millis = Integer.parseInt(this.durationFormattedString);
+				long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+				long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis));	
+				String dur;
 
-			if(seconds < 10){
-				String min = String.format("%d", minutes);
-				String sec = String.format("%d", seconds);
-				return min + ":0" + sec;
+				if(seconds < 10){
+					String min = String.format("%d", minutes);
+					String sec = String.format("%d", seconds);
+					return min + ":0" + sec;
+				}
+				else{
+					this.durationFormattedString = String.format("%d:%d", minutes, seconds);
+				}
 			}
-			else{
-				return String.format("%d:%d", minutes, seconds);
-			}
-		}
-		else{
 			return this.durationFormattedString;
 		}
+		else{
+			return "n.a.";
+		}
+		
 	}
 	
 	public void setDuration(String duration) {
