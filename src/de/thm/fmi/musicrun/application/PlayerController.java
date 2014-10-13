@@ -55,7 +55,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
-	private static final boolean D = true;
+	private static final boolean D = false;
 
 	// ------------------------------------------------------------------------
 
@@ -452,12 +452,15 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 //		this.mpThreadA.stop();
 //		this.mpThreadB.stop();
 		
+		this.playRandomTrack();
+		
 	}
 	
 	// ------------------------------------------------------------------------
 
 	public void playNextTrack(){
 		
+		this.playRandomTrack();
 	}
 
 	// ------------------------------------------------------------------------
@@ -730,13 +733,13 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 						//TODO
 						//bpm and category are temp hard coded here
-						//					int bpm = 120;
-						String bpm = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_COMMENT);
-						//					String bpm = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ENCODED_BY);
-						//					String bpm = mmr2.extractMetadata(MediaMetadataRetriever.);
-
+//						int bpm = 120;
+//						String bpm = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_COMMENT);
+//						String bpm = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ENCODED_BY);
+//						String bpm = mmr2.extractMetadata(MediaMetadataRetriever.);
+						
 						// Fallback: get the BPM from Filename (seek for expression "_123.mp3")
-						//					String bpm = getBpmString(getFileList()[i].getName());
+						String bpm = getBpmString(getFileList()[i].getName());
 
 						String category = "category";
 						String mimetype = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ENCODER);
