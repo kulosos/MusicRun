@@ -247,6 +247,7 @@ int string common_signin_button_text_long 0x7f05001e
 int string dialog_label_musicplayer_libraryscan_postDialog 0x7f050048
 int string dialog_label_musicplayer_libraryscan_postDialog_desc 0x7f050049
 int string label_currentintervall 0x7f050030
+int string label_general 0x7f05004e
 int string label_musicplayer_bpmpitch 0x7f050031
 int string label_stepsdetectionduration 0x7f05002d
 int string label_stepslastintervall 0x7f05002f
@@ -254,6 +255,7 @@ int string label_stepsperminute 0x7f05002a
 int string label_stepsperminute_average 0x7f05002c
 int string label_stepssincestarte 0x7f05002b
 int string label_totalsteps 0x7f050029
+int string label_version 0x7f05004f
 int string placeholder_null 0x7f050028
 int string playlist_placeholder_artist 0x7f05004a
 int string playlist_placeholder_bpm 0x7f05004d

@@ -97,5 +97,18 @@
         </EditTextPreference>
         
     </PreferenceCategory>
+    
+   <!-- ################################################### -->
 
+    <!-- GENERAL INFORMATION  -->
+    <PreferenceCategory
+        android:key="pref_key_version"
+        android:textColor="#FFFFFF"
+        android:title="@string/label_general" >
+        <Preference
+            android:key="pref_key_version"
+            android:textColor="#FFFFFF"
+            android:title="Version 0.21" >
+        </Preference>
+    </PreferenceCategory>
 </PreferenceScreen>

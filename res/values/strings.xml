@@ -44,5 +44,7 @@
     <string name="playlist_placeholder_title">Title</string>
     <string name="playlist_placeholder_duration">3:33</string>
     <string name="playlist_placeholder_bpm">140 BPM</string>
+    <string name="label_general">General information</string>
+    <string name="label_version">Version</string>
     
 </resources>
