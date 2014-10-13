@@ -107,7 +107,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 		case 2:
 			return this.activity.getString(R.string.title_section_pedometer).toUpperCase(l);
 		case 3:
-			return this.activity.getString(R.string.title_section_maps).toUpperCase(l);
+			return this.activity.getString(R.string.title_section_statistics).toUpperCase(l);
 		case 4:
 			return this.activity.getString(R.string.title_section_settings).toUpperCase(l);
 		}
