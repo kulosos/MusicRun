@@ -2,6 +2,7 @@ package de.thm.fmi.musicrun.application;
 
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.application.MainActivity;
+import de.thm.fmi.musicrun.bpmDetecation.BPMDetectionManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -44,18 +45,16 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	
 	private void settingsEvents(){
 
+		// MUSIC FOLDER SCAN DIALOG
 		Preference musicFolderScanDialog = (Preference) getPreferenceScreen().findPreference("pref_key_libraryscan");
-
 		musicFolderScanDialog.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
-
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 				builder.setMessage(R.string.settings_label_musicplayer_libraryscan_desc)
 				.setTitle(R.string.settings_label_musicplayer_libraryscan)
 				.setIcon(R.drawable.ic_folderscan_blue_50);
-
 
 				builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
@@ -76,6 +75,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 			}
 		});
 
+		// DATABASE CHECK
 		Preference dialogPreference = (Preference) getPreferenceScreen().findPreference("pref_key_libraryscan_test");
 
 		dialogPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -86,6 +86,38 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 				return true;
 			}
 		});
-	}
 
+		
+		// BPM DETECTION DIALOG
+		Preference bpmDetectionDialog = (Preference) getPreferenceScreen().findPreference("pref_key_bpmdetection");
+		bpmDetectionDialog.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			public boolean onPreferenceClick(Preference preference) {
+
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+				builder.setMessage(R.string.settings_label_musicplayer_bpmdetection_desc)
+				.setTitle(R.string.settings_label_musicplayer_bpmdetection)
+				.setIcon(R.drawable.ic_folderscan_blue_50);
+
+				builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						BPMDetectionManager.getInstance().detectBpmForAllFilesInList();
+					}
+				});
+
+				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+
+					}
+				});
+
+				AlertDialog dialog = builder.create();
+				dialog.show();
+
+				return true;
+			}
+		});
+
+	
+	}
 }

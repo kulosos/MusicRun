@@ -12,7 +12,7 @@
         android:textColor="#FFFFFF">
         
         <EditTextPreference
-            android:defaultValue="/storage/extSdCard/SuperMarioSounds/"
+            android:defaultValue="/storage/extSdCard/MusicRunTestFiles/"
             android:icon="@drawable/ic_player1"
             android:key="pref_key_musicfilepath"
             android:summary="@string/settings_label_musicplayer_filepath_desc"
@@ -30,6 +30,12 @@
             android:key="pref_key_libraryscan_test"
             android:textColor="#FFFFFF"
             android:title="database check" >
+        </Preference>
+        
+        <Preference
+            android:key="pref_key_bpmdetection"
+            android:title="@string/settings_label_musicplayer_bpmdetection" 
+            android:textColor="#FFFFFF">
         </Preference>
 
         <CheckBoxPreference
@@ -91,5 +97,18 @@
         </EditTextPreference>
         
     </PreferenceCategory>
+    
+   <!-- ################################################### -->
 
+    <!-- GENERAL INFORMATION  -->
+    <PreferenceCategory
+        android:key="pref_key_version"
+        android:textColor="#FFFFFF"
+        android:title="@string/label_general" >
+        <Preference
+            android:key="pref_key_version"
+            android:textColor="#FFFFFF"
+            android:title="Version 0.31" >
+        </Preference>
+    </PreferenceCategory>
 </PreferenceScreen>

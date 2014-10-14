@@ -7,6 +7,7 @@
     <string name="title_section_pedometer">Pedometer</string>
     <string name="title_section_maps">Maps</string>
     <string name="title_section_settings">Settings</string>
+    <string name="title_section_statistics">Statistics</string>
     <string name="action_settings">Settings</string>
     <string name="placeholder_null">0</string>
     <string name="label_totalsteps">total steps (Accelerometer)</string>
@@ -16,18 +17,21 @@
     <string name="label_stepsdetectionduration">duration</string><string name="btn_pedometer_reset">Reset</string>
     <string name="label_stepslastintervall">steps average last intervall</string>
     <string name="label_currentintervall">intervall (seconds)</string>
+    <string name="label_musicplayer_bpmpitch">BPM Pitch</string>
     <string name="btn_pedometer_start">Start step detection</string>
     <string name="btn_pedometer_pause">Pause step detection</string><string name="btn_ok">OK</string><string name="btn_cancel">Cancel</string>
     <string name="settings_label_pedometer_steplength">Step length (cm)</string>
     <string name="settings_label_pedometer_steplength_desc">Please enter your step length in cm</string>
     <string name="settings_label_pedometer_autostart_playback">Autostart Pedometer</string>
     <string name="settings_label_pedometer_autostart_playback_desc">Start pedometer automatically with starting playback</string>
-    <string name="settings_label_pedometer_minimum_playbacktime">Minimum plackback time (seconds)</string>
-    <string name="settings_label_pedometer_minimum_playbacktime_desc">Please enter minimum playback time for songs in seconds</string>
+    <string name="settings_label_pedometer_minimum_playbacktime">Interval time (seconds)</string>
+    <string name="settings_label_pedometer_minimum_playbacktime_desc">Please enter interval time for step average calculation</string>
     <string name="settings_label_musicplayer_filepath">Music Folder</string>
     <string name="settings_label_musicplayer_filepath_desc">Please enter the path to your music files</string>
     <string name="settings_label_musicplayer_libraryscan">Scan music folder</string>
     <string name="settings_label_musicplayer_libraryscan_desc">Scan the music folder for music files.\nThis process could take a long time.</string>
+    <string name="settings_label_musicplayer_bpmdetection">BPM Detection (experimental)</string>
+    <string name="settings_label_musicplayer_bpmdetection_desc">Detect BPM for all tracks in playlist.\n\nThis process could take a very long time!</string>
     <string name="settings_label_musicplayer_crossfading_toggle">Crossfading</string>
     <string name="settings_label_musicplayer_crossfading_toggle_desc">Enables transition between titles</string>
     <string name="settings_label_musicplayer_crossfading_duration">Crossfading duration</string>
@@ -40,5 +44,7 @@
     <string name="playlist_placeholder_title">Title</string>
     <string name="playlist_placeholder_duration">3:33</string>
     <string name="playlist_placeholder_bpm">140 BPM</string>
+    <string name="label_general">General information</string>
+    <string name="label_version">Version</string>
     
 </resources>

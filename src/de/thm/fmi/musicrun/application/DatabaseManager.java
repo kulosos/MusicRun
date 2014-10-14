@@ -36,7 +36,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 	
 	// DEBUG
 	private static final String TAG = MainActivity.class.getName();
-	private static final boolean D = true;
+	private static final boolean D = false;
 
 	// ------------------------------------------------------------------------
 	
@@ -120,7 +120,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         values.put(TRACK_BPM, track.getBpm());
         values.put(TRACK_CATEGORY, track.getCategory());
         values.put(TRACK_FILEPATH, track.getFilepath());
-        values.put(TRACK_DURATION, track.getDurationAsFormattedString());
+        values.put(TRACK_DURATION, track.getDurationInMilliseconds());
  
         db.insert(TABLE_TRACKS, null, values); 
  

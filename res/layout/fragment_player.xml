@@ -47,7 +47,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_pedometer2" />
+                        android:src="@drawable/btn_arrow_up" />
 
                     <TextView
                         android:id="@+id/label_pitchfactor"
@@ -59,12 +59,20 @@
                         android:text="0"
                         android:textSize="22sp" />
 
+                    <TextView
+                        android:id="@+id/label_bpmpitch"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/label_musicplayer_bpmpitch"
+                        android:textSize="12sp" />
+
                     <ImageView
                         android:id="@+id/btn_ptich_minus"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_pedometer3" />
+                        android:src="@drawable/btn_arrow_down" />
 
                 </LinearLayout>
 

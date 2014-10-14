@@ -88,13 +88,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				actionBar.addTab(actionBar.newTab().setText("").setIcon(R.drawable.ic_player1).setTabListener(this));
 				break;
 			case 1: 
-				actionBar.addTab(actionBar.newTab().setText("").setIcon(R.drawable.ic_player1).setTabListener(this));
+				actionBar.addTab(actionBar.newTab().setText("").setIcon(R.drawable.ic_playlist_menu2).setTabListener(this));
 				break;
 			case 2: 
 				actionBar.addTab(actionBar.newTab().setText("").setIcon(R.drawable.ic_pedometer3).setTabListener(this));
 				break;
 			case 3:
-				actionBar.addTab(actionBar.newTab().setText("").setIcon(R.drawable.ic_maps2).setTabListener(this));
+				actionBar.addTab(actionBar.newTab().setText("").setIcon(R.drawable.ic_graph_menu).setTabListener(this));
 				break;
 			case 4:
 				actionBar.addTab(actionBar.newTab().setText("").setIcon(R.drawable.ic_settings).setTabListener(this));
