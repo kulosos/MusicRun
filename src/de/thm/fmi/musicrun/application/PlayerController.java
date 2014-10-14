@@ -635,6 +635,9 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 		int lastPace = 0;
 		if(PedometerController.getInstance().getStepsPerIntervallHistory().size() > 0){
 			lastPace = PedometerController.getInstance().getStepsPerIntervallHistory().get(PedometerController.getInstance().getStepsPerIntervallHistory().size()-1);
+		
+			// calculate with BPM-Pitch
+			lastPace = lastPace + this.pitchFactor;
 		}
 		int playNext = -1;
 		
@@ -645,7 +648,7 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 
 			for(int i=0; i < tracks.size(); i++){
 
-				int bpm = Integer.parseInt(tracks.get(i).getBpm()) + this.pitchFactor;
+				int bpm = Integer.parseInt(tracks.get(i).getBpm());
 
 				// search the track from tracklist, which bpm values is the closest to the lastPace
 				if(Math.abs(bpm - lastPace) < closestValue){
