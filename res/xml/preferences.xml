@@ -108,7 +108,7 @@
         <Preference
             android:key="pref_key_version"
             android:textColor="#FFFFFF"
-            android:title="Version 0.31" >
+            android:title="Version 0.32" >
         </Preference>
     </PreferenceCategory>
 </PreferenceScreen>
