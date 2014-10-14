@@ -12,7 +12,7 @@
         android:textColor="#FFFFFF">
         
         <EditTextPreference
-            android:defaultValue="/storage/extSdCard/SuperMarioSounds/"
+            android:defaultValue="/storage/extSdCard/MusicRunTestFiles/"
             android:icon="@drawable/ic_player1"
             android:key="pref_key_musicfilepath"
             android:summary="@string/settings_label_musicplayer_filepath_desc"

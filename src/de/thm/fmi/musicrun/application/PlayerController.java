@@ -1,13 +1,9 @@
 package de.thm.fmi.musicrun.application;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import javazoom.jl.decoder.JavaLayerException;
 import de.thm.fmi.musicrun.R;
 import de.thm.fmi.musicrun.bpmDetecation.BPMDetectionManager;
 import de.thm.fmi.musicrun.pedometer.PedometerController;
@@ -467,12 +463,15 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 	
 	public void playRandomTrack(){
 		
-		// get random track
-		Track track = PlaylistController.getInstance().getTracks().get(this.getRandomRangeInt(0, PlaylistController.getInstance().getTracks().size())); 
-		this.prepareMusicPlayerThread(track);
-		
-		// notify observer (this) directly
-		this.updateCurrentPlayingTrack(track);
+		if(PlaylistController.getInstance().getTracks() != null && PlaylistController.getInstance().getTracks().size() > 0){
+
+			// get random track
+			Track track = PlaylistController.getInstance().getTracks().get(this.getRandomRangeInt(0, PlaylistController.getInstance().getTracks().size())); 
+			this.prepareMusicPlayerThread(track);
+
+			// notify observer (this) directly
+			this.updateCurrentPlayingTrack(track);
+		}
 	}
 	
 	// ------------------------------------------------------------------------
@@ -754,9 +753,6 @@ public class PlayerController implements IPlaylistObserver, OnCompletionListener
 						Track t = new Track(i, title, artist, album, year, bpm, category, mimetype, filepath, duration);
 						DatabaseManager.getInstance().addTrack(t);
 
-						Log.d(TAG, "DEBUG - String from TRACK Object - formatted " + t.getDurationAsFormattedString());
-						Log.d(TAG, "DEBUG - String from TRACK Object - unformatted " + t.getDurationInMilliseconds());
-						
 						progress.setProgress(i);
 
 						if(i == filesInFolder-1){
